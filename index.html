@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>UBIX | Catálogo Digital Local</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #2D5BFF;
+      --primary-dark: #1A3EBF;
+      --accent: #00F2FE;
+
+      --bg: #F0F2F5;
+      --card: rgba(255, 255, 255, 0.92);
+      --text: #0F172A;
+      --muted: #64748B;
+
+      --radius: 24px;
+      --shadow-sm: 0 4px 12px rgba(0,0,0,0.03);
+      --shadow-lg: 0 20px 40px rgba(0,0,0,0.08);
+
+      --border: rgba(15, 23, 42, 0.08);
+      --chip: rgba(0,0,0,0.045);
+      --chip-border: rgba(15,23,42,0.08);
+      --glow: 0 0 0 3px rgba(45,91,255,0.18);
+
+      --safe: #10B981;
+      --danger: #EF4444;
+    }
+
+    [data-theme="dark"] {
+      --bg: #05070A;
+      --card: rgba(15, 23, 42, 0.90);
+      --text: #F8FAFC;
+      --muted: #94A3B8;
+
+      --border: rgba(255, 255, 255, 0.06);
+      --chip: rgba(255,255,255,0.06);
+      --chip-border: rgba(255,255,255,0.08);
+      --shadow-lg: 0 20px 50px rgba(0,0,0,0.35);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+    button, input, select { font: inherit; }
+
+    /* Fondo suave */
+    .mesh {
+      position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      background:
+        radial-gradient(at 0% 0%, rgba(45, 91, 255, 0.08), transparent 55%),
+        radial-gradient(at 100% 100%, rgba(0, 242, 254, 0.06), transparent 55%);
+    }
+
+    /* MODAL */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.78);
+      backdrop-filter: blur(8px);
+      z-index: 9999;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; visibility: hidden; transition: 0.35s;
+      padding: 16px;
+    }
+    .modal-overlay.active { opacity: 1; visibility: visible; }
+    .modal-content {
+      position: relative;
+      width: 100%;
+      max-width: 420px;
+      border-radius: 28px;
+      overflow: hidden;
+      transform: scale(0.94);
+      transition: 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.55);
+    }
+    .modal-overlay.active .modal-content { transform: scale(1); }
+    .modal-img { width: 100%; display: block; background: #ddd; min-height: 380px; object-fit: cover; }
+    .close-modal {
+      position: absolute; top: 16px; right: 16px;
+      background: white; color: black;
+      border: none; width: 42px; height: 42px;
+      border-radius: 50%;
+      font-weight: 900; cursor: pointer;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+    }
+
+    /* WHATSAPP */
+    .wa-float {
+      position: fixed; bottom: 22px; right: 18px; width: 60px; height: 60px;
+      background: #25D366; border-radius: 50%;
+      display: grid; place-items: center;
+      box-shadow: 0 14px 30px rgba(37, 211, 102, 0.35);
+      z-index: 900;
+      transition: 0.25s; cursor: pointer;
+    }
+    .wa-float:hover { transform: scale(1.06); }
+
+    /* WRAPPER */
+    .app-container { max-width: 480px; margin: 0 auto; padding: 18px; }
+
+    /* HEADER */
+    header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 16px; padding: 0 4px;
+    }
+    .logo {
+      font-weight: 900; font-size: 22px; letter-spacing: -1px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .logo-icon {
+      width: 38px; height: 38px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      border-radius: 12px;
+      box-shadow: 0 14px 28px rgba(45,91,255,0.25);
+    }
+    .brand-sub { font-size: 12px; color: var(--muted); font-weight: 800; margin-left: 48px; margin-top: -2px; }
+
+    .icon-btn {
+      width: 44px; height: 44px; border-radius: 14px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      display: grid; place-items: center;
+      font-size: 18px;
+    }
+
+    /* PANEL */
+    .main-panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+      box-shadow: var(--shadow-lg);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+    }
+
+    .hero-title { font-size: 26px; line-height: 1.08; letter-spacing: -0.8px; font-weight: 900; }
+    .hero-sub { color: var(--muted); font-size: 14px; margin-top: 10px; font-weight: 650; line-height: 1.45; }
+
+    /* BUSCADOR */
+    .search-box {
+      background: var(--chip);
+      border: 1px solid var(--chip-border);
+      border-radius: 18px;
+      padding: 12px 12px;
+      margin: 18px 0 12px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      transition: 0.2s;
+    }
+    .search-box:focus-within { border-color: rgba(45,91,255,0.55); box-shadow: var(--glow); }
+    .search-box input {
+      border: none; background: transparent; outline: none;
+      width: 100%;
+      font-weight: 800;
+      color: var(--text);
+      font-size: 14px;
+    }
+    .search-box input::placeholder { color: var(--muted); font-weight: 700; }
+
+    .filters {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .select {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 10px 12px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .select select{
+      appearance:none; -webkit-appearance:none; -moz-appearance:none;
+      border:none; outline:none; background: transparent;
+      width:100%;
+      color: var(--text);
+      font-weight: 900;
+      font-size: 13px;
+      cursor:pointer;
+    }
+    .select{ position: relative; }
+    .select::after{
+      content:"▾";
+      position:absolute; right:12px; top:50%;
+      transform: translateY(-50%);
+      pointer-events:none;
+      color: var(--muted);
+      font-weight: 900;
+    }
+    select option { background: rgba(255,255,255,1); color: #0F172A; }
+    [data-theme="dark"] select option { background: #0F172A; color: #F8FAFC; }
+
+    /* BOTONES RAPIDOS */
+    .quick-actions{
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin: 10px 0 18px;
+    }
+    .quick-btn{
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 10px 8px;
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      transition: 0.22s;
+      text-align:center;
+      user-select: none;
+    }
+    .quick-btn:hover{ transform: translateY(-2px); border-color: rgba(45,91,255,0.45); }
+    .quick-btn b{ display:block; font-size: 11px; font-weight: 900; letter-spacing: .4px; }
+    .quick-btn span{ display:block; font-size: 10.5px; color: var(--muted); font-weight: 800; margin-top: 2px; }
+
+    /* GRID CATS */
+    .grid-cats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 10px 0 18px; }
+    .cat-item {
+      text-decoration: none;
+      text-align: center;
+      background: var(--card);
+      padding: 10px;
+      border-radius: 20px;
+      box-shadow: var(--shadow-sm);
+      transition: 0.25s;
+      border: 1px solid transparent;
+      overflow:hidden;
+    }
+    .cat-item:hover { transform: translateY(-4px); border-color: rgba(45,91,255,0.45); }
+    .cat-img {
+      width: 100%;
+      aspect-ratio: 1/1;
+      border-radius: 14px;
+      background-color: #eee;
+      margin-bottom: 8px;
+      object-fit: cover;
+      display: block;
+    }
+    .cat-item span { font-size: 11px; font-weight: 900; color: var(--text); }
+
+    /* CTA */
+    .cta-btn{
+      width: 100%;
+      padding: 16px 16px;
+      border-radius: 18px;
+      border: none;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 16px 36px rgba(45,91,255,0.28);
+      transition: 0.22s;
+    }
+    .cta-btn:hover{ transform: translateY(-1px); }
+
+    /* SPONSORS */
+    .sponsors-section { margin-top: 26px; text-align: center; }
+    .sponsors-section h4 { font-size: 11px; color: var(--muted); letter-spacing: 2px; margin-bottom: 12px; font-weight: 900; }
+    .sponsors-grid {
+      display: flex; justify-content: center; gap: 12px;
+      overflow-x: auto; padding: 10px;
+      scrollbar-width: none;
+    }
+    .sponsors-grid::-webkit-scrollbar{ display:none; }
+    .sponsor-logo {
+      width: 90px; height: 56px;
+      background: var(--card);
+      border-radius: 14px;
+      flex-shrink: 0;
+      display: grid; place-items: center;
+      font-size: 10px;
+      font-weight: 900;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* FOOTER */
+    footer{
+      margin-top: 28px;
+      padding: 26px 18px;
+      background: var(--card);
+      border-radius: 30px;
+      text-align: center;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+    }
+    .footer-links { display: flex; justify-content: center; gap: 14px; margin: 16px 0; flex-wrap: wrap; }
+    .footer-links a { font-size: 12px; font-weight: 900; color: var(--primary); }
+    .footer-info { font-size: 12px; color: var(--muted); line-height: 1.6; max-width: 320px; margin: 0 auto; font-weight: 650; }
+    .copyright { margin-top: 18px; font-size: 11px; font-weight: 800; color: rgba(100,116,139,0.8); }
+
+    @media (max-width: 360px){
+      .quick-actions{ grid-template-columns: repeat(2, 1fr); }
+      .grid-cats{ grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+
+<body data-theme="light">
+  <div class="mesh"></div>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="welcomeModal" aria-hidden="true">
+    <div class="modal-content" role="dialog" aria-modal="true" aria-label="Anuncio">
+      <button class="close-modal" id="closeModalBtn" type="button" aria-label="Cerrar">✕</button>
+      <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=600"
+           class="modal-img" alt="Promoción">
+      <div style="background: rgba(255,255,255,0.92); padding: 18px; text-align: center;">
+        <button id="continueBtn" type="button"
+          style="width:100%; background: #0F172A; color:#fff; border:none; padding: 14px; border-radius: 14px; font-weight: 900; cursor:pointer;">
+          CONTINUAR AL SITIO
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- WhatsApp -->
+  <a id="waLink" href="#" class="wa-float" aria-label="WhatsApp">
+    <svg width="30" height="30" fill="white" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12.031 6.172c-2.32 0-4.591.398-6.758 1.177-.379.138-.746.36-1.036.656L2.3 11.144c-.297.297-.393.731-.243 1.114.832 2.115 1.252 4.382 1.252 6.726 0 .552.448 1 1 1h3.498c.552 0 1-.448 1-1 0-.97-.122-1.926-.358-2.845-.098-.381-.002-.787.257-1.084l2.422-2.775c.196-.225.467-.358.756-.376.082-.005.163-.008.245-.008.238 0 .474.072.673.21l3.04 2.112c.264.184.587.251.895.187.94-.194 1.914-.29 2.914-.29.552 0 1-.448 1-1v-3.498c0-.552-.448-1-1-1-2.316 0-4.577-.395-6.741-1.171-.383-.137-.754-.361-1.047-.659l-1.929-1.929c-.294-.294-.666-.519-1.054-.658z"/>
+    </svg>
+  </a>
+
+  <div class="app-container">
+    <header>
+      <div>
+        <div class="logo">
+          <div class="logo-icon"></div>
+          UBIX
+        </div>
+        <div class="brand-sub">Catálogo Digital Local</div>
+      </div>
+
+      <button class="icon-btn" id="themeBtn" type="button" title="Cambiar tema">🌓</button>
+    </header>
+
+    <main class="main-panel">
+      <h1 class="hero-title">Tu zona en<br>tus manos.</h1>
+      <p class="hero-sub">Encontrá comercios, turnos y servicios cerca tuyo. Datos ordenados y contacto directo.</p>
+
+      <div class="search-box">
+        <span>🔍</span>
+        <input id="q" type="text" placeholder="¿Qué estás buscando hoy?" autocomplete="off">
+      </div>
+
+      <div class="filters">
+        <div class="select">
+          <span>📍</span>
+          <select id="zona" aria-label="Zona">
+            <option value="">Toda la zona</option>
+            <option value="iglesia-centro">Iglesia Centro</option>
+            <option value="rodeo">Rodeo</option>
+            <option value="las-flores">Las Flores</option>
+            <option value="tudcum">Tudcum</option>
+          </select>
+        </div>
+
+        <button class="cta-btn" id="searchBtn" type="button" style="padding:12px; border-radius: 16px;">
+          BUSCAR
+        </button>
+      </div>
+
+      <!-- BOTONES (lo que te faltaba) -->
+      <div class="quick-actions">
+        <button class="quick-btn" type="button" data-go="./catalogo.html?open=1">
+          <b>ABIERTOS</b><span>Ahora</span>
+        </button>
+        <button class="quick-btn" type="button" data-go="./eventos.html">
+          <b>EVENTOS</b><span>Zona</span>
+        </button>
+        <button class="quick-btn" type="button" data-go="./urgencias.html">
+          <b>CONTACTOS</b><span>Útiles</span>
+        </button>
+        <button class="quick-btn" type="button" data-go="./turismo.html">
+          <b>TURISMO</b><span>Puntos</span>
+        </button>
+      </div>
+
+      <!-- CATEGORÍAS → RUBRO -->
+      <div class="grid-cats" id="catsGrid"></div>
+
+      <button class="cta-btn" id="joinBtn" type="button">
+        QUIERO SUMAR MI NEGOCIO (ULA)
+      </button>
+    </main>
+
+    <section class="sponsors-section">
+      <h4>SPONSORS</h4>
+      <div class="sponsors-grid">
+        <div class="sponsor-logo">SPONSOR</div>
+        <div class="sponsor-logo">SPONSOR</div>
+        <div class="sponsor-logo">SPONSOR</div>
+        <div class="sponsor-logo">SPONSOR</div>
+        <div class="sponsor-logo">SPONSOR</div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="logo" style="justify-content:center; margin-bottom: 10px;">
+        <div class="logo-icon" style="width:34px;height:34px;border-radius:10px;"></div>
+        UBIX
+      </div>
+
+      <p class="footer-info">
+        Red local de presencia digital: catálogo + datos verificados + contacto directo.
+      </p>
+
+      <div class="footer-links">
+        <a href="./privacidad.html">Privacidad</a>
+        <a href="./terminos.html">Términos</a>
+        <a href="./soporte.html">Soporte</a>
+        <a href="./admin/login.html">Admin</a>
+      </div>
+
+      <p class="footer-info" style="margin-top: 10px;">
+        <b>Sistema UBIX</b><br>
+        Optimizado para redes móviles.
+      </p>
+
+      <div class="copyright">© 2026 UBIX. Todos los derechos reservados.</div>
+    </footer>
+  </div>
+
+  <script>
+    // =========================
+    // CONFIG UBIX
+    // =========================
+    const UBIX = {
+      routes: {
+        catalogo: "./catalogo.html",
+        rubro: "./rubro.html",
+        sumate: "./sumate.html"
+      },
+      whatsapp: {
+        number: "5490000000000", // TODO: tu número con código país
+        message: "Hola! Quiero ayuda con UBIX."
+      },
+      categories: [
+        { id:"gastronomia", name:"Comida", img:"https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=60&w=200" },
+        { id:"profesionales", name:"Salud", img:"https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&q=60&w=200" },
+        { id:"servicios", name:"Servicios", img:"https://images.unsplash.com/photo-1581578731522-a027bc1d942e?auto=format&fit=crop&q=60&w=200" },
+        { id:"transporte", name:"Transporte", img:"https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&q=60&w=200" },
+        { id:"comercios", name:"Tiendas", img:"https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=60&w=200" },
+        { id:"turismo", name:"Turismo", img:"https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=60&w=200", href:"./turismo.html" },
+        { id:"alojamientos", name:"Alojamientos", img:"https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=60&w=200"}
+      ]
+    };
+
+    // =========================
+    // THEME (persistente)
+    // =========================
+    const themeBtn = document.getElementById("themeBtn");
+    function setTheme(theme){
+      document.body.setAttribute("data-theme", theme);
+      localStorage.setItem("ubix_theme", theme);
+    }
+    function toggleTheme(){
+      const isDark = document.body.getAttribute("data-theme") === "dark";
+      setTheme(isDark ? "light" : "dark");
+    }
+    setTheme(localStorage.getItem("ubix_theme") || "light");
+    themeBtn.addEventListener("click", toggleTheme);
+
+    // =========================
+    // WhatsApp link
+    // =========================
+    const wa = document.getElementById("waLink");
+    wa.href = "https://wa.me/" + UBIX.whatsapp.number + "?text=" + encodeURIComponent(UBIX.whatsapp.message);
+
+    // =========================
+    // Modal
+    // =========================
+    const modal = document.getElementById("welcomeModal");
+    const closeModalBtn = document.getElementById("closeModalBtn");
+    const continueBtn = document.getElementById("continueBtn");
+
+    window.addEventListener("load", () => {
+      if(!sessionStorage.getItem("ubix_modal_shown")){
+        setTimeout(() => {
+          modal.classList.add("active");
+          modal.setAttribute("aria-hidden","false");
+        }, 450);
+      }
+    });
+
+    function closeModal(){
+      modal.classList.remove("active");
+      modal.setAttribute("aria-hidden","true");
+      sessionStorage.setItem("ubix_modal_shown", "true");
+    }
+    closeModalBtn.addEventListener("click", closeModal);
+    continueBtn.addEventListener("click", closeModal);
+    modal.addEventListener("click", (e)=>{ if(e.target === modal) closeModal(); });
+
+    // =========================
+    // Quick nav buttons
+    // =========================
+    document.querySelectorAll("[data-go]").forEach(btn=>{
+      btn.addEventListener("click", ()=> location.href = btn.getAttribute("data-go"));
+    });
+
+    // =========================
+    // Categories grid → rubro
+    // =========================
+    const grid = document.getElementById("catsGrid");
+    grid.innerHTML = UBIX.categories.map(c=>{
+      const href = c.href ? c.href : `${UBIX.routes.rubro}?cat=${encodeURIComponent(c.id)}`;
+      return `
+        <a href="${href}" class="cat-item" aria-label="Abrir ${c.name}">
+          <img src="${c.img}" class="cat-img" alt="${c.name}">
+          <span>${c.name}</span>
+        </a>
+      `;
+    }).join("");
+
+    // =========================
+    // Search → catalogo?q&zona
+    // =========================
+    const qEl = document.getElementById("q");
+    const zonaEl = document.getElementById("zona");
+    document.getElementById("searchBtn").addEventListener("click", runSearch);
+    qEl.addEventListener("keydown", (e)=>{ if(e.key==="Enter") runSearch(); });
+
+    function runSearch(){
+      const q = (qEl.value || "").trim();
+      const zona = (zonaEl.value || "").trim();
+      const url = new URL(UBIX.routes.catalogo, location.href);
+      if(q) url.searchParams.set("q", q);
+      if(zona) url.searchParams.set("zona", zona);
+      location.href = url.toString();
+    }
+
+    // CTA SUMATE
+    document.getElementById("joinBtn").addEventListener("click", ()=>{
+      location.href = UBIX.routes.sumate;
+    });
+  </script>
+</body>
+</html>
