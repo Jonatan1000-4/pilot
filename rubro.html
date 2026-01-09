@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>UBIX | Rubro</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #2D5BFF;
+      --primary-dark: #1A3EBF;
+      --bg: #F0F2F5;
+      --card: rgba(255, 255, 255, 0.92);
+      --text: #0F172A;
+      --muted: #64748B;
+      --radius: 24px;
+      --shadow-sm: 0 4px 12px rgba(0,0,0,0.03);
+      --shadow-lg: 0 20px 40px rgba(0,0,0,0.08);
+      --border: rgba(15, 23, 42, 0.08);
+      --chip: rgba(0,0,0,0.045);
+      --chip-border: rgba(15,23,42,0.08);
+      --glow: 0 0 0 3px rgba(45,91,255,0.18);
+    }
+
+    [data-theme="dark"] {
+      --bg: #05070A;
+      --card: rgba(15, 23, 42, 0.90);
+      --text: #F8FAFC;
+      --muted: #94A3B8;
+      --border: rgba(255, 255, 255, 0.06);
+      --chip: rgba(255,255,255,0.06);
+      --chip-border: rgba(255,255,255,0.08);
+      --shadow-lg: 0 20px 50px rgba(0,0,0,0.35);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+    button, input, select { font: inherit; }
+
+    .mesh {
+      position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      background:
+        radial-gradient(at 0% 0%, rgba(45, 91, 255, 0.08), transparent 55%),
+        radial-gradient(at 100% 100%, rgba(0, 242, 254, 0.06), transparent 55%);
+    }
+
+    .app-container { max-width: 480px; margin: 0 auto; padding: 18px; }
+
+    header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 14px; padding: 0 4px;
+    }
+    .left {
+      display:flex; align-items:center; gap: 10px;
+    }
+    .back {
+      width: 44px; height: 44px; border-radius: 14px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      display:grid; place-items:center;
+      font-size: 18px;
+    }
+    .titleBlock b{
+      display:block;
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: -0.4px;
+    }
+    .titleBlock span{
+      display:block;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--muted);
+      margin-top: 1px;
+    }
+
+    .icon-btn {
+      width: 44px; height: 44px; border-radius: 14px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      display: grid; place-items: center;
+      font-size: 18px;
+    }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow-lg);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+    }
+
+    .search-box {
+      background: var(--chip);
+      border: 1px solid var(--chip-border);
+      border-radius: 18px;
+      padding: 12px 12px;
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      margin-bottom: 12px;
+      transition: .2s;
+    }
+    .search-box:focus-within{ border-color: rgba(45,91,255,0.55); box-shadow: var(--glow); }
+    .search-box input{
+      border:none; outline:none; background: transparent;
+      width:100%;
+      color: var(--text);
+      font-weight: 800;
+      font-size: 14px;
+    }
+    .search-box input::placeholder{ color: var(--muted); font-weight: 700; }
+
+    .filters {
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .select {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 10px 12px;
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      position: relative;
+    }
+    .select::after{
+      content:"▾";
+      position:absolute;
+      right:12px; top:50%;
+      transform: translateY(-50%);
+      pointer-events:none;
+      color: var(--muted);
+      font-weight: 900;
+    }
+    .select select{
+      appearance:none; -webkit-appearance:none; -moz-appearance:none;
+      border:none; outline:none; background: transparent;
+      width:100%;
+      color: var(--text);
+      font-weight: 900;
+      font-size: 13px;
+      cursor:pointer;
+      padding-right: 18px;
+    }
+    select option { background: rgba(255,255,255,1); color: #0F172A; }
+    [data-theme="dark"] select option { background: #0F172A; color: #F8FAFC; }
+
+    .btn {
+      width:100%;
+      border:none;
+      border-radius: 16px;
+      padding: 12px 12px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color:#fff;
+      font-weight: 900;
+      cursor:pointer;
+      box-shadow: 0 14px 30px rgba(45,91,255,0.25);
+      transition: .2s;
+    }
+    .btn:hover{ transform: translateY(-1px); }
+
+    .quick-actions{
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin: 12px 0 10px;
+    }
+    .quick-btn{
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 10px 8px;
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      transition: 0.22s;
+      text-align:center;
+      user-select: none;
+    }
+    .quick-btn:hover{ transform: translateY(-2px); border-color: rgba(45,91,255,0.45); }
+    .quick-btn b{ display:block; font-size: 11px; font-weight: 900; letter-spacing: .4px; }
+    .quick-btn span{ display:block; font-size: 10.5px; color: var(--muted); font-weight: 800; margin-top: 2px; }
+
+    .subTitle{
+      margin-top: 10px;
+      font-size: 12px;
+      letter-spacing: 2px;
+      font-weight: 900;
+      color: var(--muted);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .tile{
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 14px;
+      box-shadow: var(--shadow-sm);
+      cursor:pointer;
+      transition: .22s;
+      overflow:hidden;
+    }
+    .tile:hover{ transform: translateY(-3px); border-color: rgba(45,91,255,0.45); }
+    .tile b{ display:block; font-size: 14px; font-weight: 900; letter-spacing: -0.2px; }
+    .tile span{ display:block; margin-top: 6px; font-size: 12px; color: var(--muted); font-weight: 700; line-height: 1.35; }
+    .tag{
+      display:inline-flex;
+      margin-top: 10px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(45,91,255,0.10);
+      color: var(--primary);
+      font-weight: 900;
+      font-size: 11px;
+      border: 1px solid rgba(45,91,255,0.18);
+    }
+
+    .hint{
+      margin-top: 14px;
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 360px){
+      .quick-actions{ grid-template-columns: repeat(2, 1fr); }
+      .grid{ grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body data-theme="light">
+  <div class="mesh"></div>
+
+  <div class="app-container">
+    <header>
+      <div class="left">
+        <button class="back" id="backBtn" type="button" aria-label="Volver">←</button>
+        <div class="titleBlock">
+          <b id="rubroTitle">Rubro</b>
+          <span id="rubroSub">Elegí una subcategoría</span>
+        </div>
+      </div>
+
+      <button class="icon-btn" id="themeBtn" type="button" title="Cambiar tema">🌓</button>
+    </header>
+
+    <main class="panel">
+      <div class="search-box">
+        <span>🔍</span>
+        <input id="q" type="text" placeholder="Buscar dentro del rubro..." autocomplete="off">
+      </div>
+
+      <div class="filters">
+        <div class="select">
+          <span>📍</span>
+          <select id="zona" aria-label="Zona">
+            <option value="">Toda la zona</option>
+            <option value="iglesia-centro">Iglesia Centro</option>
+            <option value="rodeo">Rodeo</option>
+            <option value="las-flores">Las Flores</option>
+            <option value="tudcum">Tudcum</option>
+          </select>
+        </div>
+
+        <button class="btn" id="verBtn" type="button">VER LISTADO</button>
+      </div>
+
+      <div class="quick-actions">
+        <button class="quick-btn" type="button" data-go="./catalogo.html?open=1">
+          <b>ABIERTOS</b><span>Ahora</span>
+        </button>
+        <button class="quick-btn" type="button" data-go="./eventos.html">
+          <b>EVENTOS</b><span>Zona</span>
+        </button>
+        <button class="quick-btn" type="button" data-go="./urgencias.html">
+          <b>CONTACTOS</b><span>Útiles</span>
+        </button>
+        <button class="quick-btn" type="button" data-go="./turismo.html">
+          <b>TURISMO</b><span>Puntos</span>
+        </button>
+      </div>
+
+      <div class="subTitle">SUBCATEGORÍAS</div>
+      <div class="grid" id="subsGrid"></div>
+
+      <div class="hint" id="hintTxt">
+        Tip: tocá una subcategoría para filtrar mejor. Si no, “Ver listado” te muestra todo el rubro.
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // =========================
+    // THEME persistente
+    // =========================
+    const themeBtn = document.getElementById("themeBtn");
+    function setTheme(theme){
+      document.body.setAttribute("data-theme", theme);
+      localStorage.setItem("ubix_theme", theme);
+    }
+    function toggleTheme(){
+      const isDark = document.body.getAttribute("data-theme") === "dark";
+      setTheme(isDark ? "light" : "dark");
+    }
+    setTheme(localStorage.getItem("ubix_theme") || "light");
+    themeBtn.addEventListener("click", toggleTheme);
+
+    // Back
+    document.getElementById("backBtn").addEventListener("click", ()=> history.length > 1 ? history.back() : (location.href="./index.html"));
+
+    // Quick nav
+    document.querySelectorAll("[data-go]").forEach(btn=>{
+      btn.addEventListener("click", ()=> location.href = btn.getAttribute("data-go"));
+    });
+
+    // =========================
+    // DATA (subcategorías por rubro)
+    // Ajustá esto a tu modelo real luego (Firestore / config).
+    // =========================
+    const RUBROS = {
+      gastronomia: {
+        title: "Gastronomía",
+        sub: [
+          { id:"pizzas", name:"Pizzas", desc:"Locales y delivery", tag:"POPULAR" },
+          { id:"parrillas", name:"Parrillas", desc:"Asado y comidas", tag:"RECOMENDADO" },
+          { id:"cafeterias", name:"Cafeterías", desc:"Desayuno & merienda", tag:"RÁPIDO" },
+          { id:"heladerias", name:"Heladerías", desc:"Postres y helados", tag:"DULCE" }
+        ]
+      },
+      comercios: {
+        title: "Comercios",
+        sub: [
+          { id:"almacenes", name:"Almacenes", desc:"Cerca tuyo", tag:"HOY" },
+          { id:"ferreterias", name:"Ferreterías", desc:"Hogar y obras", tag:"ÚTIL" },
+          { id:"librerias", name:"Librerías", desc:"Escolar y oficina", tag:"LOCAL" },
+          { id:"ropa", name:"Ropa", desc:"Indumentaria", tag:"NUEVO" }
+        ]
+      },
+      profesionales: {
+        title: "Profesionales",
+        sub: [
+          { id:"clinicas", name:"Clínicas", desc:"Atención médica", tag:"SALUD" },
+          { id:"odontologia", name:"Odontología", desc:"Turnos", tag:"TURNO" },
+          { id:"abogados", name:"Abogados", desc:"Legal", tag:"LEGAL" },
+          { id:"contadores", name:"Contadores", desc:"Impuestos", tag:"GESTIÓN" }
+        ]
+      },
+      servicios: {
+        title: "Servicios",
+        sub: [
+          { id:"electricidad", name:"Electricidad", desc:"Instalación y arreglos", tag:"URGENTE" },
+          { id:"plomeria", name:"Plomería", desc:"Pérdidas y reparaciones", tag:"HOGAR" },
+          { id:"tecnicos", name:"Técnicos", desc:"PC / celulares / TV", tag:"TECH" },
+          { id:"limpieza", name:"Limpieza", desc:"Hogar y empresas", tag:"PRO" }
+        ]
+      },
+      transporte: {
+        title: "Transporte",
+        sub: [
+          { id:"remis", name:"Remis", desc:"Traslados", tag:"RÁPIDO" },
+          { id:"fletes", name:"Fletes", desc:"Mudanzas", tag:"CARGA" },
+          { id:"taxis", name:"Taxis", desc:"Paradas", tag:"24H" },
+          { id:"turistico", name:"Transporte turístico", desc:"Recorridos", tag:"TURISMO" }
+        ]
+      }
+    };
+
+    // =========================
+    // Leer parámetros
+    // =========================
+    const params = new URLSearchParams(location.search);
+    const cat = (params.get("cat") || "").toLowerCase();
+
+    const rubro = RUBROS[cat] || null;
+
+    const rubroTitle = document.getElementById("rubroTitle");
+    const rubroSub = document.getElementById("rubroSub");
+    const subsGrid = document.getElementById("subsGrid");
+
+    if(!rubro){
+      rubroTitle.textContent = "Rubros";
+      rubroSub.textContent = "Seleccioná un rubro desde el inicio";
+      subsGrid.innerHTML = `
+        <div class="tile" onclick="location.href='./index.html'">
+          <b>Volver al inicio</b>
+          <span>No se recibió un rubro válido (cat=...).</span>
+          <div class="tag">INICIO</div>
+        </div>
+      `;
+    } else {
+      rubroTitle.textContent = rubro.title;
+      rubroSub.textContent = "Elegí una subcategoría";
+      subsGrid.innerHTML = rubro.sub.map(s => `
+        <div class="tile" data-sub="${s.id}">
+          <b>${s.name}</b>
+          <span>${s.desc}</span>
+          <div class="tag">${s.tag}</div>
+        </div>
+      `).join("");
+    }
+
+    // =========================
+    // Acciones: Ver listado / click en sub
+    // =========================
+    const qEl = document.getElementById("q");
+    const zonaEl = document.getElementById("zona");
+    const verBtn = document.getElementById("verBtn");
+
+    function goCatalog(extra = {}){
+      const url = new URL("./catalogo.html", location.href);
+      if(cat) url.searchParams.set("cat", cat);
+
+      const q = (qEl.value || "").trim();
+      const zona = (zonaEl.value || "").trim();
+
+      if(q) url.searchParams.set("q", q);
+      if(zona) url.searchParams.set("zona", zona);
+
+      Object.entries(extra).forEach(([k,v])=>{
+        if(v) url.searchParams.set(k, v);
+      });
+
+      location.href = url.toString();
+    }
+
+    verBtn.addEventListener("click", ()=> goCatalog());
+
+    qEl.addEventListener("keydown", (e)=>{
+      if(e.key === "Enter") goCatalog();
+    });
+
+    subsGrid.addEventListener("click", (e)=>{
+      const tile = e.target.closest(".tile");
+      if(!tile) return;
+      const sub = tile.getAttribute("data-sub");
+      if(!sub) return;
+      goCatalog({ sub });
+    });
+  </script>
+</body>
+</html>
