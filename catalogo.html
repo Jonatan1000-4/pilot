@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>UBIX | Catálogo</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+  <style>
+    :root{
+      --primary:#2D5BFF;
+      --primary-dark:#1A3EBF;
+      --accent:#00F2FE;
+
+      --bg:#F0F2F5;
+      --panel:rgba(255,255,255,.92);
+      --card:rgba(255,255,255,.96);
+
+      --text:#0F172A;
+      --muted:#64748B;
+
+      --line: rgba(15, 23, 42, .10);
+      --shadow: 0 18px 60px rgba(15,23,42,.10);
+      --shadow2: 0 10px 30px rgba(15,23,42,.08);
+      --transition: all .22s ease;
+
+      --r:18px;
+      --r2:24px;
+      --max:1200px;
+
+      --bronze1:#cd7f32; --bronze2:#7a3b11;
+      --silver1:#e8edf5; --silver2:#8fa3b7;
+      --gold1:#ffd166;   --gold2:#b8860b;
+      --dia1:#b9f2ff;    --dia2:#3bb8ff;
+
+      --safe:#10B981;
+      --danger:#EF4444;
+
+      --chip: rgba(0,0,0,0.04);
+      --chip-border: rgba(15, 23, 42, .10);
+      --glow: 0 0 0 3px rgba(45,91,255,0.18);
+    }
+
+    [data-theme="dark"]{
+      --bg:#05070A;
+      --panel:rgba(15,23,42,.90);
+      --card:rgba(15,23,42,.92);
+      --text:#F8FAFC;
+      --muted:#94A3B8;
+      --line: rgba(255,255,255,.07);
+      --shadow: 0 18px 70px rgba(0,0,0,.45);
+      --shadow2: 0 10px 30px rgba(0,0,0,.35);
+      --chip: rgba(255,255,255,0.06);
+      --chip-border: rgba(255,255,255,0.08);
+    }
+
+    *{ box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color: transparent; }
+    body{
+      font-family:'Plus Jakarta Sans',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:
+        radial-gradient(1000px 600px at 75% 10%, rgba(45,91,255,.10), transparent 60%),
+        radial-gradient(900px 520px at 15% 20%, rgba(0,242,254,.08), transparent 60%),
+        radial-gradient(900px 520px at 60% 90%, rgba(255,255,255,.06), transparent 62%),
+        var(--bg);
+      color:var(--text);
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      overflow-x:hidden;
+    }
+    a{ color:inherit; text-decoration:none; }
+
+    .container{ width:min(var(--max), calc(100% - 22px)); margin:0 auto; }
+
+    /* HEADER (UBIX style) */
+    header{
+      position:sticky; top:0; z-index:50;
+      background: rgba(255,255,255,.65);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom:1px solid var(--line);
+      box-shadow: 0 8px 26px rgba(0,0,0,.06);
+    }
+    [data-theme="dark"] header{
+      background: rgba(5,7,10,.65);
+      box-shadow: 0 8px 26px rgba(0,0,0,.28);
+    }
+
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:10px; padding:12px 0 8px;
+    }
+    .brand{ display:flex; align-items:center; gap:10px; min-width:0; }
+    .logo{
+      width:40px; height:40px; border-radius:14px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      box-shadow: 0 16px 34px rgba(45,91,255,.22);
+      flex:0 0 auto;
+    }
+    .brand .t{
+      min-width:0;
+      display:flex;
+      flex-direction:column;
+    }
+    .brand h1{
+      font-size:16px; font-weight:900; letter-spacing:-.4px;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      max-width: 58vw;
+    }
+    .subhead{
+      margin-top:2px; color: var(--muted); font-size:12px; font-weight:800;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      max-width: 58vw;
+    }
+
+    .controls{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
+
+    .icon-btn{
+      width:44px; height:44px; border-radius:16px;
+      border:1px solid var(--line);
+      background: var(--panel);
+      box-shadow: var(--shadow2);
+      cursor:pointer;
+      display:grid; place-items:center;
+      font-size:18px;
+      transition: var(--transition);
+    }
+    .icon-btn:hover{ transform: translateY(-1px); }
+
+    /* FILTERS */
+    .filters{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+      padding: 8px 0 10px;
+    }
+    .search-bar{
+      grid-column: 1 / -1;
+      border:1px solid var(--chip-border);
+      background: var(--chip);
+      box-shadow: var(--shadow2);
+      border-radius: var(--r2);
+      display:flex; align-items:center; padding: 12px 14px; gap:10px;
+      transition:.2s;
+    }
+    .search-bar:focus-within{ border-color: rgba(45,91,255,0.55); box-shadow: var(--glow); }
+    .search-bar i{ color: var(--muted); }
+    .search-bar input{
+      width:100%; border:none; outline:none; background:transparent;
+      color: var(--text); font-size: 14px; font-weight:800;
+    }
+    .search-bar input::placeholder{ color: var(--muted); font-weight:700; }
+
+    .select{
+      border:1px solid var(--line);
+      background: var(--panel);
+      color: var(--text);
+      border-radius: 16px;
+      padding: 10px 12px;
+      box-shadow: var(--shadow2);
+      transition: var(--transition);
+      font-weight:900;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      position:relative;
+    }
+    .select::after{
+      content:"▾";
+      position:absolute;
+      right:12px; top:50%;
+      transform: translateY(-50%);
+      pointer-events:none;
+      color: var(--muted);
+      font-weight: 900;
+    }
+    select{
+      appearance:none; -webkit-appearance:none; -moz-appearance:none;
+      border:none; outline:none; background:transparent;
+      width:100%;
+      color: var(--text);
+      font-weight:900;
+      cursor:pointer;
+      padding-right: 18px;
+    }
+    select option { background: #ffffff; color: #0F172A; }
+    [data-theme="dark"] select option { background: #0F172A; color: #F8FAFC; }
+
+    .btn{
+      border:1px solid var(--line);
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: #fff;
+      border-radius: 16px;
+      padding: 10px 12px;
+      box-shadow: 0 14px 30px rgba(45,91,255,.25);
+      transition: var(--transition);
+      font-weight:900;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+    }
+    .btn:hover{ transform: translateY(-1px); }
+
+    /* CHIPS TIPO */
+    .chips{
+      display:flex; gap:10px; overflow-x:auto;
+      padding: 8px 0 10px; -webkit-overflow-scrolling: touch;
+    }
+    .chips::-webkit-scrollbar{ height:8px; }
+    .chips::-webkit-scrollbar-thumb{ background: rgba(0,0,0,.12); border-radius:999px; }
+    [data-theme="dark"] .chips::-webkit-scrollbar-thumb{ background: rgba(255,255,255,.12); }
+
+    .chip{
+      flex:0 0 auto;
+      border:1px solid var(--line);
+      background: var(--panel);
+      color: var(--muted);
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 900;
+      cursor:pointer;
+      transition: var(--transition);
+      box-shadow: var(--shadow2);
+      white-space:nowrap;
+      user-select:none;
+    }
+    .chip:hover{ transform: translateY(-1px); color: var(--text); }
+    .chip.active{
+      background: rgba(45,91,255,.12);
+      border-color: rgba(45,91,255,.35);
+      color: var(--text);
+    }
+
+    .toggle-row{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      border:1px solid var(--chip-border);
+      background: var(--chip);
+      box-shadow: var(--shadow2);
+      padding: 12px 14px;
+      border-radius: var(--r2);
+      margin-bottom: 10px;
+      flex-wrap:wrap;
+    }
+    .toggle-row span{ font-size: 13px; font-weight:900; color: var(--muted); }
+    .toggle-row #toggleLabel{ color: var(--text); }
+
+    .switch{ position: relative; display:inline-block; width:54px; height:28px; }
+    .switch input{ display:none; }
+    .slider{
+      position:absolute; inset:0;
+      background: rgba(255,255,255,.12);
+      border:1px solid var(--line);
+      border-radius: 999px;
+      transition:.25s ease;
+    }
+    .slider:before{
+      content:""; position:absolute;
+      width:22px; height:22px; left:3px; top:50%;
+      transform: translateY(-50%);
+      background:#fff; border-radius:999px;
+      box-shadow: 0 10px 18px rgba(0,0,0,.25);
+      transition:.25s ease;
+    }
+    input:checked + .slider{
+      background: rgba(16,185,129,.18);
+      border-color: rgba(16,185,129,.35);
+    }
+    input:checked + .slider:before{
+      transform: translate(26px, -50%);
+      background: #eafff4;
+    }
+
+    .results-info{
+      font-size: 12px;
+      color: var(--muted);
+      text-align:center;
+      padding: 6px 0 12px;
+      font-weight: 800;
+    }
+
+    /* MAIN GRID */
+    main{
+      width:min(var(--max), calc(100% - 22px));
+      margin: 0 auto;
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 14px;
+      padding: 12px 0 26px;
+    }
+
+    .card{
+      grid-column: span 4;
+      border-radius: 22px;
+      overflow:hidden;
+      border: 1px solid var(--line);
+      background: var(--card);
+      box-shadow: var(--shadow);
+      position:relative;
+      cursor:pointer;
+
+      opacity:0;
+      transform: translateY(14px);
+      transition: .28s ease;
+      min-width:0;
+      isolation:isolate;
+    }
+    .card.loaded{ opacity:1; transform: translateY(0); }
+    .card:hover{ transform: translateY(-4px); box-shadow: 0 22px 60px rgba(0,0,0,.18); }
+    [data-theme="dark"] .card:hover{ box-shadow: 0 22px 60px rgba(0,0,0,.55); }
+
+    .card::before{
+      content:"";
+      position:absolute; inset:0 auto 0 0;
+      width: 7px;
+      background: rgba(255,255,255,.10);
+      z-index:2;
+    }
+    .card[data-nivel="bronce"]::before{ background: linear-gradient(180deg, var(--bronze1), var(--bronze2)); }
+    .card[data-nivel="plata"]::before{  background: linear-gradient(180deg, var(--silver1), var(--silver2)); }
+    .card[data-nivel="oro"]::before{    background: linear-gradient(180deg, var(--gold1), var(--gold2)); }
+    .card[data-nivel="diamante"]::before{background: linear-gradient(180deg, var(--dia1), var(--dia2)); }
+
+    .media{ position:relative; border-bottom:1px solid var(--line); background: rgba(255,255,255,.05); }
+    .card img{
+      width:100%;
+      height: 180px;
+      object-fit:cover;
+      display:block;
+      filter: saturate(1.06) contrast(1.05);
+      transform: scale(1.02);
+      transition: .35s ease;
+    }
+    .card:hover img{ transform: scale(1.06); }
+    .overlay{ position:absolute; inset:0; background: linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,.08), transparent); pointer-events:none; z-index:1; }
+
+    .status{
+      position:absolute; top:12px; left:12px; z-index:3;
+      display:inline-flex; align-items:center; gap:8px;
+      padding: 8px 10px; border-radius: 999px;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.38);
+      backdrop-filter: blur(10px);
+      color: rgba(255,255,255,.94);
+      font-size: 12px; font-weight: 900;
+      white-space:nowrap;
+      max-width: calc(100% - 24px);
+      overflow:hidden; text-overflow:ellipsis;
+    }
+    .status.open{ border-color: rgba(2, 247, 145, 0.85); box-shadow: 0 0 3px rgba(0, 255, 170, .6); }
+    .status.closed{ border-color: rgba(255, 0, 0, 0.85); box-shadow: 0 0 3px rgba(255, 80, 80, .6); }
+
+    .nivel{
+      position:absolute; top:12px; right:12px; z-index:3;
+      display:inline-flex; align-items:center; gap:8px;
+      padding: 9px 12px; border-radius: 999px;
+      font-size: 12px; font-weight: 900;
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow: 0 10px 28px rgba(0,0,0,.25);
+      backdrop-filter: blur(10px);
+      white-space:nowrap;
+      max-width: calc(100% - 24px);
+      overflow:hidden; text-overflow:ellipsis;
+    }
+    .nivel[data-nivel="bronce"]{ background: linear-gradient(135deg, rgba(205,127,50,.92), rgba(122,59,17,.76)); color:#fff; }
+    .nivel[data-nivel="plata"]{  background: linear-gradient(135deg, rgba(232,237,245,.92), rgba(143,163,183,.72)); color:#101828; }
+    .nivel[data-nivel="oro"]{    background: linear-gradient(135deg, rgba(255,209,102,.92), rgba(184,134,11,.70)); color:#2b1b00; }
+    .nivel[data-nivel="diamante"]{background: linear-gradient(135deg, rgba(185,242,255,.92), rgba(59,184,255,.70)); color:#002a44; }
+
+    .tipo-badge{
+      position:absolute; left:12px; bottom:12px; z-index:3;
+      display:inline-flex; align-items:center; gap:8px;
+      padding: 8px 10px; border-radius: 999px;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.36);
+      backdrop-filter: blur(10px);
+      color: rgba(255,255,255,.94);
+      font-size: 12px; font-weight: 900;
+      white-space:nowrap;
+      max-width: calc(100% - 24px);
+      overflow:hidden; text-overflow:ellipsis;
+    }
+
+    .card-content{ padding: 14px 14px 16px; }
+    .card-content h3{
+      font-size: 16px; font-weight: 900; text-align: center;
+      letter-spacing:.2px; text-transform: uppercase;
+      line-height:1.2; margin-bottom: 6px;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .card-content p{ font-size: 13px; color: var(--muted); font-weight: 800; margin-bottom: 10px; text-align:center; }
+
+    .tags{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; }
+    .tag{
+      background: rgba(45,91,255,.08);
+      border: 1px solid rgba(45,91,255,.18);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 12px;
+      font-weight: 900;
+      cursor:pointer;
+      transition:.2s ease;
+      max-width: 100%;
+      user-select:none;
+    }
+    [data-theme="dark"] .tag{ background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.10); color: var(--text); }
+
+    .hint-row{
+      margin-top: 12px; padding-top: 12px;
+      border-top: 1px solid var(--line);
+      display:flex; align-items:center; justify-content:space-between;
+      gap:10px; color: var(--muted);
+      font-size: 12px; font-weight: 900;
+    }
+    .hint-row .go{
+      display:inline-flex; align-items:center; gap:8px;
+      color: var(--text);
+    }
+    .hint-row .go i{
+      width: 30px; height: 30px;
+      border-radius: 12px;
+      display:grid; place-items:center;
+      background: rgba(45,91,255,.10);
+      border: 1px solid rgba(45,91,255,.18);
+      color: var(--primary);
+    }
+
+    .pagination{
+      grid-column: 1 / -1;
+      display:flex;
+      justify-content:center;
+      gap:10px;
+      margin-top: 6px;
+      flex-wrap:wrap;
+    }
+    .pagination button{
+      border:1px solid var(--line);
+      background: var(--panel);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 10px 14px;
+      box-shadow: var(--shadow2);
+      transition: var(--transition);
+      font-weight:900;
+      cursor:pointer;
+    }
+    .pagination button:hover{ transform: translateY(-1px); }
+    .pagination button:disabled{ opacity:.5; cursor:not-allowed; transform:none; }
+
+    footer{
+      margin-top:auto;
+      padding: 18px 0 22px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      text-align:center;
+      font-size: 12px;
+      font-weight:800;
+    }
+
+    .skeleton{ position:relative; overflow:hidden; background: rgba(255,255,255,.10); border-radius: 16px; }
+    [data-theme="dark"] .skeleton{ background: rgba(255,255,255,.06); }
+    .skeleton::after{
+      content:"";
+      position:absolute; inset:-40% -60%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.12), transparent);
+      transform: translateX(-40%);
+      animation: sk 1.2s ease-in-out infinite;
+    }
+    @keyframes sk{ 0%{ transform: translateX(-60%); } 100%{ transform: translateX(60%); } }
+
+    /* STRIPS (eventos/turismo/destacados) */
+    .section-strip{
+      grid-column: 1 / -1;
+      border: 1px solid var(--line);
+      border-radius: var(--r2);
+      background: var(--panel);
+      box-shadow: var(--shadow2);
+      overflow:hidden;
+    }
+    .strip-head{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:10px;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+    }
+    .strip-title{
+      display:flex; align-items:center; gap:10px;
+      font-weight: 900;
+      font-size: 13px;
+      color: var(--text);
+    }
+    .strip-title i{
+      width: 34px; height: 34px;
+      border-radius: 14px;
+      display:grid; place-items:center;
+      background: rgba(45,91,255,.10);
+      border: 1px solid rgba(45,91,255,.18);
+      color: var(--primary);
+    }
+    .strip-sub{
+      font-size: 12px;
+      font-weight: 900;
+      color: var(--muted);
+      text-align:right;
+      white-space:nowrap;
+    }
+    .strip-body{ padding: 12px 14px 14px; }
+    .strip-row{
+      display:flex;
+      gap:12px;
+      overflow-x:auto;
+      padding-bottom: 6px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .strip-row::-webkit-scrollbar{ height:8px; }
+    .strip-row::-webkit-scrollbar-thumb{ background: rgba(0,0,0,.12); border-radius:999px; }
+    [data-theme="dark"] .strip-row::-webkit-scrollbar-thumb{ background: rgba(255,255,255,.12); }
+
+    .mini{
+      flex: 0 0 280px;
+      border:1px solid var(--line);
+      border-radius: 18px;
+      overflow:hidden;
+      background: var(--card);
+      box-shadow: var(--shadow2);
+      cursor:pointer;
+      transition: var(--transition);
+      min-width: 240px;
+    }
+    .mini:hover{ transform: translateY(-2px); border-color: rgba(45,91,255,.28); }
+    .mini img{ width:100%; height: 120px; object-fit:cover; display:block; }
+    .mini .mini-content{ padding: 10px 12px 12px; }
+    .mini .mini-title{ font-weight: 900; font-size: 13px; color: var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .mini .mini-meta{ margin-top:6px; font-size: 12px; font-weight: 900; color: var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+    @media (max-width: 980px){
+      .card{ grid-column: span 6; }
+    }
+    @media (max-width: 640px){
+      .container, main{ width: calc(100% - 22px); }
+      .card{ grid-column: span 12; }
+      .card img{ height: 180px; }
+      .filters{ grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+
+<body data-theme="light">
+  <header>
+    <div class="container">
+      <div class="topbar">
+        <a class="brand" href="./index.html" title="Volver al inicio">
+          <div class="logo" aria-hidden="true"></div>
+          <div class="t">
+            <h1 id="pageTitle">UBIX | Catálogo</h1>
+            <div class="subhead" id="pageSub">Encontrá lo que buscás, rápido.</div>
+          </div>
+        </a>
+
+        <div class="controls">
+          <button class="icon-btn" id="backBtn" title="Volver">←</button>
+          <button class="icon-btn" id="themeToggle" title="Cambiar tema">🌓</button>
+        </div>
+      </div>
+
+      <section class="filters">
+        <div class="search-bar">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="searchInput" placeholder="Buscar por nombre, descripción, tags...">
+        </div>
+
+        <div class="select" title="Zona / distrito">
+          <span>📍</span>
+          <select id="districtSelect">
+            <option value="todos">Toda la zona</option>
+            <option value="iglesia-centro">Iglesia Centro</option>
+            <option value="rodeo">Rodeo</option>
+            <option value="las-flores">Las Flores</option>
+            <option value="tudcum">Tudcum</option>
+            <option value="bella-vista">Bella Vista</option>
+            <option value="villa-iglesia">Villa Iglesia</option>
+          </select>
+        </div>
+
+        <button class="btn" id="clearBtn" type="button" title="Limpiar filtros">
+          <i class="fa-solid fa-eraser"></i> Limpiar
+        </button>
+      </section>
+
+      <div class="chips" id="tipoChips">
+        <div class="chip active" data-tipo="todos">✨ Todos</div>
+      </div>
+
+      <div class="toggle-row">
+        <span>Disponibilidad:</span>
+        <label class="switch" title="Filtrar disponibles">
+          <input type="checkbox" id="toggleActivos" checked>
+          <span class="slider"></span>
+        </label>
+        <span id="toggleLabel">Solo disponibles</span>
+      </div>
+
+      <div class="results-info" id="resultsInfo"></div>
+    </div>
+  </header>
+
+  <main id="vendorsList"></main>
+
+  <footer>© 2026 UBIX • Catálogo Digital Local</footer>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    // ===== Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyDYNLhKi2h_JoPlDYK9_ZhKaHnKQ3DJhbk",
+      authDomain: "cweb-ac414.firebaseapp.com",
+      projectId: "cweb-ac414",
+      storageBucket: "cweb-ac414.firebasestorage.app",
+      messagingSenderId: "174144272082",
+      appId: "1:174144272082:web:68b9d5aefc1aef07ab9f0b"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // ===== DOM
+    const contenedor = document.getElementById('vendorsList');
+    const input = document.getElementById('searchInput');
+    const selectDistrito = document.getElementById('districtSelect');
+    const checkbox = document.getElementById('toggleActivos');
+    const label = document.getElementById('toggleLabel');
+    const resultsInfo = document.getElementById('resultsInfo');
+    const themeToggle = document.getElementById('themeToggle');
+    const tipoChips = document.getElementById('tipoChips');
+    const clearBtn = document.getElementById('clearBtn');
+    const backBtn = document.getElementById('backBtn');
+    const pageTitle = document.getElementById('pageTitle');
+    const pageSub = document.getElementById('pageSub');
+
+    // ===== CONFIG
+    const THEME_KEY = "ubix_theme"; // MISMA KEY que Home/Rubro
+    const HIDE_EXPIRED_ALWAYS = true;
+    const itemsPerPage = 20;
+
+    let mostrarSoloActivos = true;
+    let vendedores = [];
+    let currentPage = 1;
+    let selectedTipo = 'todos';
+
+    // ===== PARAMS desde Home/Rubro
+    const params = new URLSearchParams(location.search);
+    const P = {
+      q: (params.get("q") || "").trim(),
+      zona: (params.get("zona") || "").trim(),
+      open: (params.get("open") || "").trim(),  // "1" si viene del botón ABIERTO
+      cat: (params.get("cat") || "").trim(),    // desde rubro.html
+      sub: (params.get("sub") || "").trim(),    // desde rubro.html
+      tipo: (params.get("tipo") || "").trim()   // opcional
+    };
+
+    // ===== Helpers
+    const slugify = (s) => (s || "")
+      .toString()
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "");
+
+    function parseDateMaybe(d){
+      if(!d) return null;
+      if(d.toDate) return d.toDate();
+      const dt = new Date(d);
+      return isNaN(dt.getTime()) ? null : dt;
+    }
+
+    // ===== PAGO/VENCIMIENTO
+    function computeEstadoPago(v){
+      const diasGracia = Number(v.diasGracia ?? 3);
+      if(!v.vencimiento) return "activo";
+      const venc = v.vencimiento?.toDate ? v.vencimiento.toDate() : new Date(v.vencimiento);
+      const now = new Date();
+      const endGrace = new Date(venc.getTime() + diasGracia * 86400000);
+      if(now <= venc) return "activo";
+      if(now > venc && now <= endGrace) return "en_gracia";
+      return "vencido";
+    }
+    function isVisibleByPayment(v){
+      const activo = (v.activo !== false);
+      if(!activo) return false;
+      const estado = (v.estadoPago || computeEstadoPago(v));
+      if(estado === "vencido") return false;
+      return true;
+    }
+
+    // ===== TIPO NORMALIZADO
+    function normTipo(t){
+      const v = (t || 'comercio').toString().toLowerCase().trim();
+      const alias = {
+        "profesionales":"profesional",
+        "servicios":"servicio",
+        "transportes":"transporte",
+        "comercios":"comercio",
+        "eventos":"evento",
+        "turístico":"turismo",
+        "punto de interés":"turismo",
+        "poi":"turismo",
+        "delivery sin local":"delivery"
+      };
+      return alias[v] || v || 'comercio';
+    }
+
+    const TIPO_META = {
+      todos: { label:"Todos", icon:"✨" },
+      profesional: { label:"Profesionales", icon:"👤" },
+      servicio: { label:"Servicios", icon:"🧰" },
+      transporte: { label:"Transporte", icon:"🚕" },
+      comercio: { label:"Comercios", icon:"🏪" },
+      farmacia: { label:"Farmacias", icon:"💊" },
+      delivery: { label:"Delivery", icon:"🍔" },
+      turismo: { label:"Turismo", icon:"🏞️" },
+      evento: { label:"Eventos", icon:"🎉" }
+    };
+    const TIPO_ORDER = ["todos","profesional","servicio","transporte","comercio","farmacia","delivery","turismo","evento"];
+
+    function tipoBadgeText(tipo){
+      const t = normTipo(tipo);
+      const m = TIPO_META[t];
+      if(m) return `${m.icon} ${m.label}`;
+      return `📌 ${t.charAt(0).toUpperCase() + t.slice(1)}`;
+    }
+
+    // ===== RUBRO/SUB desde Home/Rubro (cat/sub)
+    // home manda cat IDs: gastronomia, profesionales, servicios, transporte, comercios, turismo
+    // en datos reales puede venir en: v.categoria, v.rubro, v.cat, v.tipo, v.tipoMacro, v.subcategoria
+    const CAT_ALIASES = {
+      gastronomia: ["gastronomia","comida","restaurant","restaurante","pizzeria","parrilla","cafeteria","bar","heladeria"],
+      profesionales: ["profesional","profesionales","salud","doctor","medico","odontologia","abogado","contador","psicologo"],
+      servicios: ["servicio","servicios","tecnico","tecnicos","electricidad","plomeria","limpieza","mantenimiento"],
+      transporte: ["transporte","remis","taxi","flete","logistica","mudanza"],
+      comercios: ["comercio","comercios","tienda","almacen","kiosco","ferreteria","libreria","ropa","super"],
+      turismo: ["turismo","hotel","hospedaje","cabaña","cabana","punto-de-interes","atraccion","poi"]
+    };
+
+    function matchesCatSub(v){
+      if(!P.cat && !P.sub) return true;
+
+      const fields = [
+        v.cat, v.rubro, v.categoria, v.tipoMacro, v.tipo,
+        v.subcategoria, v.sub, v.especialidad, v.profesion
+      ].map(x => slugify(x)).filter(Boolean);
+
+      const catKey = slugify(P.cat);
+      const subKey = slugify(P.sub);
+
+      // Match cat: por alias o por inclusión en campos
+      let okCat = true;
+      if(catKey){
+        const aliases = CAT_ALIASES[catKey] ? CAT_ALIASES[catKey].map(slugify) : [catKey];
+        okCat = fields.some(f => aliases.some(a => f.includes(a) || a.includes(f))) || aliases.some(a => fields.includes(a));
+      }
+
+      // Match sub: sub debe aparecer en algún campo
+      let okSub = true;
+      if(subKey){
+        okSub = fields.some(f => f.includes(subKey) || subKey.includes(f));
+      }
+
+      return okCat && okSub;
+    }
+
+    // ===== DISPONIBILIDAD (tu lógica)
+    function estaAbiertoHorario(v) {
+      const ahora = new Date();
+      const diasSemana = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
+      const diaActual = diasSemana[ahora.getDay()];
+      const horaActual = ahora.getHours() + ahora.getMinutes() / 60;
+
+      if (!v.dias || !Array.isArray(v.dias) || !v.dias.includes(diaActual)) return false;
+      if (!v.horarios || typeof v.horarios !== 'object') return false;
+
+      let franjasDelDia = [];
+      if (diaActual === 'sábado') franjasDelDia = v.horarios.sabado || [];
+      else if (diaActual === 'domingo') franjasDelDia = v.horarios.domingo || [];
+      else franjasDelDia = v.horarios.semana || [];
+
+      if (franjasDelDia.length === 0) return false;
+
+      return franjasDelDia.some(h => {
+        if (!h.apertura || !h.cierre) return false;
+        const [hA, mA] = h.apertura.split(':').map(Number);
+        const [hC, mC] = h.cierre.split(':').map(Number);
+        const horaA = hA + mA / 60;
+        const horaC = hC + mC / 60;
+        if (horaA > horaC) return horaActual >= horaA || horaActual < horaC;
+        return horaActual >= horaA && horaActual < horaC;
+      });
+    }
+
+    function disponibilidad(v){
+      const tipo = normTipo(v.tipo);
+      const modalidad = (v.modalidad || '').toString().toLowerCase().trim();
+
+      if(tipo === 'profesional' && modalidad === 'turnos'){
+        return { ok:true, label:"Con turno", kind:"turnos" };
+      }
+
+      if(tipo === 'evento'){
+        const ini = parseDateMaybe(v.fechaInicio || v.inicio || v.startDate);
+        const fin = parseDateMaybe(v.fechaFin || v.fin || v.endDate);
+        const now = new Date();
+        if(ini && fin){
+          const ok = (now >= ini && now <= fin);
+          return { ok, label: ok ? "En curso" : (now < ini ? "Próximo" : "Finalizado"), kind: ok ? "open" : "closed" };
+        }
+        if(ini && !fin){
+          const ok = now >= ini;
+          return { ok, label: ok ? "Activo" : "Próximo", kind: ok ? "open" : "closed" };
+        }
+        return { ok:true, label:"Evento", kind:"evento" };
+      }
+
+      if(tipo === 'turismo'){
+        const hasHorario = !!(v.horarios && typeof v.horarios === 'object');
+        if(!hasHorario) return { ok:true, label:"Visitable", kind:"turismo" };
+        const ok = estaAbiertoHorario(v);
+        return { ok, label: ok ? "Abierto" : "Cerrado", kind: ok ? "open" : "closed" };
+      }
+
+      if(tipo === 'transporte'){
+        const disp = (v.disponibilidad || v.turno || '').toString().toLowerCase();
+        if(disp.includes('24') || disp.includes('24hs') || disp.includes('noct') || disp.includes('siempre')){
+          return { ok:true, label:"Disponible", kind:"open" };
+        }
+        const ok = estaAbiertoHorario(v);
+        return { ok, label: ok ? "Disponible" : "No disponible", kind: ok ? "open" : "closed" };
+      }
+
+      if(tipo === 'farmacia'){
+        const turno = (v.turno || v.deTurno || '').toString().toLowerCase();
+        if(turno === 'si' || turno === 'true') return { ok:true, label:"De turno", kind:"open" };
+        const ok = estaAbiertoHorario(v);
+        return { ok, label: ok ? "Abierta" : "Cerrada", kind: ok ? "open" : "closed" };
+      }
+
+      const ok = estaAbiertoHorario(v);
+      return { ok, label: ok ? "Abierto ahora" : "Cerrado", kind: ok ? "open" : "closed" };
+    }
+
+    // ===== NIVEL
+    const nivelRank = { diamante: 0, oro: 1, plata: 2, bronce: 3 };
+    function normNivel(n){
+      const v = (n || 'bronce').toString().toLowerCase().trim();
+      return ['bronce','plata','oro','diamante'].includes(v) ? v : 'bronce';
+    }
+    function getNivelHtml(nivel) {
+      switch ((nivel || '').toLowerCase()) {
+        case 'bronce': return '<i class="fas fa-medal"></i> Bronce';
+        case 'plata': return '<i class="fas fa-medal"></i> Plata';
+        case 'oro': return '<i class="fas fa-medal"></i> Oro';
+        case 'diamante': return '<i class="fas fa-gem"></i> Diamante';
+        default: return '<i class="fas fa-medal"></i> Bronce';
+      }
+    }
+
+    // ===== THEME (consistente)
+    function setTheme(theme){
+      document.body.setAttribute("data-theme", theme === "dark" ? "dark" : "light");
+      localStorage.setItem(THEME_KEY, theme === "dark" ? "dark" : "light");
+      themeToggle.textContent = (document.body.dataset.theme === "dark") ? "🌙" : "🌓";
+    }
+    function initTheme(){
+      const saved = localStorage.getItem(THEME_KEY);
+      if(saved === "dark" || saved === "light"){
+        setTheme(saved);
+        return;
+      }
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      setTheme(prefersDark ? "dark" : "light");
+    }
+    themeToggle.addEventListener("click", ()=>{
+      const isDark = document.body.dataset.theme === "dark";
+      setTheme(isDark ? "light" : "dark");
+    });
+
+    // ===== Skeleton
+    function paintSkeletons(count = 12){
+      contenedor.innerHTML = '';
+      for(let i=0;i<count;i++){
+        const sk = document.createElement('div');
+        sk.className = 'card loaded';
+        sk.dataset.nivel = 'bronce';
+        sk.style.cursor = 'default';
+        sk.innerHTML = `
+          <div class="media">
+            <div class="skeleton" style="height:190px;"></div>
+          </div>
+          <div class="card-content">
+            <div class="skeleton" style="height:16px; width:70%; border-radius:999px; margin: 0 auto 10px;"></div>
+            <div class="skeleton" style="height:12px; width:45%; border-radius:999px; margin: 0 auto 14px;"></div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:center;">
+              <div class="skeleton" style="height:28px; width:90px; border-radius:999px;"></div>
+              <div class="skeleton" style="height:28px; width:110px; border-radius:999px;"></div>
+              <div class="skeleton" style="height:28px; width:80px; border-radius:999px;"></div>
+            </div>
+            <div class="hint-row">
+              <span class="skeleton" style="height:12px; width:120px; border-radius:999px;"></span>
+              <span class="skeleton" style="height:30px; width:30px; border-radius:12px;"></span>
+            </div>
+          </div>
+        `;
+        contenedor.appendChild(sk);
+      }
+    }
+
+    // ===== Chips por tipo (dinámicos)
+    function buildTipoChipsFromData(list){
+      const present = new Set();
+      list.forEach(v => present.add(normTipo(v.tipo)));
+
+      tipoChips.innerHTML = "";
+      const ordered = [...TIPO_ORDER];
+      const extras = [...present].filter(t => !ordered.includes(t)).sort((a,b)=>a.localeCompare(b,'es',{sensitivity:'base'}));
+      const finalList = [...ordered, ...extras];
+
+      finalList.forEach(t => {
+        if(t !== 'todos' && !present.has(t)) return;
+        const div = document.createElement("div");
+        div.className = "chip" + (t === "todos" ? " active" : "");
+        div.dataset.tipo = t;
+        const meta = TIPO_META[t];
+        div.textContent = meta ? `${meta.icon} ${meta.label}` : `📌 ${t.charAt(0).toUpperCase()+t.slice(1)}`;
+        div.addEventListener("click", ()=>{
+          [...tipoChips.querySelectorAll(".chip")].forEach(x=>x.classList.remove("active"));
+          div.classList.add("active");
+          selectedTipo = t;
+          currentPage = 1;
+          renderAll();
+        });
+        tipoChips.appendChild(div);
+      });
+    }
+
+    // ===== Strip sections (solo primera página si no hay búsqueda dura)
+    function renderStrip({iconClass, title, subtitle, items}){
+      if(!items || items.length === 0) return null;
+
+      const wrap = document.createElement('section');
+      wrap.className = 'section-strip';
+
+      wrap.innerHTML = `
+        <div class="strip-head">
+          <div class="strip-title"><i class="${iconClass}"></i> ${title}</div>
+          <div class="strip-sub">${subtitle || ''}</div>
+        </div>
+        <div class="strip-body">
+          <div class="strip-row"></div>
+        </div>
+      `;
+
+      const row = wrap.querySelector('.strip-row');
+
+      items.forEach(v => {
+        const mini = document.createElement('div');
+        mini.className = 'mini';
+
+        const catTxt = (v.categoria || v.rubro || v.tipo || 'Sin categoría').toString();
+        const img = (v.imagen || '').toString().trim();
+
+        mini.innerHTML = `
+          ${img ? `<img src="${img}" alt="${v.nombre || 'Item'}" loading="lazy" decoding="async">` : ``}
+          <div class="mini-content">
+            <div class="mini-title" title="${v.nombre || ''}">${v.nombre || 'Sin nombre'}</div>
+            <div class="mini-meta">${tipoBadgeText(v.tipo)} • ${catTxt}</div>
+          </div>
+        `;
+
+        mini.addEventListener('click', () => {
+          window.location.href = `detalle.html?id=${v.id}`;
+        });
+
+        row.appendChild(mini);
+      });
+
+      return wrap;
+    }
+
+    // ===== Render
+    function renderAll(){
+      contenedor.innerHTML = "";
+
+      // --- estado filtros UI
+      const busqueda = (input.value || "").toLowerCase().trim();
+      const distrito = selectDistrito.value;
+
+      // 1) base list + pago
+      let list = [...vendedores];
+
+      if(HIDE_EXPIRED_ALWAYS){
+        list = list.filter(v => isVisibleByPayment(v));
+      }
+
+      // 2) filtros por params cat/sub
+      list = list.filter(matchesCatSub);
+
+      // 3) zona/distrito (params zona o select)
+      const zonaReal = (P.zona ? P.zona : distrito);
+      if(zonaReal && zonaReal !== "todos"){
+        list = list.filter(v => slugify(v.distrito) === slugify(zonaReal) || String(v.distrito) === String(zonaReal));
+      }
+
+      // 4) tipo chip (macro)
+      if(selectedTipo !== "todos"){
+        list = list.filter(v => normTipo(v.tipo) === selectedTipo);
+      }
+
+      // 5) búsqueda
+      if(busqueda){
+        list = list.filter(v => {
+          const nombre = (v.nombre || '').toString().toLowerCase();
+          const tipo = normTipo(v.tipo);
+          const categoria = (v.categoria || v.rubro || v.tipo || '').toString().toLowerCase();
+          const desc = (v.descripcion || '').toString().toLowerCase();
+          const profesion = (v.profesion || v.especialidad || '').toString().toLowerCase();
+          const subcat = (v.subcategoria || v.sub || '').toString().toLowerCase();
+          const tags = Array.isArray(v.tags) ? v.tags.join(' ').toLowerCase() : '';
+          return (
+            nombre.includes(busqueda) ||
+            tipo.includes(busqueda) ||
+            categoria.includes(busqueda) ||
+            desc.includes(busqueda) ||
+            profesion.includes(busqueda) ||
+            subcat.includes(busqueda) ||
+            tags.includes(busqueda)
+          );
+        });
+      }
+
+      // 6) disponibles (si open=1 viene desde Home, forzamos ON)
+      const forceOpen = (P.open === "1");
+      const filtroDisponibles = forceOpen ? true : mostrarSoloActivos;
+
+      if(filtroDisponibles){
+        list = list.filter(v => disponibilidad(v).ok);
+      }
+
+      // ===== Secciones premium (solo si NO hay búsqueda dura y estás en página 1)
+      const showPremium = !busqueda && currentPage === 1 && selectedTipo === "todos" && !P.sub;
+
+      if(showPremium){
+        const eventos = vendedores
+          .filter(v => isVisibleByPayment(v))
+          .filter(v => matchesCatSub(v))
+          .filter(v => normTipo(v.tipo) === 'evento')
+          .filter(v => {
+            const st = disponibilidad(v);
+            return st.label === "En curso" || st.label === "Próximo" || st.kind === "evento";
+          })
+          .slice(0, 10);
+
+        const turismo = vendedores
+          .filter(v => isVisibleByPayment(v))
+          .filter(v => matchesCatSub(v))
+          .filter(v => normTipo(v.tipo) === 'turismo')
+          .slice(0, 10);
+
+        const destacados = vendedores
+          .filter(v => isVisibleByPayment(v))
+          .filter(v => matchesCatSub(v))
+          .filter(v => ['diamante','oro'].includes(normNivel(v.nivel)))
+          .sort((a,b) => (nivelRank[normNivel(a.nivel)] - nivelRank[normNivel(b.nivel)]))
+          .slice(0, 10);
+
+        const s1 = renderStrip({ iconClass:"fa-solid fa-calendar-star", title:"Eventos destacados", subtitle:"Lo que hay en la zona", items:eventos });
+        const s2 = renderStrip({ iconClass:"fa-solid fa-mountain-sun", title:"Turismo & Puntos de interés", subtitle:"Lugares para visitar", items:turismo });
+        const s3 = renderStrip({ iconClass:"fa-solid fa-crown", title:"Destacados", subtitle:"Top posicionados", items:destacados });
+
+        if(s1) contenedor.appendChild(s1);
+        if(s2) contenedor.appendChild(s2);
+        if(s3) contenedor.appendChild(s3);
+      }
+
+      // ===== Orden
+      list.sort((a,b) => {
+        const ra = nivelRank[normNivel(a.nivel)] ?? 99;
+        const rb = nivelRank[normNivel(b.nivel)] ?? 99;
+        if (ra !== rb) return ra - rb;
+
+        const va = (a.visualizaciones || 0);
+        const vb = (b.visualizaciones || 0);
+        if (vb !== va) return vb - va;
+
+        return (a.nombre || '').localeCompare((b.nombre || ''), 'es', { sensitivity:'base' });
+      });
+
+      const totalPages = Math.max(1, Math.ceil(list.length / itemsPerPage));
+      if (currentPage > totalPages) currentPage = totalPages;
+
+      const start = (currentPage - 1) * itemsPerPage;
+      const end = start + itemsPerPage;
+      const pageItems = list.slice(start, end);
+
+      // ===== UI texto superior
+      const parts = [];
+      if(P.cat) parts.push(`Rubro: ${P.cat}`);
+      if(P.sub) parts.push(`Sub: ${P.sub}`);
+      if(zonaReal && zonaReal !== "todos") parts.push(`Zona: ${zonaReal}`);
+      if(forceOpen) parts.push("Solo abiertos");
+      if(busqueda) parts.push(`Búsqueda: "${busqueda}"`);
+
+      pageTitle.textContent = "UBIX | Catálogo";
+      pageSub.textContent = parts.length ? parts.join(" • ") : "Encontrá lo que buscás, rápido.";
+
+      resultsInfo.textContent = `Mostrando ${pageItems.length} de ${list.length} (Página ${currentPage} de ${totalPages})`;
+
+      // si no hay resultados
+      if (pageItems.length === 0) {
+        contenedor.innerHTML += `
+          <p style="grid-column:1/-1;text-align:center; color:var(--muted); padding:18px 0; font-weight:900;">
+            😕 No se encontraron resultados con esos filtros.
+          </p>`;
+        return;
+      }
+
+      // ===== Render cards
+      pageItems.forEach((v) => {
+        const st = disponibilidad(v);
+        const tagsHTML = (Array.isArray(v.tags) ? v.tags : []).slice(0, 7).map(t => `<span class="tag">${t}</span>`).join('');
+        const nivel = normNivel(v.nivel);
+        const categoria = (v.categoria || v.rubro || v.tipo || 'Sin categoría');
+
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.dataset.nivel = nivel;
+
+        card.innerHTML = `
+          <div class="media">
+            <img src="${(v.imagen || '').toString()}" alt="${(v.nombre || '').toString()}" loading="lazy" decoding="async">
+            <div class="overlay" aria-hidden="true"></div>
+
+            <span class="status ${st.ok ? 'open' : 'closed'}">
+              <i class="fa-solid ${st.ok ? 'fa-circle-check' : 'fa-circle-xmark'}"></i>
+              ${st.label}
+            </span>
+
+            <span class="nivel" data-nivel="${nivel}">${getNivelHtml(nivel)}</span>
+            <span class="tipo-badge">${tipoBadgeText(v.tipo)}</span>
+          </div>
+
+          <div class="card-content">
+            <h3 title="${(v.nombre || '').toString()}">${(v.nombre || 'Sin nombre').toString()}</h3>
+            <p>${categoria}</p>
+            <div class="tags">${tagsHTML}</div>
+
+            <div class="hint-row">
+              <span><i class="fa-solid fa-eye"></i> Ver detalle</span>
+              <span class="go"><i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+          </div>
+        `;
+
+        card.addEventListener('click', () => {
+          // suma visualización en catálogo (si en detalle también suma, duplicás)
+          updateDoc(doc(db, "comercios", v.id), {
+            visualizaciones: (v.visualizaciones || 0) + 1
+          }).catch(()=>{});
+          window.location.href = `detalle.html?id=${v.id}`;
+        });
+
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              card.classList.add('loaded');
+              observer.unobserve(card);
+            }
+          });
+        }, { rootMargin: '140px' });
+        observer.observe(card);
+
+        contenedor.appendChild(card);
+      });
+
+      // ===== Paginación
+      const pagination = document.createElement('div');
+      pagination.className = 'pagination';
+
+      const prevBtn = document.createElement('button');
+      prevBtn.textContent = 'Anterior';
+      prevBtn.disabled = currentPage <= 1;
+      prevBtn.addEventListener('click', () => { currentPage--; renderAll(); window.scrollTo({top:0, behavior:'smooth'}); });
+      pagination.appendChild(prevBtn);
+
+      const nextBtn = document.createElement('button');
+      nextBtn.textContent = 'Siguiente';
+      nextBtn.disabled = currentPage >= totalPages;
+      nextBtn.addEventListener('click', () => { currentPage++; renderAll(); window.scrollTo({top:0, behavior:'smooth'}); });
+      pagination.appendChild(nextBtn);
+
+      contenedor.appendChild(pagination);
+    }
+
+    // ===== Cargar Firestore
+    async function cargarComercios(){
+      paintSkeletons(12);
+      try{
+        const snapshot = await getDocs(collection(db, "comercios"));
+        vendedores = snapshot.docs.map(docu => {
+          const data = docu.data() || {};
+          if(!data.tipo) data.tipo = "comercio";
+          return { id: docu.id, ...data };
+        });
+
+        buildTipoChipsFromData(vendedores);
+
+        // ===== Aplicar defaults desde URL (q/zona/open/tipo)
+        if(P.q) input.value = P.q;
+        if(P.zona){
+          // si la zona no existe como option exacta, igual la dejamos en "todos"
+          const z = [...selectDistrito.options].some(o => slugify(o.value) === slugify(P.zona));
+          if(z) selectDistrito.value = P.zona;
+        }
+        if(P.tipo){
+          selectedTipo = normTipo(P.tipo);
+          // marcar chip si existe
+          const chip = [...tipoChips.querySelectorAll(".chip")].find(c => c.dataset.tipo === selectedTipo);
+          if(chip){
+            [...tipoChips.querySelectorAll(".chip")].forEach(x=>x.classList.remove("active"));
+            chip.classList.add("active");
+          }
+        }
+
+        // open=1 fuerza “solo disponibles”
+        if(P.open === "1"){
+          checkbox.checked = true;
+          mostrarSoloActivos = true;
+          label.textContent = "Solo disponibles";
+        }
+
+        renderAll();
+      } catch(e){
+        console.error("Error al cargar", e);
+        contenedor.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:#ff4d6d;padding:18px 0;font-weight:900;">Error al cargar datos.</p>`;
+      }
+    }
+
+    // ===== Eventos UI
+    input.addEventListener('input', () => { currentPage = 1; renderAll(); });
+
+    selectDistrito.addEventListener('change', () => {
+      currentPage = 1;
+      // si cambias manualmente la zona, anulamos el param zona (a nivel lógico)
+      P.zona = "";
+      renderAll();
+    });
+
+    checkbox.addEventListener('change', () => {
+      mostrarSoloActivos = checkbox.checked;
+      label.textContent = checkbox.checked ? "Solo disponibles" : "Todos";
+      currentPage = 1;
+      renderAll();
+    });
+
+    clearBtn.addEventListener("click", ()=>{
+      input.value = "";
+      selectDistrito.value = "todos";
+      checkbox.checked = true;
+      mostrarSoloActivos = true;
+      label.textContent = "Solo disponibles";
+      selectedTipo = "todos";
+      [...tipoChips.querySelectorAll(".chip")].forEach(x=>x.classList.remove("active"));
+      const all = tipoChips.querySelector('.chip[data-tipo="todos"]');
+      if(all) all.classList.add("active");
+
+      // limpiar params visibles de la URL (sin recargar)
+      history.replaceState({}, "", "./catalogo.html");
+      P.q=""; P.zona=""; P.open=""; P.cat=""; P.sub=""; P.tipo="";
+      currentPage = 1;
+      renderAll();
+    });
+
+    backBtn.addEventListener("click", ()=>{
+      if(history.length > 1) history.back();
+      else location.href = "./index.html";
+    });
+
+    // ===== Init
+    initTheme();
+    cargarComercios();
+
+    // refresco suave (estado abierto/cerrado)
+    setInterval(() => { renderAll(); }, 60000);
+  </script>
+</body>
+</html>
