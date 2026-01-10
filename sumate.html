@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=5.0" />
+  <title>INDX | Sumate</title>
+  <meta name="description" content="Sumate a indx: publicá tu negocio o servicio en el Catálogo Digital Local. Formulario, requisitos y contacto." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+  <style>
+    :root{
+      --primary:#2D5BFF;
+      --primary-dark:#1A3EBF;
+      --sky:#0EA5E9;
+      --ok:#10B981;
+      --danger:#EF4444;
+
+      --bg:#F6F7FB;
+      --surface: rgba(255,255,255,.76);
+      --panel: rgba(255,255,255,.86);
+      --card: rgba(255,255,255,.92);
+
+      --text:#0B1220;
+      --muted:#5B667A;
+      --line: rgba(12,18,32,.10);
+
+      --shadow: 0 18px 60px rgba(11,18,32,.10);
+      --shadow2: 0 10px 26px rgba(11,18,32,.08);
+      --glow: 0 0 0 3px rgba(45,91,255,0.20);
+
+      --r14:14px;
+      --r18:18px;
+      --r22:22px;
+      --r26:26px;
+
+      --max:1100px;
+      --transition: all .22s ease;
+    }
+
+    [data-theme="dark"]{
+      --bg:#070A10;
+      --surface: rgba(15,23,42,.65);
+      --panel: rgba(15,23,42,.80);
+      --card: rgba(15,23,42,.88);
+      --text:#F8FAFC;
+      --muted:#A3B2C7;
+      --line: rgba(255,255,255,.08);
+
+      --shadow: 0 18px 70px rgba(0,0,0,.45);
+      --shadow2: 0 10px 30px rgba(0,0,0,.35);
+    }
+
+    *{ box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color: transparent; }
+    body{
+      font-family:'Plus Jakarta Sans',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background: var(--bg);
+      color:var(--text);
+      min-height:100vh;
+      overflow-x:hidden;
+    }
+    a{ color:inherit; text-decoration:none; }
+    button,input,select,textarea{ font:inherit; }
+    :focus-visible{ outline:none; box-shadow: var(--glow); border-radius: 14px; }
+
+    /* Fondo premium (igual vibe) */
+    .bgfx{
+      position:fixed; inset:0; z-index:-2; pointer-events:none;
+      background:
+        radial-gradient(900px 520px at 10% -10%, rgba(45,91,255,.18), transparent 60%),
+        radial-gradient(700px 460px at 110% 10%, rgba(14,165,233,.14), transparent 60%),
+        radial-gradient(650px 520px at 40% 120%, rgba(16,185,129,.10), transparent 55%);
+    }
+    .grain{
+      position:fixed; inset:0; z-index:-1; pointer-events:none;
+      opacity:.05;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
+      mix-blend-mode:multiply;
+    }
+    [data-theme="dark"] .grain{ mix-blend-mode:screen; opacity:.06; }
+
+    .container{ width:min(var(--max), calc(100% - 22px)); margin:0 auto; }
+
+    /* Header (similar al resto) */
+    header{
+      position:sticky; top:0; z-index:50;
+      background: rgba(255,255,255,.60);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom:1px solid var(--line);
+      box-shadow: 0 8px 24px rgba(0,0,0,.06);
+    }
+    [data-theme="dark"] header{
+      background: rgba(7,10,16,.55);
+      box-shadow: 0 10px 28px rgba(0,0,0,.30);
+    }
+
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:10px; padding:12px 0;
+    }
+    .brand{ display:flex; align-items:center; gap:10px; min-width:0; }
+    .logo{
+      width:40px; height:40px; border-radius:14px;
+      background: url(logo.jpg) center/cover no-repeat;
+      box-shadow: 0 16px 34px rgba(45,91,255,.22);
+      border: 1px solid rgba(255,255,255,.25);
+      flex:0 0 auto;
+    }
+    .brand .t{ min-width:0; display:flex; flex-direction:column; }
+    .brand h1{
+      font-size:16px; font-weight:950; letter-spacing:-.4px;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      max-width: 62vw;
+    }
+    .subhead{
+      margin-top:2px; color: var(--muted); font-size:12px; font-weight:850;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      max-width: 62vw;
+    }
+
+    .controls{ display:flex; align-items:center; gap:10px; }
+    .icon-btn{
+      width:44px; height:44px; border-radius:16px;
+      border:1px solid var(--line);
+      background: var(--panel);
+      box-shadow: var(--shadow2);
+      cursor:pointer;
+      display:grid; place-items:center;
+      font-size:18px;
+      transition: var(--transition);
+    }
+    .icon-btn:hover{ transform: translateY(-1px); }
+
+    /* Layout principal */
+    main{ padding: 18px 0 26px; }
+    .hero{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:14px;
+      align-items:stretch;
+      margin-top: 14px;
+    }
+    .panel{
+      background: var(--panel);
+      border:1px solid var(--line);
+      border-radius: var(--r26);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+
+    .hero-left{
+      padding: 18px;
+      position:relative;
+    }
+    .kicker{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(45,91,255,.22);
+      background: rgba(45,91,255,.08);
+      color: var(--text);
+      font-weight: 950;
+      font-size: 12px;
+    }
+    .kicker i{ color: var(--primary); }
+
+    .hero-title{
+      margin-top: 12px;
+      font-size: 28px;
+      line-height: 1.05;
+      letter-spacing: -0.8px;
+      font-weight: 1000;
+    }
+    .hero-desc{
+      margin-top: 10px;
+      color: var(--muted);
+      font-weight: 850;
+      font-size: 14px;
+      line-height: 1.55;
+      max-width: 62ch;
+    }
+
+    .cta-row{
+      margin-top: 14px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .btn{
+      border:1px solid rgba(45,91,255,.20);
+      background: linear-gradient(135deg, var(--sky), var(--primary));
+      color:#fff;
+      border-radius: 18px;
+      padding: 12px 14px;
+      box-shadow: 0 14px 28px rgba(14,165,233,.20);
+      font-weight: 950;
+      cursor:pointer;
+      transition: var(--transition);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      min-width: 210px;
+      text-align:center;
+    }
+    .btn:hover{ transform: translateY(-1px); }
+
+    .btn-secondary{
+      border:1px solid var(--line);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 18px;
+      padding: 12px 14px;
+      box-shadow: var(--shadow2);
+      font-weight: 950;
+      cursor:pointer;
+      transition: var(--transition);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      min-width: 210px;
+      text-align:center;
+    }
+    .btn-secondary:hover{ transform: translateY(-1px); }
+
+    .meta{
+      margin-top: 14px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+      color: var(--muted);
+      font-weight: 850;
+      font-size: 12px;
+    }
+    .meta .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.45);
+    }
+    [data-theme="dark"] .meta .pill{ background: rgba(15,23,42,.55); }
+
+    /* Right card */
+    .hero-right{
+      padding: 16px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .mini-card{
+      border:1px solid var(--line);
+      background: var(--card);
+      border-radius: var(--r22);
+      padding: 14px;
+      box-shadow: var(--shadow2);
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+    }
+    .mini-ico{
+      width:40px; height:40px;
+      border-radius: 16px;
+      display:grid; place-items:center;
+      border:1px solid rgba(45,91,255,.20);
+      background: rgba(45,91,255,.10);
+      color: var(--primary);
+      flex:0 0 auto;
+    }
+    .mini-card b{
+      display:block;
+      font-weight: 1000;
+      letter-spacing: -0.2px;
+      font-size: 14px;
+    }
+    .mini-card p{
+      margin-top: 4px;
+      color: var(--muted);
+      font-weight: 850;
+      font-size: 12.5px;
+      line-height: 1.45;
+    }
+
+    /* Sections */
+    .section{
+      margin-top: 14px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      align-items:start;
+    }
+    .section .panel{ padding: 16px; }
+    .section h2{
+      font-size: 14px;
+      font-weight: 1000;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .list{
+      display:grid;
+      gap:10px;
+    }
+    .item{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      padding: 12px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.55);
+      box-shadow: var(--shadow2);
+    }
+    [data-theme="dark"] .item{ background: rgba(15,23,42,.55); }
+    .badge{
+      width:34px; height:34px;
+      border-radius: 14px;
+      display:grid; place-items:center;
+      background: rgba(16,185,129,.12);
+      border: 1px solid rgba(16,185,129,.22);
+      color: var(--ok);
+      flex:0 0 auto;
+      font-weight: 1000;
+    }
+    .item b{
+      display:block;
+      font-weight: 1000;
+      font-size: 14px;
+      letter-spacing: -0.2px;
+    }
+    .item p{
+      margin-top: 3px;
+      color: var(--muted);
+      font-weight: 850;
+      font-size: 12.5px;
+      line-height: 1.45;
+    }
+
+    /* Form area */
+    .form-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top: 10px;
+    }
+
+    .note{
+      margin-top: 10px;
+      color: var(--muted);
+      font-weight: 850;
+      font-size: 12px;
+      line-height: 1.55;
+    }
+    .note code{
+      background: rgba(45,91,255,.10);
+      border: 1px solid rgba(45,91,255,.18);
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-weight: 950;
+      color: var(--text);
+    }
+
+    /* Embed forms */
+    .embed{
+      margin-top: 14px;
+      border:1px solid var(--line);
+      background: var(--card);
+      border-radius: var(--r26);
+      overflow:hidden;
+      box-shadow: var(--shadow2);
+    }
+    .embed-head{
+      padding: 12px 14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      border-bottom:1px solid var(--line);
+      background: rgba(255,255,255,.45);
+    }
+    [data-theme="dark"] .embed-head{ background: rgba(15,23,42,.55); }
+    .embed-head b{
+      font-weight: 1000;
+      font-size: 13px;
+      letter-spacing: -0.2px;
+    }
+    .embed-head span{
+      color: var(--muted);
+      font-weight: 850;
+      font-size: 12px;
+      white-space:nowrap;
+    }
+    .embed iframe{
+      width:100%;
+      height: 760px;
+      border:0;
+      display:block;
+      background: transparent;
+    }
+
+    /* Footer */
+    footer{
+      padding: 18px 0 22px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      text-align:center;
+      font-size: 12px;
+      font-weight:850;
+      margin-top: 18px;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px){
+      .hero{ grid-template-columns: 1fr; }
+    }
+    @media (max-width: 720px){
+      .section{ grid-template-columns: 1fr; }
+      .hero-title{ font-size: 26px; }
+      .btn,.btn-secondary{ width:100%; min-width: unset; }
+    }
+  </style>
+</head>
+
+<body data-theme="light">
+  <div class="bgfx"></div>
+  <div class="grain"></div>
+
+  <header>
+    <div class="container">
+      <div class="topbar">
+        <a class="brand" href="./index.html" title="Volver al inicio">
+          <div class="logo" aria-hidden="true"></div>
+          <div class="t">
+            <h1>INDX | Sumate</h1>
+            <div class="subhead">Publicá tu negocio o servicio en el Catálogo Digital Local</div>
+          </div>
+        </a>
+
+        <div class="controls">
+          <button class="icon-btn" id="backBtn" title="Volver">←</button>
+          <button class="icon-btn" id="themeToggle" title="Cambiar tema">🌓</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="panel hero-left">
+        <div class="kicker"><i class="fa-solid fa-sparkles"></i> Alta visibilidad • Más clientes • Presencia local</div>
+        <h2 class="hero-title">Sumate a <span style="color: #ff9900;">INDX</span> y aparecé en el mapa local.</h2>
+        <p class="hero-desc">
+          Si tenés un <b>comercio</b>, <b>servicio</b>, sos <b>profesional</b> o brindás <b>transporte</b>, podés formar parte del Catálogo Digital Local.
+          Te cargamos con ficha completa, imagen, redes, tags y ubicación para que la gente te encuentre rápido.
+        </p>
+
+        <div class="cta-row">
+          <!-- ✅ PONÉ ACÁ TU LINK DE GOOGLE FORMS -->
+          <a class="btn" id="formsBtn" href="https://forms.gle/PEGAR_TU_LINK" target="_blank" rel="noopener">
+            <i class="fa-solid fa-pen-to-square"></i> Completar formulario
+          </a>
+          <a class="btn-secondary" href="./catalogo.html" title="Ver el catálogo">
+            <i class="fa-solid fa-magnifying-glass"></i> Ver catálogo
+          </a>
+        </div>
+
+        <div class="meta">
+          <div class="pill"><i class="fa-solid fa-circle-check" style="color:var(--ok)"></i> Alta rápida</div>
+          <div class="pill"><i class="fa-solid fa-location-dot" style="color:var(--primary)"></i> Por zona</div>
+          <div class="pill"><i class="fa-solid fa-shield-halved" style="color:var(--sky)"></i> Datos verificados</div>
+        </div>
+
+        <p class="note">
+          Tip: si querés que el botón apunte a tu formulario real, reemplazá el link en <code>href</code> del botón “Completar formulario”.
+        </p>
+      </div>
+
+      <aside class="panel hero-right">
+        <div class="mini-card">
+          <div class="mini-ico"><i class="fa-solid fa-id-card"></i></div>
+          <div>
+            <b>Ficha completa</b>
+            <p>Nombre, rubro/subrubro, descripción, imágenes, WhatsApp, ubicación, horarios, tags.</p>
+          </div>
+        </div>
+
+        <div class="mini-card">
+          <div class="mini-ico"><i class="fa-solid fa-ranking-star"></i></div>
+          <div>
+            <b>Mejor posicionamiento</b>
+            <p>Opciones por nivel (Bronce/Plata/Oro/Diamante) para aparecer arriba y destacarte.</p>
+          </div>
+        </div>
+
+        <div class="mini-card">
+          <div class="mini-ico"><i class="fa-solid fa-bolt"></i></div>
+          <div>
+            <b>Listo para vender</b>
+            <p>Tu ficha se abre en “detalle”, con llamada directa, redes y botón a Maps.</p>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- 2 columnas -->
+    <section class="section">
+      <!-- Requisitos -->
+      <div class="panel">
+        <h2>Qué necesitás para sumarte</h2>
+        <div class="list">
+          <div class="item">
+            <div class="badge">1</div>
+            <div>
+              <b>Datos básicos</b>
+              <p>Nombre del negocio/servicio, rubro y zona donde trabajás.</p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="badge">2</div>
+            <div>
+              <b>Contacto</b>
+              <p>WhatsApp, teléfono y/o redes (Instagram/Facebook) para que te contacten fácil.</p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="badge">3</div>
+            <div>
+              <b>Imágenes</b>
+              <p>Logo o fotos del local/trabajo (se ven MUCHO mejor en el catálogo).</p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="badge">4</div>
+            <div>
+              <b>Horarios y disponibilidad</b>
+              <p>Días, horarios y modalidad (turnos, delivery, 24hs, etc.).</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Proceso -->
+      <div class="panel">
+        <h2>Cómo es el proceso</h2>
+        <div class="list">
+          <div class="item">
+            <div class="badge"><i class="fa-solid fa-file-signature"></i></div>
+            <div>
+              <b>1) Completás el formulario</b>
+              <p>En menos de 3 minutos nos dejás tus datos.</p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="badge"><i class="fa-solid fa-clipboard-check"></i></div>
+            <div>
+              <b>2) Validamos y armamos tu ficha</b>
+              <p>Revisamos info, ordenamos tags y mejoramos presentación.</p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="badge"><i class="fa-solid fa-rocket"></i></div>
+            <div>
+              <b>3) Te publicamos en INDX</b>
+              <p>Quedás visible en rubros, búsqueda y en el mapa local.</p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="badge"><i class="fa-solid fa-headset"></i></div>
+            <div>
+              <b>4) Soporte y actualizaciones</b>
+              <p>Podés pedir cambios de fotos, horarios, promos y más.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <a class="btn" href="https://forms.gle/PEGAR_TU_LINK" target="_blank" rel="noopener">
+            <i class="fa-solid fa-paper-plane"></i> Enviar mis datos
+          </a>
+          <button class="btn-secondary" id="copyLinkBtn" type="button">
+            <i class="fa-solid fa-link"></i> Copiar link del formulario
+          </button>
+        </div>
+
+        <p class="note">
+          Si no tenés fotos ahora, igual podés sumarte y las agregamos después.
+        </p>
+      </div>
+    </section>
+
+    <!-- Google Forms EMBED (opcional) -->
+    <section class="embed" id="embedBox" aria-label="Formulario de alta">
+      <div class="embed-head">
+        <b><i class="fa-solid fa-list-check"></i> Formulario (Google Forms)</b>
+        <span>Podés completarlo acá mismo</span>
+      </div>
+
+      <!-- ✅ PARA EMBEBER:
+        1) Abrí tu Google Form
+        2) Botón "Enviar"
+        3) ícono "<>" (Insertar HTML)
+        4) Copiá el link del iframe (src="...")
+        5) Pegalo abajo en data-src o directamente en src
+      -->
+      <iframe id="formsEmbed"
+        src=""
+        data-src="https://docs.google.com/forms/d/e/PEGAR_ID_DE_TU_FORM/viewform?embedded=true"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        title="Formulario de inscripción INDX">
+      </iframe>
+    </section>
+
+  </main>
+
+  <footer>© 2026 INDX • Catálogo Digital Local</footer>
+
+  <script>
+    // ===== Theme (misma key del sistema)
+    const THEME_KEY = "indx_theme";
+    const themeToggle = document.getElementById("themeToggle");
+
+    function setTheme(theme){
+      document.body.setAttribute("data-theme", theme === "dark" ? "dark" : "light");
+      localStorage.setItem(THEME_KEY, theme === "dark" ? "dark" : "light");
+      themeToggle.textContent = (document.body.dataset.theme === "dark") ? "🌙" : "🌓";
+    }
+    function initTheme(){
+      const saved = localStorage.getItem(THEME_KEY);
+      if(saved === "dark" || saved === "light"){
+        setTheme(saved);
+        return;
+      }
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      setTheme(prefersDark ? "dark" : "light");
+    }
+    themeToggle.addEventListener("click", ()=>{
+      const isDark = document.body.dataset.theme === "dark";
+      setTheme(isDark ? "light" : "dark");
+    });
+
+    // Back
+    document.getElementById("backBtn").addEventListener("click", ()=>{
+      if(history.length > 1) history.back();
+      else location.href = "./index.html";
+    });
+
+    // Copy form link (editalo con tu link real)
+    const FORM_LINK = "https://forms.gle/PEGAR_TU_LINK";
+    const copyLinkBtn = document.getElementById("copyLinkBtn");
+    copyLinkBtn.addEventListener("click", async ()=>{
+      try{
+        await navigator.clipboard.writeText(FORM_LINK);
+        copyLinkBtn.innerHTML = '<i class="fa-solid fa-check"></i> Link copiado';
+        setTimeout(()=> copyLinkBtn.innerHTML = '<i class="fa-solid fa-link"></i> Copiar link del formulario', 1600);
+      }catch(e){
+        alert("No pude copiar. Copialo manual: " + FORM_LINK);
+      }
+    });
+
+    // Embed lazy-load (carga el iframe solo cuando hace falta)
+    const iframe = document.getElementById("formsEmbed");
+    const dataSrc = iframe.getAttribute("data-src");
+    function loadEmbed(){
+      if(!iframe.src && dataSrc && dataSrc.includes("docs.google.com/forms")){
+        iframe.src = dataSrc;
+      }
+    }
+
+    // Si querés que el embed se cargue siempre al abrir:
+    // loadEmbed();
+
+    // Mejor: cargar cuando el usuario baja hasta el formulario
+    const obs = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){
+          loadEmbed();
+          obs.disconnect();
+        }
+      });
+    }, { rootMargin: "200px" });
+    obs.observe(document.getElementById("embedBox"));
+
+    // Init
+    initTheme();
+  </script>
+</body>
+</html>
