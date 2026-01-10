@@ -112,10 +112,15 @@
     .iconbtn{
       width:44px; height:44px; border-radius: 16px;
       border: 1px solid var(--border);
-      background: var(--surface);
+      background: var(--text);
       box-shadow: var(--shadow-1);
       display:grid; place-items:center;
       cursor:pointer;
+      color: white;
+    }
+    [data-theme="dark"] .iconbtn{
+      color: #050505;
+      background: white;
     }
 
     /* Hero */
@@ -406,7 +411,7 @@
       transition: transform .16s ease, border-color .16s ease;
       text-align:center;
     }
-    [data-theme="dark"] .qbtn{ background: rgba(15,23,42,.55); box-shadow: 0 12px 18px rgba(0,0,0,.35); }
+    [data-theme="dark"] .qbtn{ background: rgba(15,23,42,.55); box-shadow: 0 12px 18px rgba(0,0,0,.35);color: #1A3EBF; }
     .qbtn:hover{ transform: translateY(-2px); border-color: rgba(45,91,255,.28); }
     .qbtn b{ display:block; font-size: 11px; font-weight: 950; }
     .qbtn span{ display:block; font-size: 10.5px; color: var(--muted); font-weight: 850; margin-top: 2px; }
