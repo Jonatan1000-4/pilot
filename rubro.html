@@ -2,304 +2,427 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>UBIX | Rubro</title>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
 
   <style>
-    :root {
-      --primary: #2D5BFF;
-      --primary-dark: #1A3EBF;
-      --bg: #F0F2F5;
-      --card: rgba(255, 255, 255, 0.92);
-      --text: #0F172A;
-      --muted: #64748B;
-      --radius: 24px;
-      --shadow-sm: 0 4px 12px rgba(0,0,0,0.03);
-      --shadow-lg: 0 20px 40px rgba(0,0,0,0.08);
-      --border: rgba(15, 23, 42, 0.08);
-      --chip: rgba(0,0,0,0.045);
-      --chip-border: rgba(15,23,42,0.08);
-      --glow: 0 0 0 3px rgba(45,91,255,0.18);
+    :root{
+      --bg:#F6F7FB;
+      --surface: rgba(255,255,255,.82);
+      --card: rgba(255,255,255,.92);
+      --text:#0B1220;
+      --muted:#5B667A;
+      --border: rgba(12,18,32,.10);
+
+      --primary:#2D5BFF;
+      --primary2:#0EA5E9;
+      --ok:#10B981;
+
+      --r16:16px; --r20:20px; --r26:26px;
+      --s1: 0 10px 26px rgba(11,18,32,.06);
+      --s2: 0 18px 50px rgba(11,18,32,.10);
+      --focus: 0 0 0 3px rgba(45,91,255,.22);
     }
 
-    [data-theme="dark"] {
-      --bg: #05070A;
-      --card: rgba(15, 23, 42, 0.90);
-      --text: #F8FAFC;
-      --muted: #94A3B8;
-      --border: rgba(255, 255, 255, 0.06);
-      --chip: rgba(255,255,255,0.06);
-      --chip-border: rgba(255,255,255,0.08);
-      --shadow-lg: 0 20px 50px rgba(0,0,0,0.35);
+    [data-theme="dark"]{
+      --bg:#070A10;
+      --surface: rgba(15,23,42,.70);
+      --card: rgba(15,23,42,.88);
+      --text:#F8FAFC;
+      --muted:#A3B2C7;
+      --border: rgba(255,255,255,.08);
+      --s1: 0 12px 24px rgba(0,0,0,.35);
+      --s2: 0 22px 58px rgba(0,0,0,.45);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-    body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
-    a { color: inherit; text-decoration: none; }
-    button, input, select { font: inherit; }
-
-    .mesh {
-      position: fixed; inset: 0; z-index: -1; pointer-events: none;
-      background:
-        radial-gradient(at 0% 0%, rgba(45, 91, 255, 0.08), transparent 55%),
-        radial-gradient(at 100% 100%, rgba(0, 242, 254, 0.06), transparent 55%);
-    }
-
-    .app-container { max-width: 480px; margin: 0 auto; padding: 18px; }
-
-    header {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 14px; padding: 0 4px;
-    }
-    .left {
-      display:flex; align-items:center; gap: 10px;
-    }
-    .back {
-      width: 44px; height: 44px; border-radius: 14px;
-      border: 1px solid var(--border);
-      background: var(--card);
-      box-shadow: var(--shadow-sm);
-      cursor: pointer;
-      display:grid; place-items:center;
-      font-size: 18px;
-    }
-    .titleBlock b{
-      display:block;
-      font-size: 16px;
-      font-weight: 900;
-      letter-spacing: -0.4px;
-    }
-    .titleBlock span{
-      display:block;
-      font-size: 12px;
-      font-weight: 800;
-      color: var(--muted);
-      margin-top: 1px;
-    }
-
-    .icon-btn {
-      width: 44px; height: 44px; border-radius: 14px;
-      border: 1px solid var(--border);
-      background: var(--card);
-      box-shadow: var(--shadow-sm);
-      cursor: pointer;
-      display: grid; place-items: center;
-      font-size: 18px;
-    }
-
-    .panel {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 18px;
-      box-shadow: var(--shadow-lg);
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-    }
-
-    .search-box {
-      background: var(--chip);
-      border: 1px solid var(--chip-border);
-      border-radius: 18px;
-      padding: 12px 12px;
-      display:flex;
-      gap: 10px;
-      align-items:center;
-      margin-bottom: 12px;
-      transition: .2s;
-    }
-    .search-box:focus-within{ border-color: rgba(45,91,255,0.55); box-shadow: var(--glow); }
-    .search-box input{
-      border:none; outline:none; background: transparent;
-      width:100%;
+    *{ box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+    body{
+      font-family:"Plus Jakarta Sans",system-ui,Segoe UI,Roboto,Arial,sans-serif;
+      background: var(--bg);
       color: var(--text);
-      font-weight: 800;
-      font-size: 14px;
+      overflow-x:hidden;
     }
-    .search-box input::placeholder{ color: var(--muted); font-weight: 700; }
+    a{ color:inherit; text-decoration:none; }
+    button,input,select{ font:inherit; }
+    :focus-visible{ outline:none; box-shadow: var(--focus); border-radius: 14px; }
 
-    .filters {
+    .bgfx{
+      position:fixed; inset:0; z-index:-2; pointer-events:none;
+      background:
+        radial-gradient(900px 500px at 10% -10%, rgba(45,91,255,.18), transparent 60%),
+        radial-gradient(700px 450px at 110% 20%, rgba(14,165,233,.14), transparent 60%),
+        radial-gradient(600px 460px at 40% 120%, rgba(16,185,129,.10), transparent 55%);
+    }
+    .grain{
+      position:fixed; inset:0; z-index:-1; pointer-events:none;
+      opacity:.05;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
+      mix-blend-mode:multiply;
+    }
+    [data-theme="dark"] .grain{ mix-blend-mode:screen; opacity:.06; }
+
+    .wrap{ max-width: 480px; margin:0 auto; padding: 18px 16px 28px; }
+
+    /* Topbar */
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between;
+      margin-bottom: 12px;
+    }
+    .left{
+      display:flex; align-items:center; gap:10px;
+      min-width: 0;
+    }
+    .iconbtn{
+      width:44px; height:44px; border-radius:16px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      box-shadow: var(--s1);
+      display:grid; place-items:center;
+      cursor:pointer;
+      flex: 0 0 auto;
+    }
+    .title{
+      min-width:0;
+    }
+    .title b{
+      display:flex; align-items:center; gap:8px;
+      font-size: 16px;
+      font-weight: 950;
+      letter-spacing: -.4px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(45,91,255,.12);
+      border: 1px solid rgba(45,91,255,.20);
+      color: var(--primary);
+      font-weight: 950;
+      font-size: 11px;
+      flex: 0 0 auto;
+    }
+    .title span{
+      display:block;
+      margin-top: 2px;
+      font-size: 12px;
+      font-weight: 850;
+      color: var(--muted);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    /* Card sections */
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.78), rgba(255,255,255,.58));
+      border: 1px solid var(--border);
+      border-radius: var(--r26);
+      box-shadow: var(--s2);
+      padding: 14px;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      overflow:hidden;
+    }
+    [data-theme="dark"] .card{
+      background: linear-gradient(180deg, rgba(15,23,42,.88), rgba(15,23,42,.62));
+    }
+
+    .heroRow{
+      display:flex; align-items:flex-start; justify-content:space-between; gap: 12px;
+      padding: 4px 4px 10px;
+    }
+    .heroRow .hTitle{
+      font-size: 14px;
+      font-weight: 950;
+      letter-spacing: -.2px;
+    }
+    .heroRow .hSub{
+      margin-top: 4px;
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 850;
+      line-height: 1.3;
+      max-width: 290px;
+    }
+
+    .actions{
       display:grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
-      margin-bottom: 12px;
+      padding: 4px;
     }
-    .select {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 10px 12px;
-      display:flex;
-      align-items:center;
-      gap: 10px;
-      position: relative;
-    }
-    .select::after{
-      content:"▾";
-      position:absolute;
-      right:12px; top:50%;
-      transform: translateY(-50%);
-      pointer-events:none;
-      color: var(--muted);
-      font-weight: 900;
-    }
-    .select select{
-      appearance:none; -webkit-appearance:none; -moz-appearance:none;
-      border:none; outline:none; background: transparent;
-      width:100%;
-      color: var(--text);
-      font-weight: 900;
-      font-size: 13px;
-      cursor:pointer;
-      padding-right: 18px;
-    }
-    select option { background: rgba(255,255,255,1); color: #0F172A; }
-    [data-theme="dark"] select option { background: #0F172A; color: #F8FAFC; }
-
-    .btn {
-      width:100%;
-      border:none;
-      border-radius: 16px;
+    .btn{
+      border:none; cursor:pointer;
+      border-radius: 18px;
       padding: 12px 12px;
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      font-weight: 950;
+      letter-spacing: .2px;
+      transition: transform .18s ease, filter .18s ease;
+    }
+    .btn:active{ transform: translateY(1px); }
+    .btnPrimary{
       color:#fff;
-      font-weight: 900;
-      cursor:pointer;
-      box-shadow: 0 14px 30px rgba(45,91,255,0.25);
-      transition: .2s;
+      background: linear-gradient(135deg, var(--primary2), var(--primary));
+      box-shadow: 0 14px 28px rgba(14,165,233,.22);
     }
-    .btn:hover{ transform: translateY(-1px); }
+    .btnGhost{
+      color: var(--text);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      box-shadow: var(--s1);
+    }
 
-    .quick-actions{
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      margin: 12px 0 10px;
+    /* Search & filters */
+    .searchbox{
+      display:flex; gap:10px; align-items:center;
+      padding: 12px 12px;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.55);
+      transition: box-shadow .18s ease, border-color .18s ease;
+      margin: 10px 4px 8px;
     }
-    .quick-btn{
-      background: var(--card);
+    [data-theme="dark"] .searchbox{ background: rgba(15,23,42,.55); }
+    .searchbox:focus-within{ border-color: rgba(45,91,255,.45); box-shadow: var(--focus);}
+    .searchbox input{
+      border:none; outline:none; background:transparent;
+      width:100%;
+      font-weight: 850;
+      color: var(--text);
+      font-size: 14px;
+    }
+    .searchbox input::placeholder{ color: var(--muted); font-weight: 800; }
+
+    .row{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      padding: 4px;
+    }
+    .sel{
+      position:relative;
+      display:flex; align-items:center; gap:10px;
+      background: rgba(255,255,255,.55);
       border: 1px solid var(--border);
       border-radius: 18px;
-      padding: 10px 8px;
-      box-shadow: var(--shadow-sm);
-      cursor: pointer;
-      transition: 0.22s;
-      text-align:center;
-      user-select: none;
+      padding: 10px 12px;
     }
-    .quick-btn:hover{ transform: translateY(-2px); border-color: rgba(45,91,255,0.45); }
-    .quick-btn b{ display:block; font-size: 11px; font-weight: 900; letter-spacing: .4px; }
-    .quick-btn span{ display:block; font-size: 10.5px; color: var(--muted); font-weight: 800; margin-top: 2px; }
+    [data-theme="dark"] .sel{ background: rgba(15,23,42,.55); }
+    .sel select{
+      appearance:none; -webkit-appearance:none; -moz-appearance:none;
+      border:none; outline:none; background:transparent;
+      width:100%;
+      font-weight: 950;
+      color: rgb(4, 170, 247);
+      cursor:pointer;
+      font-size: 13px;
+      padding-right: 18px;
+    }
+    .sel::after{
+      content:"▾";
+      position:absolute; right:12px; top:50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-weight: 950;
+      pointer-events:none;
+    }
 
-    .subTitle{
+    /* Quick actions (smaller, cleaner) */
+    .quick{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      padding: 4px;
       margin-top: 10px;
+    }
+    .qbtn{
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.55);
+      border-radius: 18px;
+      padding: 10px 8px;
+      cursor:pointer;
+      box-shadow: 0 10px 18px rgba(11,18,32,.05);
+      transition: transform .16s ease, border-color .16s ease;
+      text-align:center;
+    }
+    [data-theme="dark"] .qbtn{ background: rgba(15,23,42,.55); box-shadow: 0 12px 18px rgba(0,0,0,.35); }
+    .qbtn:hover{ transform: translateY(-2px); border-color: rgba(45,91,255,.28); }
+    .qbtn b{ display:block; font-size: 11px; font-weight: 950;    color: #2d5bff; }
+    .qbtn span{ display:block; font-size: 10.5px; color: var(--muted); font-weight: 850; margin-top: 2px; }
+
+    /* Subcategories */
+    .subHead{
+      margin-top: 14px;
+      display:flex; align-items:flex-end; justify-content:space-between; gap:10px;
+      padding: 0 6px;
+    }
+    .subHead h3{
       font-size: 12px;
       letter-spacing: 2px;
-      font-weight: 900;
+      font-weight: 950;
       color: var(--muted);
+    }
+    .subHead small{
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 850;
     }
 
     .grid{
       display:grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin-top: 12px;
+      gap: 10px;
+      margin-top: 10px;
+      padding: 4px;
     }
     .tile{
-      background: var(--card);
-      border: 1px solid var(--border);
       border-radius: 20px;
-      padding: 14px;
-      box-shadow: var(--shadow-sm);
-      cursor:pointer;
-      transition: .22s;
       overflow:hidden;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      box-shadow: var(--s1);
+      padding: 12px;
+      cursor:pointer;
+      transition: transform .18s ease, border-color .18s ease;
+      position:relative;
+      min-height: 98px;
     }
-    .tile:hover{ transform: translateY(-3px); border-color: rgba(45,91,255,0.45); }
-    .tile b{ display:block; font-size: 14px; font-weight: 900; letter-spacing: -0.2px; }
-    .tile span{ display:block; margin-top: 6px; font-size: 12px; color: var(--muted); font-weight: 700; line-height: 1.35; }
+    .tile:hover{ transform: translateY(-2px); border-color: rgba(45,91,255,.25); }
+
+    .tile .top{
+      display:flex; align-items:flex-start; justify-content:space-between; gap: 10px;
+    }
+    .ico{
+      width: 38px; height: 38px;
+      border-radius: 16px;
+      display:grid; place-items:center;
+      background: rgba(45,91,255,.12);
+      border: 1px solid rgba(45,91,255,.18);
+      flex: 0 0 auto;
+    }
+    .tile b{
+      display:block;
+      font-size: 13.5px;
+      font-weight: 950;
+      letter-spacing: -.2px;
+      line-height: 1.15;
+    }
+    .tile p{
+      margin-top: 6px;
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 800;
+      line-height: 1.3;
+    }
     .tag{
       display:inline-flex;
       margin-top: 10px;
       padding: 6px 10px;
       border-radius: 999px;
-      background: rgba(45,91,255,0.10);
-      color: var(--primary);
-      font-weight: 900;
+      background: rgba(16,185,129,.10);
+      border: 1px solid rgba(16,185,129,.18);
+      color: var(--ok);
+      font-weight: 950;
       font-size: 11px;
-      border: 1px solid rgba(45,91,255,0.18);
     }
 
     .hint{
-      margin-top: 14px;
-      font-size: 12px;
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 18px;
+      border: 1px dashed var(--border);
+      background: rgba(255,255,255,.45);
       color: var(--muted);
-      font-weight: 700;
-      line-height: 1.5;
+      font-weight: 850;
+      font-size: 12px;
+      line-height: 1.45;
     }
+    [data-theme="dark"] .hint{ background: rgba(15,23,42,.45); }
 
     @media (max-width: 360px){
-      .quick-actions{ grid-template-columns: repeat(2, 1fr); }
+      .actions{ grid-template-columns: 1fr; }
+      .quick{ grid-template-columns: repeat(2, 1fr); }
       .grid{ grid-template-columns: 1fr; }
     }
   </style>
 </head>
 
 <body data-theme="light">
-  <div class="mesh"></div>
+  <div class="bgfx"></div>
+  <div class="grain"></div>
 
-  <div class="app-container">
-    <header>
+  <div class="wrap">
+    <!-- Topbar -->
+    <div class="topbar">
       <div class="left">
-        <button class="back" id="backBtn" type="button" aria-label="Volver">←</button>
-        <div class="titleBlock">
-          <b id="rubroTitle">Rubro</b>
+        <button class="iconbtn" id="backBtn" type="button" aria-label="Volver">←</button>
+        <div class="title">
+          <b>
+            <span id="rubroTitle">Rubro</span>
+            <span class="chip" id="rubroChip">UBIX</span>
+          </b>
           <span id="rubroSub">Elegí una subcategoría</span>
         </div>
       </div>
 
-      <button class="icon-btn" id="themeBtn" type="button" title="Cambiar tema">🌓</button>
-    </header>
+      <button class="iconbtn" id="themeBtn" type="button" aria-label="Cambiar tema" title="Cambiar tema">🌓</button>
+    </div>
 
-    <main class="panel">
-      <div class="search-box">
-        <span>🔍</span>
+    <!-- Main -->
+    <main class="card">
+      <div class="heroRow">
+        <div>
+          <div class="hTitle">Exploración inteligente</div>
+          <div class="hSub" id="contextTxt">Filtrá por subcategoría o mirá el rubro completo.</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn btnPrimary" id="verBtn" type="button">Ver listado</button>
+        <button class="btn btnGhost" id="openBtn" type="button">Abiertos ahora</button>
+      </div>
+
+      <div class="searchbox">
+        <span aria-hidden="true">🔎</span>
         <input id="q" type="text" placeholder="Buscar dentro del rubro..." autocomplete="off">
       </div>
 
-      <div class="filters">
-        <div class="select">
-          <span>📍</span>
+      <div class="row">
+        <div class="sel">
+          <span aria-hidden="true">📍</span>
           <select id="zona" aria-label="Zona">
-            <option value="">Toda la zona</option>
-            <option value="iglesia-centro">Iglesia Centro</option>
+            <option value="">Todos los Districtos</option>
+            <option value="bella-vista">Bella Vista</option>
             <option value="rodeo">Rodeo</option>
+            <option value="villa-iglesia">Villa Iglesia</option>
             <option value="las-flores">Las Flores</option>
             <option value="tudcum">Tudcum</option>
           </select>
         </div>
-
-        <button class="btn" id="verBtn" type="button">VER LISTADO</button>
+        <button class="btn btnPrimary" id="searchBtn" type="button">Buscar</button>
       </div>
 
-      <div class="quick-actions">
-        <button class="quick-btn" type="button" data-go="./catalogo.html?open=1">
-          <b>ABIERTOS</b><span>Ahora</span>
-        </button>
-        <button class="quick-btn" type="button" data-go="./eventos.html">
-          <b>EVENTOS</b><span>Zona</span>
-        </button>
-        <button class="quick-btn" type="button" data-go="./urgencias.html">
-          <b>CONTACTOS</b><span>Útiles</span>
-        </button>
-        <button class="quick-btn" type="button" data-go="./turismo.html">
-          <b>TURISMO</b><span>Puntos</span>
-        </button>
+      <div class="quick" aria-label="Accesos rápidos">
+        <button class="qbtn" type="button" data-go="./eventos.html"><b>EVENTOS</b><span>Zona</span></button>
+        <button class="qbtn" type="button" data-go="./urgencias.html"><b>CONTACTOS</b><span>Útiles</span></button>
+        <button class="qbtn" type="button" data-go="./turismo.html"><b>TURISMO</b><span>Puntos</span></button>
+        <button class="qbtn" type="button" data-go="./index.html"><b>INICIO</b><span>UBIX</span></button>
       </div>
 
-      <div class="subTitle">SUBCATEGORÍAS</div>
+      <div class="subHead">
+        <h3>SUBCATEGORÍAS</h3>
+        <small id="subsCount">—</small>
+      </div>
+
       <div class="grid" id="subsGrid"></div>
 
       <div class="hint" id="hintTxt">
@@ -317,15 +440,17 @@
       document.body.setAttribute("data-theme", theme);
       localStorage.setItem("ubix_theme", theme);
     }
-    function toggleTheme(){
+    setTheme(localStorage.getItem("ubix_theme") || "light");
+    themeBtn.addEventListener("click", ()=>{
       const isDark = document.body.getAttribute("data-theme") === "dark";
       setTheme(isDark ? "light" : "dark");
-    }
-    setTheme(localStorage.getItem("ubix_theme") || "light");
-    themeBtn.addEventListener("click", toggleTheme);
+    });
 
     // Back
-    document.getElementById("backBtn").addEventListener("click", ()=> history.length > 1 ? history.back() : (location.href="./index.html"));
+    document.getElementById("backBtn").addEventListener("click", ()=> {
+      if(history.length > 1) history.back();
+      else location.href="./index.html";
+    });
 
     // Quick nav
     document.querySelectorAll("[data-go]").forEach(btn=>{
@@ -334,52 +459,62 @@
 
     // =========================
     // DATA (subcategorías por rubro)
-    // Ajustá esto a tu modelo real luego (Firestore / config).
+    // (Luego lo conectás a Firestore/config)
     // =========================
     const RUBROS = {
       gastronomia: {
         title: "Gastronomía",
+        chip: "COMIDA",
+        context: "Encontrá lugares para comer, pedir o merendar cerca tuyo.",
         sub: [
-          { id:"pizzas", name:"Pizzas", desc:"Locales y delivery", tag:"POPULAR" },
-          { id:"parrillas", name:"Parrillas", desc:"Asado y comidas", tag:"RECOMENDADO" },
-          { id:"cafeterias", name:"Cafeterías", desc:"Desayuno & merienda", tag:"RÁPIDO" },
-          { id:"heladerias", name:"Heladerías", desc:"Postres y helados", tag:"DULCE" }
+          { id:"pizzas", icon:"🍕", name:"Pizzas", desc:"Locales y delivery", tag:"POPULAR" },
+          { id:"parrillas", icon:"🥩", name:"Parrillas", desc:"Asado y comidas", tag:"RECOMENDADO" },
+          { id:"cafeterias", icon:"☕", name:"Cafeterías", desc:"Desayuno & merienda", tag:"RÁPIDO" },
+          { id:"heladerias", icon:"🍦", name:"Heladerías", desc:"Postres y helados", tag:"DULCE" }
         ]
       },
       comercios: {
         title: "Comercios",
+        chip: "TIENDAS",
+        context: "Compras locales: tiendas, ferreterías y más.",
         sub: [
-          { id:"almacenes", name:"Almacenes", desc:"Cerca tuyo", tag:"HOY" },
-          { id:"ferreterias", name:"Ferreterías", desc:"Hogar y obras", tag:"ÚTIL" },
-          { id:"librerias", name:"Librerías", desc:"Escolar y oficina", tag:"LOCAL" },
-          { id:"ropa", name:"Ropa", desc:"Indumentaria", tag:"NUEVO" }
+          { id:"almacenes", icon:"🧺", name:"Almacenes", desc:"Cerca tuyo", tag:"HOY" },
+          { id:"ferreterias", icon:"🧱", name:"Ferreterías", desc:"Hogar y obras", tag:"ÚTIL" },
+          { id:"librerias", icon:"📚", name:"Librerías", desc:"Escolar y oficina", tag:"LOCAL" },
+          { id:"ropa", icon:"👕", name:"Ropa", desc:"Indumentaria", tag:"NUEVO" }
         ]
       },
       profesionales: {
         title: "Profesionales",
+        chip: "SALUD/ASESORÍA",
+        context: "Turnos, consultas y atención profesional.",
         sub: [
-          { id:"clinicas", name:"Clínicas", desc:"Atención médica", tag:"SALUD" },
-          { id:"odontologia", name:"Odontología", desc:"Turnos", tag:"TURNO" },
-          { id:"abogados", name:"Abogados", desc:"Legal", tag:"LEGAL" },
-          { id:"contadores", name:"Contadores", desc:"Impuestos", tag:"GESTIÓN" }
+          { id:"clinicas", icon:"🏥", name:"Clínicas", desc:"Atención médica", tag:"SALUD" },
+          { id:"odontologia", icon:"🦷", name:"Odontología", desc:"Turnos", tag:"TURNO" },
+          { id:"abogados", icon:"⚖️", name:"Abogados", desc:"Legal", tag:"LEGAL" },
+          { id:"contadores", icon:"🧾", name:"Contadores", desc:"Impuestos", tag:"GESTIÓN" }
         ]
       },
       servicios: {
         title: "Servicios",
+        chip: "HOGAR",
+        context: "Técnicos y servicios para resolver rápido.",
         sub: [
-          { id:"electricidad", name:"Electricidad", desc:"Instalación y arreglos", tag:"URGENTE" },
-          { id:"plomeria", name:"Plomería", desc:"Pérdidas y reparaciones", tag:"HOGAR" },
-          { id:"tecnicos", name:"Técnicos", desc:"PC / celulares / TV", tag:"TECH" },
-          { id:"limpieza", name:"Limpieza", desc:"Hogar y empresas", tag:"PRO" }
+          { id:"electricidad", icon:"💡", name:"Electricidad", desc:"Instalación y arreglos", tag:"URGENTE" },
+          { id:"plomeria", icon:"🚿", name:"Plomería", desc:"Pérdidas y reparaciones", tag:"HOGAR" },
+          { id:"tecnicos", icon:"🖥️", name:"Técnicos", desc:"PC / celulares / TV", tag:"TECH" },
+          { id:"limpieza", icon:"🧼", name:"Limpieza", desc:"Hogar y empresas", tag:"PRO" }
         ]
       },
       transporte: {
         title: "Transporte",
+        chip: "MOVILIDAD",
+        context: "Traslados, fletes y opciones turísticas.",
         sub: [
-          { id:"remis", name:"Remis", desc:"Traslados", tag:"RÁPIDO" },
-          { id:"fletes", name:"Fletes", desc:"Mudanzas", tag:"CARGA" },
-          { id:"taxis", name:"Taxis", desc:"Paradas", tag:"24H" },
-          { id:"turistico", name:"Transporte turístico", desc:"Recorridos", tag:"TURISMO" }
+          { id:"remis", icon:"🚗", name:"Remis", desc:"Traslados", tag:"RÁPIDO" },
+          { id:"fletes", icon:"🚚", name:"Fletes", desc:"Mudanzas", tag:"CARGA" },
+          { id:"taxis", icon:"🚕", name:"Taxis", desc:"Paradas", tag:"24H" },
+          { id:"turistico", icon:"🗺️", name:"Turístico", desc:"Recorridos", tag:"TURISMO" }
         ]
       }
     };
@@ -394,36 +529,58 @@
 
     const rubroTitle = document.getElementById("rubroTitle");
     const rubroSub = document.getElementById("rubroSub");
+    const rubroChip = document.getElementById("rubroChip");
+    const contextTxt = document.getElementById("contextTxt");
     const subsGrid = document.getElementById("subsGrid");
+    const subsCount = document.getElementById("subsCount");
 
     if(!rubro){
       rubroTitle.textContent = "Rubros";
-      rubroSub.textContent = "Seleccioná un rubro desde el inicio";
+      rubroSub.textContent = "Volvé al inicio y elegí un rubro";
+      rubroChip.textContent = "UBIX";
+      contextTxt.textContent = "No se recibió un rubro válido (cat=...).";
+      subsCount.textContent = "";
       subsGrid.innerHTML = `
-        <div class="tile" onclick="location.href='./index.html'">
-          <b>Volver al inicio</b>
-          <span>No se recibió un rubro válido (cat=...).</span>
-          <div class="tag">INICIO</div>
+        <div class="tile" style="grid-column: 1 / -1;" onclick="location.href='./index.html'">
+          <div class="top">
+            <div class="ico">🏠</div>
+            <div style="flex:1;">
+              <b>Volver al inicio</b>
+              <p>Elegí un rubro desde la pantalla principal.</p>
+              <div class="tag">INICIO</div>
+            </div>
+          </div>
         </div>
       `;
     } else {
       rubroTitle.textContent = rubro.title;
       rubroSub.textContent = "Elegí una subcategoría";
+      rubroChip.textContent = rubro.chip || "UBIX";
+      contextTxt.textContent = rubro.context || "Filtrá por subcategoría o mirá el rubro completo.";
+      subsCount.textContent = `${rubro.sub.length} opciones`;
+
       subsGrid.innerHTML = rubro.sub.map(s => `
-        <div class="tile" data-sub="${s.id}">
-          <b>${s.name}</b>
-          <span>${s.desc}</span>
-          <div class="tag">${s.tag}</div>
+        <div class="tile" data-sub="${s.id}" role="button" tabindex="0" aria-label="Abrir ${s.name}">
+          <div class="top">
+            <div class="ico">${s.icon || "➜"}</div>
+            <div style="flex:1;">
+              <b>${s.name}</b>
+              <p>${s.desc}</p>
+              <div class="tag">${s.tag}</div>
+            </div>
+          </div>
         </div>
       `).join("");
     }
 
     // =========================
-    // Acciones: Ver listado / click en sub
+    // Acciones: Ver listado / click en sub / buscar
     // =========================
     const qEl = document.getElementById("q");
     const zonaEl = document.getElementById("zona");
     const verBtn = document.getElementById("verBtn");
+    const openBtn = document.getElementById("openBtn");
+    const searchBtn = document.getElementById("searchBtn");
 
     function goCatalog(extra = {}){
       const url = new URL("./catalogo.html", location.href);
@@ -436,24 +593,41 @@
       if(zona) url.searchParams.set("zona", zona);
 
       Object.entries(extra).forEach(([k,v])=>{
-        if(v) url.searchParams.set(k, v);
+        if(v !== undefined && v !== null && String(v).length) url.searchParams.set(k, v);
       });
 
       location.href = url.toString();
     }
 
     verBtn.addEventListener("click", ()=> goCatalog());
-
-    qEl.addEventListener("keydown", (e)=>{
-      if(e.key === "Enter") goCatalog();
+    openBtn.addEventListener("click", ()=> {
+      // Mantiene cat / zona / q y suma open=1
+      goCatalog({ open: "1" });
     });
+
+    searchBtn.addEventListener("click", ()=> goCatalog());
+    qEl.addEventListener("keydown", (e)=>{ if(e.key === "Enter") goCatalog(); });
+
+    function onTileActivate(tile){
+      const sub = tile.getAttribute("data-sub");
+      if(!sub) return;
+      goCatalog({ sub });
+    }
 
     subsGrid.addEventListener("click", (e)=>{
       const tile = e.target.closest(".tile");
       if(!tile) return;
-      const sub = tile.getAttribute("data-sub");
-      if(!sub) return;
-      goCatalog({ sub });
+      onTileActivate(tile);
+    });
+
+    // Accesibilidad: Enter/Espacio en tiles
+    subsGrid.addEventListener("keydown", (e)=>{
+      const tile = e.target.closest(".tile");
+      if(!tile) return;
+      if(e.key === "Enter" || e.key === " "){
+        e.preventDefault();
+        onTileActivate(tile);
+      }
     });
   </script>
 </body>
