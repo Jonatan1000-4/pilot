@@ -256,15 +256,17 @@
 
     /* DISPONIBILIDAD (compacto) */
     .toggle-row{
-      display:flex; align-items:center; justify-content:flex-end;
+      display:flex; align-items:center; justify-content:flex-start;
       gap:10px;
-      border:1px solid var(--chip-border);
+      border:1px solid rgb(255, 94, 0);
       background: var(--chip);
       box-shadow: var(--shadow2);
       padding: 8px 12px;
       border-radius: 18px;
+      
       margin-bottom: 10px;
       flex-wrap:nowrap;
+      max-width: fit-content;
     }
     .toggle-row span{ font-size: 12px; font-weight:950; color: var(--muted); }
     .toggle-row #toggleLabel{ color: var(--text); font-size:12px; white-space:nowrap; }
@@ -624,7 +626,6 @@
           <span>📍</span>
           <select id="districtSelect">
             <option value="todos">Toda la zona</option>
-            <option value="iglesia-centro">Iglesia Centro</option>
             <option value="rodeo">Rodeo</option>
             <option value="las-flores">Las Flores</option>
             <option value="tudcum">Tudcum</option>
