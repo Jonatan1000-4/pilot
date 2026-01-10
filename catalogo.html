@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-  <title>UBIX | Catálogo</title>
+  <title>INDX | Catálogo</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -220,6 +220,7 @@
       align-items:center;
       justify-content:center;
       gap:10px;
+      max-width: fit-content;
     }
     .btn:hover{ transform: translateY(-1px); }
 
@@ -605,7 +606,7 @@
         <a class="brand" href="./index.html" title="Volver al inicio">
           <div class="logo" aria-hidden="true"></div>
           <div class="t">
-            <h1 id="pageTitle">UBIX | Catálogo</h1>
+            <h1 id="pageTitle"> INDX | Catálogo</h1>
             <div class="subhead" id="pageSub">Encontrá lo que buscás, rápido.</div>
           </div>
         </a>
@@ -644,13 +645,17 @@
       </div>
 
       <div class="toggle-row">
-        <span>Disponibilidad</span>
-        <label class="switch" title="Filtrar disponibles">
-          <input type="checkbox" id="toggleActivos" checked>
-          <span class="slider"></span>
-        </label>
-        <span id="toggleLabel">Solo disponibles</span>
-      </div>
+  <span id="toggleLabel">Solo abiertos</span>
+
+  <label class="switch" title="Filtrar disponibles">
+    <input type="checkbox" id="toggleActivos" checked>
+    <span class="slider"></span>
+  </label>
+
+  <span id="availabilityMessage" style="margin-left:10px; color:#ff4d4d; font-weight:850; display:none;">
+    Algunos lugares están cerrados. Desactivá “Solo abiertos” para verlos.
+  </span>
+</div>
 
       <div class="results-info" id="resultsInfo"></div>
     </div>
@@ -658,7 +663,7 @@
 
   <main id="vendorsList"></main>
 
-  <footer>© 2026 UBIX • Catálogo Digital Local</footer>
+  <footer>© 2026 INDX • Catálogo Digital Local</footer>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -692,7 +697,7 @@
     const pageSub = document.getElementById('pageSub');
 
     // ===== CONFIG
-    const THEME_KEY = "ubix_theme"; // MISMA KEY que Home/Rubro
+    const THEME_KEY = "indx_theme"; // MISMA KEY que Home/Rubro
     const HIDE_EXPIRED_ALWAYS = true;
     const itemsPerPage = 20;
 
@@ -745,6 +750,17 @@
       if(estado === "vencido") return false;
       return true;
     }
+
+
+const availabilityMessage = document.getElementById('availabilityMessage');
+function showAvailabilityMsg(show){
+  if(!availabilityMessage) return;
+  availabilityMessage.style.display = show ? "inline" : "none";
+}
+
+
+// Llamá a esta función en tu lógica cuando no haya resultados disponibles.
+
 
     // ===== TIPO NORMALIZADO
     function normTipo(t){
@@ -1087,11 +1103,16 @@
       }
 
       // disponibles (open=1 fuerza ON)
-      const forceOpen = (P.open === "1");
-      const filtroDisponibles = forceOpen ? true : mostrarSoloActivos;
-      if(filtroDisponibles){
-        list = list.filter(v => disponibilidad(v).ok);
-      }
+const forceOpen = (P.open === "1");
+const filtroDisponibles = forceOpen ? true : mostrarSoloActivos;
+
+// guardo cuántos habría SIN filtrar por abiertos
+const listBeforeDisponibles = [...list];
+
+if(filtroDisponibles){
+  list = list.filter(v => disponibilidad(v).ok);
+}
+
 
       // ===== Orden
       list.sort((a,b) => {
@@ -1112,6 +1133,12 @@
       const start = (currentPage - 1) * itemsPerPage;
       const end = start + itemsPerPage;
       const pageItems = list.slice(start, end);
+// Mensaje: “hay lugares cerrados”
+const hadAnyBefore = listBeforeDisponibles.length > 0;
+const hasNoneAfter = list.length === 0;
+
+// solo mostrar si el filtro “solo abiertos” está activo y sin él había resultados
+showAvailabilityMsg(filtroDisponibles && hasNoneAfter && hadAnyBefore);
 
       // ===== UI texto superior
       const parts = [];
@@ -1121,7 +1148,7 @@
       if(forceOpen) parts.push("Solo abiertos");
       if(busqueda) parts.push(`Búsqueda: "${busqueda}"`);
 
-      pageTitle.textContent = "UBIX | Catálogo";
+      pageTitle.textContent = "indx | Catálogo";
       pageSub.textContent = parts.length ? parts.join(" • ") : "Encontrá lo que buscás, rápido.";
       resultsInfo.textContent = `Mostrando ${pageItems.length} de ${list.length} (Página ${currentPage} de ${totalPages})`;
 
@@ -1286,7 +1313,7 @@
         if(P.open === "1"){
           checkbox.checked = true;
           mostrarSoloActivos = true;
-          label.textContent = "Solo disponibles";
+          label.textContent = "Solo abiertos";
         }
 
         renderAll();
@@ -1307,7 +1334,7 @@
 
     checkbox.addEventListener('change', () => {
       mostrarSoloActivos = checkbox.checked;
-      label.textContent = checkbox.checked ? "Solo disponibles" : "Todos";
+      label.textContent = checkbox.checked ? "Solo abiertos" : "Todos";
       currentPage = 1;
       renderAll();
     });
@@ -1317,7 +1344,7 @@
       selectDistrito.value = "todos";
       checkbox.checked = true;
       mostrarSoloActivos = true;
-      label.textContent = "Solo disponibles";
+      label.textContent = "Solo abiertos";
       selectedTipo = "todos";
 
       [...tipoChips.querySelectorAll(".chip")].forEach(x=>x.classList.remove("active"));
