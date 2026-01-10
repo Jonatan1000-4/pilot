@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Detalle - igw</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <style>
+    :root{
+      --brand:#2b8290;
+      --brand2:#56cfe1;
+      --good:#18c77e;
+      --bad:#ff4d6d;
+
+      --bg:#0b1220;
+      --panel:#0f1a2e;
+      --card:#0f1d33;
+
+      --text:#eaf2ff;
+      --muted:#a9bbd6;
+      --line: rgba(255,255,255,.10);
+
+      --shadow: 0 18px 60px rgba(0,0,0,.40);
+      --shadow2: 0 10px 30px rgba(0,0,0,.35);
+      --t: all .22s ease;
+
+      --r:18px;
+      --r2:24px;
+      --max:1200px;
+
+      --bronze1:#cd7f32; --bronze2:#7a3b11;
+      --silver1:#e8edf5; --silver2:#8fa3b7;
+      --gold1:#ffd166;   --gold2:#b8860b;
+      --dia1:#b9f2ff;    --dia2:#3bb8ff;
+    }
+
+    [data-theme="light"]{
+      --bg:#f5f7fb;
+      --panel:#ffffff;
+      --card:#ffffff;
+      --text:#111827;
+      --muted:#56627a;
+      --line: rgba(16,24,40,.10);
+      --shadow: 0 18px 60px rgba(16,24,40,.10);
+      --shadow2: 0 10px 30px rgba(16,24,40,.08);
+    }
+
+    *{ box-sizing:border-box; margin:0; padding:0; font-family:'Poppins',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; }
+    body{
+      background:
+        radial-gradient(1000px 600px at 75% 10%, rgba(86,207,225,.18), transparent 60%),
+        radial-gradient(900px 520px at 15% 20%, rgba(128,255,219,.12), transparent 60%),
+        radial-gradient(900px 520px at 60% 90%, rgba(255,255,255,.06), transparent 62%),
+        var(--bg);
+      color:var(--text);
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      overflow-x:hidden;
+    }
+    a{ color:inherit; text-decoration:none; }
+    .container{ width:min(var(--max), calc(100% - 32px)); margin:0 auto; }
+
+    header{
+      position:sticky; top:0; z-index:50;
+      background: linear-gradient(to bottom, rgba(11,18,32,.92), rgba(11,18,32,.70));
+      backdrop-filter: blur(14px);
+      border-bottom:1px solid var(--line);
+      box-shadow: 0 6px 22px rgba(0,0,0,.18);
+    }
+    [data-theme="light"] header{
+      background: rgba(255,255,255,.82);
+      box-shadow: 0 6px 22px rgba(16,24,40,.06);
+    }
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:14px 0;
+      flex-wrap:wrap;
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px;
+      min-width:0;
+    }
+    .logo{
+      width:42px; height:42px; border-radius:16px;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(86,207,225,.95), rgba(86,207,225,.20)),
+        radial-gradient(circle at 70% 70%, rgba(128,255,219,.65), rgba(128,255,219,0));
+      border:1px solid rgba(86,207,225,.35);
+      box-shadow: 0 12px 32px rgba(86,207,225,.14);
+      flex:0 0 auto;
+      position:relative;
+      overflow:hidden;
+    }
+    .logo:after{
+      content:"";
+      position:absolute; inset:-60%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent);
+      transform:rotate(25deg);
+      animation: shine 7s linear infinite;
+    }
+    @keyframes shine{ 0%{ transform:translateX(-40%) rotate(25deg);} 100%{ transform:translateX(40%) rotate(25deg);} }
+
+    .brand h1{
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing:.2px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width: 60vw;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .brand small{
+      display:block;
+      margin-top:3px;
+      color: var(--muted);
+      font-size:12px;
+      font-weight:600;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width: 60vw;
+    }
+
+    .controls{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      min-width:0;
+    }
+
+    .btn, .theme-toggle{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 10px 12px;
+      box-shadow: var(--shadow2);
+      transition: var(--t);
+      font-weight:800;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      white-space:nowrap;
+      max-width:100%;
+    }
+    [data-theme="light"] .btn, [data-theme="light"] .theme-toggle{ background:#fff; }
+    .btn:hover, .theme-toggle:hover{ transform: translateY(-1px); border-color: rgba(86,207,225,.30); }
+
+    .theme-toggle{
+      width:44px; height:44px;
+      padding:0;
+      border-radius: 16px;
+      font-size: 18px;
+      justify-content:center;
+    }
+
+    main{
+      width:min(var(--max), calc(100% - 32px));
+      margin: 18px auto 26px;
+      display:grid;
+      grid-template-columns: 1.35fr .65fr;
+      gap:16px;
+      align-items:start;
+    }
+
+    .panel{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      border-radius: var(--r2);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    [data-theme="light"] .panel{ background:#fff; }
+
+    .hero{ position:relative; background: rgba(255,255,255,.04); }
+    .hero img{
+      width:100%;
+      height: 420px;
+      object-fit:cover;
+      display:block;
+      filter: saturate(1.05) contrast(1.05) brightness(.92);
+      transform: scale(1.02);
+    }
+    .hero .overlay{
+      position:absolute; inset:0;
+      background: linear-gradient(to top, rgba(0,0,0,.72), rgba(0,0,0,.16), transparent);
+      pointer-events:none;
+    }
+    .hero-top{
+      position:absolute;
+      top:12px; left:12px; right:12px;
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:flex-start;
+      z-index:2;
+      flex-wrap:wrap;
+    }
+
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.38);
+      backdrop-filter: blur(10px);
+      color: rgba(255,255,255,.92);
+      font-size: 12px;
+      font-weight: 900;
+      white-space:nowrap;
+      max-width: 100%;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .chip.open{ border-color: rgba(24,199,126,.35); }
+    .chip.closed{ border-color: rgba(255,77,109,.35); }
+
+    .nivel{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 9px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing:.2px;
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow: 0 10px 28px rgba(0,0,0,.25);
+      backdrop-filter: blur(10px);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width: 100%;
+    }
+    .nivel[data-nivel="bronce"]{ background: linear-gradient(135deg, rgba(205,127,50,.92), rgba(122,59,17,.76)); color:#fff; }
+    .nivel[data-nivel="plata"]{  background: linear-gradient(135deg, rgba(232,237,245,.92), rgba(143,163,183,.72)); color:#101828; }
+    .nivel[data-nivel="oro"]{    background: linear-gradient(135deg, rgba(255,209,102,.92), rgba(184,134,11,.70)); color:#2b1b00; }
+    .nivel[data-nivel="diamante"]{background: linear-gradient(135deg, rgba(185,242,255,.92), rgba(59,184,255,.70)); color:#002a44; }
+
+    .hero-info{
+      position:absolute;
+      left: 0; right: 0; bottom: 0;
+      padding: 18px;
+      z-index:2;
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:14px;
+      flex-wrap:wrap;
+    }
+
+    .titlebox{ min-width:0; max-width: 820px; }
+    .titlebox h2{
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing:.2px;
+      line-height:1.12;
+      color:#fff;
+      text-shadow: 0 6px 22px rgba(0,0,0,.45);
+      margin-bottom: 6px;
+      word-break: break-word;
+    }
+    .subtitle{
+      color: rgba(255,255,255,.85);
+      font-weight: 700;
+      font-size: 14px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .subtitle .dot{
+      width:6px; height:6px; border-radius:999px;
+      background: rgba(255,255,255,.55);
+      display:inline-block;
+    }
+
+    .meta{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:flex-end;
+    }
+    .meta .chip{ background: rgba(0,0,0,.42); }
+
+    .stack{
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+      padding: 16px;
+    }
+
+    .section{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      border-radius: var(--r2);
+      box-shadow: var(--shadow2);
+      padding: 14px;
+    }
+    [data-theme="light"] .section{ background:#fff; }
+
+    .section h3{
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing:.2px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin-bottom: 10px;
+      color: var(--text);
+    }
+    .section h3 i{
+      width: 34px; height: 34px;
+      border-radius: 14px;
+      display:grid; place-items:center;
+      background: rgba(86,207,225,.12);
+      border: 1px solid rgba(86,207,225,.25);
+      color: var(--text);
+    }
+
+    .desc{
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.55;
+      white-space: pre-line;
+    }
+
+    .quick-actions{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap:10px;
+      margin-top: 10px;
+    }
+    .action{
+      grid-column: span 6;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      border-radius: 18px;
+      padding: 12px;
+      box-shadow: var(--shadow2);
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:center;
+      font-weight: 900;
+      transition: var(--t);
+      text-align:center;
+      min-height: 50px;
+    }
+    [data-theme="light"] .action{ background:#fff; }
+    .action:hover{ transform: translateY(-1px); border-color: rgba(86,207,225,.28); }
+    .action.maps{
+      border-color: rgba(24,199,126,.25);
+      background: rgba(24,199,126,.10);
+    }
+    .action.maps:hover{ border-color: rgba(24,199,126,.45); }
+    .action.call{
+      border-color: rgba(86,207,225,.25);
+      background: rgba(86,207,225,.10);
+    }
+
+    .kv{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin-top: 6px;
+    }
+    .kv-row{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      padding: 10px 10px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255,255,255,.02);
+      font-weight: 800;
+    }
+    [data-theme="light"] .kv-row{ background:#f7f9fe; }
+    .kv-row .k{ color: var(--muted); }
+    .kv-row .v{ color: var(--text); text-align:right; word-break: break-word; }
+
+    .dias-activos{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top: 8px;
+    }
+    .dia-badge{
+      background: rgba(24,199,126,.14);
+      border: 1px solid rgba(24,199,126,.30);
+      color: var(--text);
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: capitalize;
+    }
+
+    .horarios-lista{
+      list-style:none;
+      margin:0; padding:0;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      margin-top: 10px;
+    }
+    .horarios-lista li{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:10px;
+      padding: 10px 10px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.02);
+    }
+    [data-theme="light"] .horarios-lista li{ background:#f7f9fe; }
+    .horarios-lista .dia{
+      font-weight: 900;
+      color: var(--text);
+      white-space:nowrap;
+    }
+    .horarios-lista .franjas{
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 13px;
+      text-align:right;
+      word-break: break-word;
+    }
+
+    .tags{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top: 8px;
+    }
+    .tag{
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 12px;
+      font-weight: 900;
+      cursor: default;
+      max-width:100%;
+    }
+    [data-theme="light"] .tag{ background:#f3f6fb; }
+
+    .gallery{
+      display:grid;
+      gap: 12px;
+      grid-template-columns: repeat(12, 1fr);
+      margin-top: 10px;
+    }
+    .gallery img{
+      width:100%;
+      display:block;
+      cursor:pointer;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow2);
+      transition: var(--t);
+      object-fit: cover;
+      aspect-ratio: 4 / 3;
+      height: auto;
+      background: rgba(255,255,255,.04);
+    }
+    .gallery img:hover{
+      transform: translateY(-2px);
+      border-color: rgba(86,207,225,.28);
+    }
+    @media (min-width: 1100px){
+      .gallery img{ grid-column: span 3; }
+      .gallery img:first-child{ grid-column: span 6; aspect-ratio: 16 / 9; }
+    }
+    @media (min-width: 700px) and (max-width: 1099px){
+      .gallery img{ grid-column: span 4; }
+      .gallery img:first-child{ grid-column: span 12; aspect-ratio: 16 / 9; }
+    }
+    @media (max-width: 699px){
+      .gallery img{ grid-column: span 6; aspect-ratio: 1 / 1; }
+      .gallery img:first-child{ grid-column: span 12; aspect-ratio: 16 / 10; }
+    }
+    @media (max-width: 380px){
+      .gallery img{ grid-column: span 12; aspect-ratio: 16 / 11; }
+    }
+
+    .social-buttons{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top: 8px;
+    }
+    .social-btn{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      box-shadow: var(--shadow2);
+      font-weight: 900;
+      transition: var(--t);
+      color: var(--text);
+    }
+    [data-theme="light"] .social-btn{ background:#fff; }
+    .social-btn:hover{ transform: translateY(-1px); border-color: rgba(86,207,225,.28); }
+
+    .whatsapp-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      width: 100%;
+      border-radius: 18px;
+      padding: 14px 14px;
+      border:1px solid rgba(37,211,102,.35);
+      background: linear-gradient(135deg, rgba(37,211,102,.22), rgba(18,140,126,.18));
+      color: var(--text);
+      font-weight: 900;
+      font-size: 15px;
+      transition: var(--t);
+      box-shadow: var(--shadow2);
+      margin-top: 10px;
+    }
+    .whatsapp-btn:hover{ transform: translateY(-1px); border-color: rgba(37,211,102,.55); }
+
+    /* ✅ NUEVO: botón asistencia (destacado) */
+    .assist-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      width:100%;
+      border-radius: 18px;
+      padding: 14px 14px;
+      border:1px solid rgba(255,209,102,.40);
+      background: linear-gradient(135deg, rgba(255,209,102,.22), rgba(86,207,225,.12));
+      color: var(--text);
+      font-weight: 950;
+      font-size: 15px;
+      transition: var(--t);
+      box-shadow: var(--shadow2);
+      margin-top: 10px;
+    }
+    .assist-btn:hover{ transform: translateY(-1px); border-color: rgba(255,209,102,.65); }
+
+    .side{
+      position:sticky;
+      top: 92px;
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+      padding: 16px;
+    }
+
+    .loader{
+      padding: 26px 16px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      align-items:center;
+      justify-content:center;
+      color: var(--muted);
+      font-weight: 800;
+      text-align:center;
+    }
+    .skeleton{
+      position:relative;
+      overflow:hidden;
+      border-radius: 18px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--line);
+      width: 100%;
+    }
+    .skeleton::after{
+      content:"";
+      position:absolute; inset:-40% -60%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.12), transparent);
+      transform: translateX(-40%);
+      animation: sk 1.2s ease-in-out infinite;
+    }
+    @keyframes sk{ 0%{ transform: translateX(-60%);} 100%{ transform: translateX(60%);} }
+
+    .modal{
+      position: fixed;
+      inset:0;
+      background: rgba(0, 0, 0, 0.82);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--t);
+      padding: 16px;
+    }
+    .modal.show{ opacity: 1; visibility: visible; }
+    .modal-content{
+      width:min(980px, 100%);
+      max-height: 90vh;
+      background: var(--panel);
+      border-radius: 22px;
+      overflow:hidden;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,.10);
+    }
+    [data-theme="light"] .modal-content{ background:#fff; border-color: rgba(16,24,40,.10); }
+    .modal-content img{ width:100%; height:auto; display:block; }
+    .modal-close{
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      border:1px solid rgba(255,77,109,.40);
+      background: rgba(255,77,109,.18);
+      color: #fff;
+      border-radius: 16px;
+      width: 46px;
+      height: 46px;
+      font-size: 22px;
+      cursor: pointer;
+      transition: var(--t);
+      backdrop-filter: blur(10px);
+      display:grid;
+      place-items:center;
+    }
+    .modal-close:hover{ transform: translateY(-1px); border-color: rgba(255,77,109,.65); }
+
+    footer{
+      margin-top:auto;
+      padding: 18px 0 22px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      text-align:center;
+      font-size: 13px;
+      font-weight:700;
+    }
+
+    @media (max-width: 980px){
+      main{ grid-template-columns: 1fr; }
+      .side{ position:static; top:auto; }
+      .hero img{ height: 380px; }
+    }
+    @media (max-width: 640px){
+      .container, main{ width: calc(100% - 22px); }
+      .brand h1{ max-width: 100%; font-size: 16px; }
+      .brand small{ max-width: 100%; }
+      .controls{ width:100%; justify-content:stretch; }
+      .btn{ width: 100%; justify-content:center; }
+      .hero img{ height: 320px; }
+      .titlebox h2{ font-size: 22px; }
+      .action{ grid-column: span 12; }
+      .horarios-lista li{ flex-direction:column; align-items:flex-start; }
+      .horarios-lista .franjas{ text-align:left; }
+    }
+  </style>
+</head>
+
+<body data-theme="light">
+  <header>
+    <div class="container">
+      <div class="topbar">
+        <div class="brand">
+          <div class="logo" aria-hidden="true"></div>
+          <div>
+            <h1 id="pageTitle"><i class="fas fa-store"></i> Detalle</h1>
+            <small id="pageSubtitle">Información, horarios, redes y contacto</small>
+          </div>
+        </div>
+
+        <div class="controls">
+          <button class="theme-toggle" id="themeToggle" title="Cambiar tema">🌞</button>
+          <a class="btn" href="index.html"><i class="fas fa-arrow-left"></i> Volver al catálogo</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="detalleContainer">
+    <div class="panel" style="grid-column: 1 / -1;">
+      <div class="loader">
+        <div class="skeleton" style="height: 360px;"></div>
+        <div class="skeleton" style="height: 16px; width: 60%;"></div>
+        <div class="skeleton" style="height: 14px; width: 45%;"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer>igw - iglesia web</footer>
+
+  <div id="imageModal" class="modal" aria-hidden="true">
+    <button class="modal-close" onclick="closeModal()" aria-label="Cerrar">×</button>
+    <div class="modal-content">
+      <img id="modalImage" src="" alt="Imagen ampliada">
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDYNLhKi2h_JoPlDYK9_ZhKaHnKQ3DJhbk",
+      authDomain: "cweb-ac414.firebaseapp.com",
+      projectId: "cweb-ac414",
+      storageBucket: "cweb-ac414.firebasestorage.app",
+      messagingSenderId: "174144272082",
+      appId: "1:174144272082:web:68b9d5aefc1aef07ab9f0b"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const THEME_KEY = "igw_theme";
+
+    const themeToggle = document.getElementById('themeToggle');
+    const detalleContainer = document.getElementById('detalleContainer');
+    const modal = document.getElementById('imageModal');
+    const modalImage = document.getElementById('modalImage');
+
+    const pageTitle = document.getElementById('pageTitle');
+    const pageSubtitle = document.getElementById('pageSubtitle');
+
+    // ==========================
+    // THEME (persistente con index)
+    // ==========================
+    function applyTheme(theme){
+      document.body.dataset.theme = (theme === 'dark') ? 'dark' : 'light';
+      themeToggle.textContent = document.body.dataset.theme === 'dark' ? '🌙' : '🌞';
+      localStorage.setItem(THEME_KEY, document.body.dataset.theme);
+    }
+    function initTheme(){
+      const saved = localStorage.getItem(THEME_KEY);
+      if (saved === 'dark' || saved === 'light') return applyTheme(saved);
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      applyTheme(prefersDark ? 'dark' : 'light');
+    }
+    function toggleTheme() {
+      const next = document.body.dataset.theme === 'dark' ? 'light' : 'dark';
+      applyTheme(next);
+    }
+    themeToggle.addEventListener('click', toggleTheme);
+    initTheme();
+
+    // ==========================
+    // Utils
+    // ==========================
+    function getIdFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get("id");
+    }
+
+    function normNivel(n){
+      const v = (n || 'bronce').toString().toLowerCase().trim();
+      return ['bronce','plata','oro','diamante'].includes(v) ? v : 'bronce';
+    }
+    function nivelLabel(n){
+      const v = normNivel(n);
+      return v.charAt(0).toUpperCase() + v.slice(1);
+    }
+
+    function normTipo(t){
+      const v = (t || 'comercio').toString().toLowerCase().trim();
+      const alias = {
+        "profesionales":"profesional",
+        "servicios":"servicio",
+        "transportes":"transporte",
+        "comercios":"comercio",
+        "eventos":"evento",
+        "turístico":"turismo",
+        "punto de interés":"turismo",
+        "poi":"turismo",
+        "delivery sin local":"delivery"
+      };
+      return alias[v] || v || 'comercio';
+    }
+
+    const TIPO_META = {
+      comercio:   { label:"Comercio",     icon:"fa-store" },
+      profesional:{ label:"Profesional",  icon:"fa-user-tie" },
+      servicio:   { label:"Servicio",     icon:"fa-screwdriver-wrench" },
+      transporte: { label:"Transporte",   icon:"fa-taxi" },
+      farmacia:   { label:"Farmacia",     icon:"fa-pills" },
+      delivery:   { label:"Delivery",     icon:"fa-burger" },
+      turismo:    { label:"Turismo",      icon:"fa-mountain-sun" },
+      evento:     { label:"Evento",       icon:"fa-calendar-star" }
+    };
+
+    function parseDateMaybe(d){
+      if(!d) return null;
+      if(d.toDate) return d.toDate();
+      const dt = new Date(d);
+      return isNaN(dt.getTime()) ? null : dt;
+    }
+
+    // ===== disponibilidad (mismo criterio del index)
+    function estaAbiertoHorario(v) {
+      const ahora = new Date();
+      const diasSemana = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
+      const diaActual = diasSemana[ahora.getDay()];
+      const horaActual = ahora.getHours() + ahora.getMinutes() / 60;
+
+      if (!v.dias || !Array.isArray(v.dias) || !v.dias.includes(diaActual)) return false;
+      if (!v.horarios || typeof v.horarios !== 'object') return false;
+
+      let franjas = [];
+      if (diaActual === 'sábado') franjas = v.horarios.sabado || [];
+      else if (diaActual === 'domingo') franjas = v.horarios.domingo || [];
+      else franjas = v.horarios.semana || [];
+
+      if (franjas.length === 0) return false;
+
+      return franjas.some(h => {
+        if (!h.apertura || !h.cierre) return false;
+        const [hA, mA] = h.apertura.split(':').map(Number);
+        const [hC, mC] = h.cierre.split(':').map(Number);
+        const horaA = hA + mA / 60;
+        const horaC = hC + mC / 60;
+        if (horaA > horaC) return horaActual >= horaA || horaActual < horaC;
+        return horaActual >= horaA && horaActual < horaC;
+      });
+    }
+
+    // devuelve { ok, label, kind }
+    function disponibilidad(v){
+      const tipo = normTipo(v.tipo);
+      const modalidad = (v.modalidad || '').toString().toLowerCase().trim();
+
+      if(tipo === 'profesional' && modalidad === 'turnos'){
+        return { ok:true, label:"Atención con turno", kind:"turnos" };
+      }
+
+      if(tipo === 'evento'){
+        const ini = parseDateMaybe(v.fechaInicio || v.inicio || v.startDate);
+        const fin = parseDateMaybe(v.fechaFin || v.fin || v.endDate);
+        const now = new Date();
+        if(ini && fin){
+          const ok = (now >= ini && now <= fin);
+          return { ok, label: ok ? "En curso" : (now < ini ? "Próximo" : "Finalizado"), kind: ok ? "open" : "closed" };
+        }
+        if(ini && !fin){
+          const ok = now >= ini;
+          return { ok, label: ok ? "Activo" : "Próximo", kind: ok ? "open" : "closed" };
+        }
+        return { ok:true, label:"Evento", kind:"evento" };
+      }
+
+      if(tipo === 'turismo'){
+        const hasHorario = !!(v.horarios && typeof v.horarios === 'object');
+        if(!hasHorario) return { ok:true, label:"Visitable", kind:"turismo" };
+        const ok = estaAbiertoHorario(v);
+        return { ok, label: ok ? "Abierto" : "Cerrado", kind: ok ? "open" : "closed" };
+      }
+
+      if(tipo === 'transporte'){
+        const disp = (v.disponibilidad || v.turno || '').toString().toLowerCase();
+        if(disp.includes('24') || disp.includes('24hs') || disp.includes('noct') || disp.includes('siempre')){
+          return { ok:true, label:"Disponible", kind:"open" };
+        }
+        const ok = estaAbiertoHorario(v);
+        return { ok, label: ok ? "Disponible" : "No disponible", kind: ok ? "open" : "closed" };
+      }
+
+      if(tipo === 'farmacia'){
+        const turno = (v.turno || v.deTurno || '').toString().toLowerCase();
+        if(turno === 'si' || turno === 'true') return { ok:true, label:"De turno", kind:"open" };
+        const ok = estaAbiertoHorario(v);
+        return { ok, label: ok ? "Abierta" : "Cerrada", kind: ok ? "open" : "closed" };
+      }
+
+      // default
+      const ok = estaAbiertoHorario(v);
+      return { ok, label: ok ? "Abierto ahora" : "Cerrado", kind: ok ? "open" : "closed" };
+    }
+
+    function formatoHorario(v) {
+      if (!v.horarios) return "<li><span class='dia'>Horarios</span><span class='franjas'>No informado</span></li>";
+      let html = "";
+
+      if (v.horarios.semana) {
+        const franjas = v.horarios.semana.map(f => `${f.apertura} - ${f.cierre}`).join(', ');
+        html += `<li><span class="dia">Lunes a Viernes</span><span class="franjas">${franjas || 'No informado'}</span></li>`;
+      }
+      if (v.horarios.sabado) {
+        const franjas = v.horarios.sabado.map(f => `${f.apertura} - ${f.cierre}`).join(', ');
+        html += `<li><span class="dia">Sábado</span><span class="franjas">${franjas || 'No informado'}</span></li>`;
+      }
+      if (v.horarios.domingo) {
+        const franjas = v.horarios.domingo.map(f => `${f.apertura} - ${f.cierre}`).join(', ');
+        html += `<li><span class="dia">Domingo</span><span class="franjas">${franjas || 'No informado'}</span></li>`;
+      }
+
+      return html || "<li><span class='dia'>Horarios</span><span class='franjas'>No informado</span></li>";
+    }
+
+    function distritoLabel(d){
+      const map = { "1":"Las Flores","2":"Rodeo","3":"Tudcum","4":"Bella Vista","5":"Villa Iglesia" };
+      return map[String(d)] || d || "No informado";
+    }
+
+    function safeUrl(u){
+      const s = (u || '').toString().trim();
+      if (!s) return '';
+      if (!/^https?:\/\//i.test(s)) return '';
+      return s;
+    }
+    function safeImg(u){
+      const s = (u || '').toString().trim();
+      if (!s) return '';
+      if (/^https?:\/\//i.test(s)) return s;
+      if (/^data:image\//i.test(s)) return s;
+      return '';
+    }
+    function digitsOnly(s){ return (s || '').toString().replace(/\D/g,''); }
+
+    // ✅ Asistencia: admite {asistencia:{telefono, whatsapp, texto}} o asistencia string (tel/wa/link)
+    function buildAssistLink(v){
+      const a = v.asistencia;
+      if(!a) return null;
+
+      // Caso: objeto
+      if(typeof a === 'object'){
+        const txt = (a.texto || a.mensaje || 'Necesito asistencia').toString();
+        const w = digitsOnly(a.whatsapp);
+        const t = digitsOnly(a.telefono);
+        const link = safeUrl(a.link);
+
+        if(w) return { href:`https://wa.me/${w}?text=${encodeURIComponent(txt)}`, label:"Necesito asistencia", icon:"fa-life-ring" };
+        if(t) return { href:`tel:${t}`, label:"Necesito asistencia", icon:"fa-life-ring" };
+        if(link) return { href:link, label:"Necesito asistencia", icon:"fa-life-ring" };
+        return null;
+      }
+
+      // Caso: string
+      const str = a.toString().trim();
+      const w = digitsOnly(str);
+      if(str.startsWith('http')) return { href:safeUrl(str), label:"Necesito asistencia", icon:"fa-life-ring" };
+      if(w.length >= 8) return { href:`https://wa.me/${w}?text=${encodeURIComponent('Necesito asistencia')}`, label:"Necesito asistencia", icon:"fa-life-ring" };
+      return null;
+    }
+
+    // ✅ Galería por tipo
+    function galleryLimitByType(tipo){
+      const t = normTipo(tipo);
+      if(t === 'turismo' || t === 'evento') return 10;
+      return 5;
+    }
+
+    // ✅ Títulos por tipo
+    function setHeaderByType(tipo){
+      const t = normTipo(tipo);
+      const meta = TIPO_META[t] || { label:"Detalle", icon:"fa-circle-info" };
+
+      pageTitle.innerHTML = `<i class="fa-solid ${meta.icon}"></i> Detalle del ${meta.label.toLowerCase()}`;
+      pageSubtitle.textContent = (t === 'evento')
+        ? "Fechas, ubicación, galería y contacto"
+        : (t === 'turismo')
+          ? "Cómo llegar, galería y asistencia"
+          : (t === 'profesional')
+            ? "Especialidad, contacto y redes"
+            : "Información, horarios, redes y contacto";
+    }
+
+    // ==========================
+    // Load / Render
+    // ==========================
+    async function cargarDetalle() {
+      const id = getIdFromUrl();
+      if (!id) {
+        detalleContainer.innerHTML = errorBox("⚠️ ID no proporcionado.");
+        return;
+      }
+
+      try {
+        const docRef = doc(db, "comercios", id);
+        const docSnap = await getDoc(docRef);
+
+        if (!docSnap.exists()) {
+          detalleContainer.innerHTML = errorBox("⚠️ No encontrado.");
+          return;
+        }
+
+        const v = { id: docSnap.id, ...docSnap.data() };
+        if(!v.tipo) v.tipo = "comercio";
+
+        // ✅ VISUALIZACIONES: recomendado SOLO en detalle (A)
+        // Si index ya suma, quita el updateDoc del index (lo ideal).
+        await updateDoc(docRef, {
+          visualizaciones: (v.visualizaciones || 0) + 1
+        });
+
+        renderDetalle(v);
+      } catch (error) {
+        console.error('Error cargando detalle:', error);
+        detalleContainer.innerHTML = errorBox("❌ Error al cargar el detalle.");
+      }
+    }
+
+    function errorBox(msg){
+      return `<div class="panel" style="grid-column:1/-1;">
+        <div class="stack">
+          <div class="section">
+            <h3><i class="fa-solid fa-triangle-exclamation"></i> Error</h3>
+            <div class="desc">${msg}</div>
+          </div>
+        </div>
+      </div>`;
+    }
+
+    function renderDetalle(v) {
+      const tipo = normTipo(v.tipo);
+      setHeaderByType(tipo);
+
+      const st = disponibilidad(v);
+      const nivel = normNivel(v.nivel);
+
+      const heroImg = safeImg(v.imagen) || "https://images.unsplash.com/photo-1528698827591-e19ccd7bc23d?auto=format&fit=crop&w=1600&q=60";
+
+      // ---- galería flexible
+      const lim = galleryLimitByType(tipo);
+      const galeriaList = (v.galeria || []).map(safeImg).filter(Boolean).slice(0, lim);
+      const galeriaHTML = galeriaList.map(img =>
+        `<img src="${img}" alt="Imagen" loading="lazy" decoding="async" onclick="openModal('${img}')">`
+      ).join('');
+
+      // ---- redes
+      const redes = v.redes || {};
+      const socialButtons = [];
+      if (redes.instagram) socialButtons.push(`<a href="${safeUrl(redes.instagram)}" target="_blank" class="social-btn" rel="noopener"><i class="fab fa-instagram"></i> Instagram</a>`);
+      if (redes.facebook) socialButtons.push(`<a href="${safeUrl(redes.facebook)}" target="_blank" class="social-btn" rel="noopener"><i class="fab fa-facebook"></i> Facebook</a>`);
+      if (redes.tiktok) socialButtons.push(`<a href="${safeUrl(redes.tiktok)}" target="_blank" class="social-btn" rel="noopener"><i class="fab fa-tiktok"></i> TikTok</a>`);
+      if (redes.web) socialButtons.push(`<a href="${safeUrl(redes.web)}" target="_blank" class="social-btn" rel="noopener"><i class="fas fa-globe"></i> Sitio Web</a>`);
+      if (redes.email) {
+        const em = (redes.email || '').toString().trim();
+        if(em) socialButtons.push(`<a href="mailto:${em}" class="social-btn"><i class="fas fa-envelope"></i> Email</a>`);
+      }
+
+      // ---- contacto (tel/whatsapp)
+      const telDigits = digitsOnly(v.telefono);
+      const callBtn = telDigits
+        ? `<a class="action call" href="tel:${telDigits}"><i class="fa-solid fa-phone"></i> Llamar</a>`
+        : `<div class="action" style="grid-column: span 6; opacity:.75; cursor:default;"><i class="fa-solid fa-phone"></i> Teléfono no disponible</div>`;
+
+      const whatsappDigits = digitsOnly(v.whatsapp);
+      const whatsappBtn = whatsappDigits
+        ? `<a href="https://wa.me/${whatsappDigits}?text=${encodeURIComponent('Hola, vi tu perfil en el catálogo.')}" target="_blank" class="whatsapp-btn" rel="noopener">
+            <i class="fab fa-whatsapp"></i> Contactar por WhatsApp
+          </a>`
+        : '';
+
+      // ---- maps (cómo llegar)
+      let mapsLink = safeUrl(v.mapLink);
+      if (!mapsLink) {
+        if (v.ubicacion && typeof v.ubicacion.lat === 'number' && typeof v.ubicacion.lng === 'number') {
+          mapsLink = `https://www.google.com/maps/dir/?api=1&destination=${v.ubicacion.lat},${v.ubicacion.lng}`;
+        } else {
+          const q = [v.direccion, v.nombre, distritoLabel(v.distrito)].filter(Boolean).join(' - ');
+          mapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q || 'Ubicación')}`;
+        }
+      }
+
+      // ---- asistencia (turismo / evento recomendado)
+      const assist = buildAssistLink(v);
+      const showAssist = !!assist && (tipo === 'turismo' || tipo === 'evento');
+
+      // ---- secciones condicionales
+      const especialidad = (v.especialidad || v.profesion || v.rubro_profesional || '').toString().trim();
+      const modalidad = (v.modalidad || '').toString().trim();
+      const disponibilidadTxt = (v.disponibilidad || v.turno || '').toString().trim();
+
+      const fechaInicio = parseDateMaybe(v.fechaInicio || v.inicio || v.startDate);
+      const fechaFin = parseDateMaybe(v.fechaFin || v.fin || v.endDate);
+      const lugarEvento = (v.lugar || v.ubicacionNombre || v.direccion || '').toString().trim();
+
+      const showHorarios = (tipo === 'comercio' || tipo === 'servicio' || tipo === 'farmacia' || tipo === 'delivery' || tipo === 'turismo' || tipo === 'transporte');
+      const showEventDates = (tipo === 'evento');
+
+      // ---- tags
+      const tagsHTML = (v.tags || []).slice(0, 20).map(t => `<span class="tag">${t}</span>`).join('');
+      const diasHTML = (v.dias || []).map(d => `<span class="dia-badge">${d}</span>`).join('');
+
+      // ---- chips hero: estado + tipo + nivel
+      const tipoChip = (TIPO_META[tipo] ? `${TIPO_META[tipo].label}` : `Tipo: ${tipo}`);
+
+      detalleContainer.innerHTML = `
+        <div class="panel">
+          <div class="hero">
+            <img src="${heroImg}" alt="${v.nombre || 'Detalle'}" loading="lazy" decoding="async">
+            <div class="overlay" aria-hidden="true"></div>
+
+            <div class="hero-top">
+              <span class="chip ${st.ok ? 'open' : 'closed'}">
+                <i class="fa-solid ${st.ok ? 'fa-circle-check' : 'fa-circle-xmark'}"></i>
+                ${st.label}
+              </span>
+
+              <span class="nivel" data-nivel="${nivel}">
+                <i class="fa-solid ${nivel === 'diamante' ? 'fa-gem' : 'fa-medal'}"></i>
+                ${nivelLabel(nivel)}
+              </span>
+
+              <span class="chip">
+                <i class="fa-solid ${TIPO_META[tipo]?.icon || 'fa-layer-group'}"></i>
+                ${tipoChip}
+              </span>
+            </div>
+
+            <div class="hero-info">
+              <div class="titlebox">
+                <h2>${v.nombre || 'Sin nombre'}</h2>
+                <div class="subtitle">
+                  ${v.categoria ? `<span><i class="fa-solid fa-layer-group"></i> ${v.categoria}</span><span class="dot"></span>` : ``}
+                  <span><i class="fa-solid fa-eye"></i> ${(v.visualizaciones || 0) + 1} vistas</span>
+                  ${v.distrito ? `<span class="dot"></span><span><i class="fa-solid fa-location-crosshairs"></i> ${distritoLabel(v.distrito)}</span>` : ``}
+                </div>
+              </div>
+
+              <div class="meta">
+                ${v.direccion ? `<span class="chip"><i class="fa-solid fa-location-dot"></i> ${v.direccion}</span>` : ``}
+              </div>
+            </div>
+          </div>
+
+          <div class="stack">
+            <div class="section">
+              <h3><i class="fa-solid fa-bolt"></i> Acciones rápidas</h3>
+              <div class="quick-actions">
+                <a class="action maps" href="${mapsLink}" target="_blank" rel="noopener">
+                  <i class="fa-solid fa-route"></i> Cómo llegar
+                </a>
+                ${callBtn}
+              </div>
+
+              ${whatsappBtn || `<div class="desc" style="margin-top:10px;">WhatsApp no disponible.</div>`}
+
+              ${showAssist ? `
+                <a class="assist-btn" href="${assist.href}" target="_blank" rel="noopener">
+                  <i class="fa-solid ${assist.icon}"></i> ${assist.label}
+                </a>
+              ` : ``}
+
+              ${tipo === 'transporte' && disponibilidadTxt ? `
+                <div class="desc" style="margin-top:10px;">
+                  <b>Disponibilidad:</b> ${disponibilidadTxt}
+                </div>
+              ` : ``}
+            </div>
+
+            ${tipo === 'profesional' ? `
+              <div class="section">
+                <h3><i class="fa-solid fa-user-doctor"></i> Perfil profesional</h3>
+                <div class="kv">
+                  <div class="kv-row"><div class="k">Especialidad</div><div class="v">${especialidad || 'No informado'}</div></div>
+                  <div class="kv-row"><div class="k">Modalidad</div><div class="v">${modalidad || (st.kind === 'turnos' ? 'Turnos' : 'No informado')}</div></div>
+                </div>
+                <div class="desc" style="margin-top:10px;">${v.descripcion || 'Sin descripción'}</div>
+              </div>
+            ` : `
+              <div class="section">
+                <h3><i class="fa-solid fa-circle-info"></i> Descripción</h3>
+                <div class="desc">${v.descripcion || 'Sin descripción'}</div>
+              </div>
+            `}
+
+            ${showEventDates ? `
+              <div class="section">
+                <h3><i class="fa-solid fa-calendar-days"></i> Fechas del evento</h3>
+                <div class="kv">
+                  <div class="kv-row"><div class="k">Inicio</div><div class="v">${fechaInicio ? fechaInicio.toLocaleString('es-AR') : 'No informado'}</div></div>
+                  <div class="kv-row"><div class="k">Fin</div><div class="v">${fechaFin ? fechaFin.toLocaleString('es-AR') : 'No informado'}</div></div>
+                  <div class="kv-row"><div class="k">Lugar</div><div class="v">${lugarEvento || 'No informado'}</div></div>
+                </div>
+              </div>
+            ` : ``}
+
+            ${showHorarios ? `
+              <div class="section">
+                <h3><i class="fa-solid fa-clock"></i> Horarios</h3>
+                <div class="desc" style="margin-bottom:10px;">Días activos:</div>
+                <div class="dias-activos">${diasHTML || '<span class="tag">No informado</span>'}</div>
+                <ul class="horarios-lista">${formatoHorario(v)}</ul>
+                ${tipo === 'turismo' && (!v.horarios || typeof v.horarios !== 'object') ? `
+                  <div class="desc" style="margin-top:10px;"><b>Nota:</b> Este punto figura como “Visitable” (sin horarios cargados).</div>
+                ` : ``}
+              </div>
+            ` : ``}
+
+            <div class="section">
+              <h3><i class="fa-solid fa-tags"></i> Etiquetas</h3>
+              <div class="tags">
+                ${tagsHTML || '<span class="tag">Sin etiquetas</span>'}
+              </div>
+            </div>
+
+            ${galeriaHTML ? `
+              <div class="section">
+                <h3><i class="fa-solid fa-images"></i> Galería (${galeriaList.length}/${lim})</h3>
+                <div class="gallery">${galeriaHTML}</div>
+              </div>
+            ` : ``}
+
+            ${socialButtons.length ? `
+              <div class="section">
+                <h3><i class="fa-solid fa-share-nodes"></i> Redes</h3>
+                <div class="social-buttons">${socialButtons.join('')}</div>
+              </div>
+            ` : ``}
+          </div>
+        </div>
+
+        <aside class="panel">
+          <div class="side">
+            <div class="section">
+              <h3><i class="fa-solid fa-list-check"></i> Información rápida</h3>
+              <div class="kv">
+                <div class="kv-row"><div class="k">Tipo</div><div class="v">${tipoChip}</div></div>
+                <div class="kv-row"><div class="k">Distrito</div><div class="v">${distritoLabel(v.distrito)}</div></div>
+                <div class="kv-row"><div class="k">Dirección</div><div class="v">${v.direccion || 'No informado'}</div></div>
+                <div class="kv-row"><div class="k">Teléfono</div><div class="v">${v.telefono || 'No informado'}</div></div>
+                <div class="kv-row"><div class="k">WhatsApp</div><div class="v">${v.whatsapp || 'No informado'}</div></div>
+                ${tipo === 'farmacia' ? `<div class="kv-row"><div class="k">Turno</div><div class="v">${(String(v.turno || v.deTurno || '')).toLowerCase() === 'si' ? 'De turno' : 'No'}</div></div>` : ``}
+                ${tipo === 'profesional' ? `<div class="kv-row"><div class="k">Especialidad</div><div class="v">${especialidad || 'No informado'}</div></div>` : ``}
+              </div>
+
+              <a class="action maps" style="margin-top:12px; width:100%;" href="${mapsLink}" target="_blank" rel="noopener">
+                <i class="fa-solid fa-map-location-dot"></i> Abrir en Google Maps
+              </a>
+
+              ${showAssist ? `
+                <a class="assist-btn" style="margin-top:10px;" href="${assist.href}" target="_blank" rel="noopener">
+                  <i class="fa-solid ${assist.icon}"></i> ${assist.label}
+                </a>
+              ` : ``}
+            </div>
+
+            ${socialButtons.length ? `
+              <div class="section">
+                <h3><i class="fa-solid fa-users"></i> Redes</h3>
+                <div class="desc">Fotos, horarios y novedades en sus redes.</div>
+                <div class="social-buttons" style="margin-top:10px;">${socialButtons.join('')}</div>
+              </div>
+            ` : ``}
+          </div>
+        </aside>
+      `;
+    }
+
+    // ==========================
+    // Modal
+    // ==========================
+    function openModal(src) {
+      modalImage.src = src;
+      modal.classList.add('show');
+      modal.setAttribute('aria-hidden', 'false');
+    }
+    function closeModal() {
+      modal.classList.remove('show');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+    window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+    window.openModal = openModal;
+    window.closeModal = closeModal;
+
+    // Cargar una vez
+    cargarDetalle();
+
+    // ⚠️ IMPORTANTE:
+    // Esto NO lo dejes activo porque vuelve a sumar visualizaciones y hace llamadas inútiles.
+    // Si querés “actualizar estado” sin sumar, habría que separar el updateDoc del render.
+    // setInterval(() => { cargarDetalle(); }, 9190000);
+  </script>
+</body>
+</html>
