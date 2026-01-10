@@ -2,9 +2,11 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>UBIX | Catálogo</title>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
@@ -12,22 +14,28 @@
     :root{
       --primary:#2D5BFF;
       --primary-dark:#1A3EBF;
-      --accent:#00F2FE;
+      --sky:#0EA5E9;
+      --ok:#10B981;
+      --danger:#EF4444;
 
-      --bg:#F0F2F5;
-      --panel:rgba(255,255,255,.92);
-      --card:rgba(255,255,255,.96);
+      --bg:#F6F7FB;
+      --surface: rgba(255,255,255,.76);
+      --panel: rgba(255,255,255,.86);
+      --card: rgba(255,255,255,.92);
 
-      --text:#0F172A;
-      --muted:#64748B;
+      --text:#0B1220;
+      --muted:#5B667A;
+      --line: rgba(12,18,32,.10);
 
-      --line: rgba(15, 23, 42, .10);
-      --shadow: 0 18px 60px rgba(15,23,42,.10);
-      --shadow2: 0 10px 30px rgba(15,23,42,.08);
-      --transition: all .22s ease;
+      --shadow: 0 18px 60px rgba(11,18,32,.10);
+      --shadow2: 0 10px 26px rgba(11,18,32,.08);
+      --glow: 0 0 0 3px rgba(45,91,255,0.20);
 
-      --r:18px;
-      --r2:24px;
+      --r14:14px;
+      --r18:18px;
+      --r22:22px;
+      --r26:26px;
+
       --max:1200px;
 
       --bronze1:#cd7f32; --bronze2:#7a3b11;
@@ -35,35 +43,31 @@
       --gold1:#ffd166;   --gold2:#b8860b;
       --dia1:#b9f2ff;    --dia2:#3bb8ff;
 
-      --safe:#10B981;
-      --danger:#EF4444;
+      --chip: rgba(255,255,255,0.62);
+      --chip-border: rgba(12,18,32,.10);
 
-      --chip: rgba(0,0,0,0.04);
-      --chip-border: rgba(15, 23, 42, .10);
-      --glow: 0 0 0 3px rgba(45,91,255,0.18);
+      --transition: all .22s ease;
     }
 
     [data-theme="dark"]{
-      --bg:#05070A;
-      --panel:rgba(15,23,42,.90);
-      --card:rgba(15,23,42,.92);
+      --bg:#070A10;
+      --surface: rgba(15,23,42,.65);
+      --panel: rgba(15,23,42,.80);
+      --card: rgba(15,23,42,.88);
       --text:#F8FAFC;
-      --muted:#94A3B8;
-      --line: rgba(255,255,255,.07);
+      --muted:#A3B2C7;
+      --line: rgba(255,255,255,.08);
+
       --shadow: 0 18px 70px rgba(0,0,0,.45);
       --shadow2: 0 10px 30px rgba(0,0,0,.35);
-      --chip: rgba(255,255,255,0.06);
-      --chip-border: rgba(255,255,255,0.08);
+      --chip: rgba(15,23,42,0.55);
+      --chip-border: rgba(255,255,255,.10);
     }
 
     *{ box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color: transparent; }
     body{
       font-family:'Plus Jakarta Sans',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      background:
-        radial-gradient(1000px 600px at 75% 10%, rgba(45,91,255,.10), transparent 60%),
-        radial-gradient(900px 520px at 15% 20%, rgba(0,242,254,.08), transparent 60%),
-        radial-gradient(900px 520px at 60% 90%, rgba(255,255,255,.06), transparent 62%),
-        var(--bg);
+      background: var(--bg);
       color:var(--text);
       min-height:100vh;
       display:flex;
@@ -71,21 +75,39 @@
       overflow-x:hidden;
     }
     a{ color:inherit; text-decoration:none; }
+    button,input,select{ font:inherit; }
+    :focus-visible{ outline:none; box-shadow: var(--glow); border-radius: 14px; }
+
+    /* Fondo premium */
+    .bgfx{
+      position:fixed; inset:0; z-index:-2; pointer-events:none;
+      background:
+        radial-gradient(900px 520px at 10% -10%, rgba(45,91,255,.18), transparent 60%),
+        radial-gradient(700px 460px at 110% 10%, rgba(14,165,233,.14), transparent 60%),
+        radial-gradient(650px 520px at 40% 120%, rgba(16,185,129,.10), transparent 55%);
+    }
+    .grain{
+      position:fixed; inset:0; z-index:-1; pointer-events:none;
+      opacity:.05;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
+      mix-blend-mode:multiply;
+    }
+    [data-theme="dark"] .grain{ mix-blend-mode:screen; opacity:.06; }
 
     .container{ width:min(var(--max), calc(100% - 22px)); margin:0 auto; }
 
-    /* HEADER (UBIX style) */
+    /* HEADER */
     header{
       position:sticky; top:0; z-index:50;
-      background: rgba(255,255,255,.65);
+      background: rgba(255,255,255,.60);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       border-bottom:1px solid var(--line);
-      box-shadow: 0 8px 26px rgba(0,0,0,.06);
+      box-shadow: 0 8px 24px rgba(0,0,0,.06);
     }
     [data-theme="dark"] header{
-      background: rgba(5,7,10,.65);
-      box-shadow: 0 8px 26px rgba(0,0,0,.28);
+      background: rgba(7,10,16,.55);
+      box-shadow: 0 10px 28px rgba(0,0,0,.30);
     }
 
     .topbar{
@@ -95,28 +117,24 @@
     .brand{ display:flex; align-items:center; gap:10px; min-width:0; }
     .logo{
       width:40px; height:40px; border-radius:14px;
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      background: url(logo.jpg) center/cover no-repeat;
       box-shadow: 0 16px 34px rgba(45,91,255,.22);
+      border: 1px solid rgba(255,255,255,.25);
       flex:0 0 auto;
     }
-    .brand .t{
-      min-width:0;
-      display:flex;
-      flex-direction:column;
-    }
+    .brand .t{ min-width:0; display:flex; flex-direction:column; }
     .brand h1{
-      font-size:16px; font-weight:900; letter-spacing:-.4px;
+      font-size:16px; font-weight:950; letter-spacing:-.4px;
       white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
       max-width: 58vw;
     }
     .subhead{
-      margin-top:2px; color: var(--muted); font-size:12px; font-weight:800;
+      margin-top:2px; color: var(--muted); font-size:12px; font-weight:850;
       white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
       max-width: 58vw;
     }
 
     .controls{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
-
     .icon-btn{
       width:44px; height:44px; border-radius:16px;
       border:1px solid var(--line);
@@ -141,7 +159,7 @@
       border:1px solid var(--chip-border);
       background: var(--chip);
       box-shadow: var(--shadow2);
-      border-radius: var(--r2);
+      border-radius: var(--r26);
       display:flex; align-items:center; padding: 12px 14px; gap:10px;
       transition:.2s;
     }
@@ -149,19 +167,19 @@
     .search-bar i{ color: var(--muted); }
     .search-bar input{
       width:100%; border:none; outline:none; background:transparent;
-      color: var(--text); font-size: 14px; font-weight:800;
+      color: var(--text); font-size: 14px; font-weight:850;
     }
-    .search-bar input::placeholder{ color: var(--muted); font-weight:700; }
+    .search-bar input::placeholder{ color: var(--muted); font-weight:800; }
 
     .select{
       border:1px solid var(--line);
       background: var(--panel);
       color: var(--text);
-      border-radius: 16px;
+      border-radius: 18px;
       padding: 10px 12px;
       box-shadow: var(--shadow2);
       transition: var(--transition);
-      font-weight:900;
+      font-weight:950;
       display:flex;
       align-items:center;
       gap:10px;
@@ -174,14 +192,14 @@
       transform: translateY(-50%);
       pointer-events:none;
       color: var(--muted);
-      font-weight: 900;
+      font-weight: 950;
     }
     select{
       appearance:none; -webkit-appearance:none; -moz-appearance:none;
       border:none; outline:none; background:transparent;
       width:100%;
       color: var(--text);
-      font-weight:900;
+      font-weight:950;
       cursor:pointer;
       padding-right: 18px;
     }
@@ -189,14 +207,14 @@
     [data-theme="dark"] select option { background: #0F172A; color: #F8FAFC; }
 
     .btn{
-      border:1px solid var(--line);
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      border:1px solid rgba(45,91,255,.20);
+      background: linear-gradient(135deg, var(--sky), var(--primary));
       color: #fff;
-      border-radius: 16px;
+      border-radius: 18px;
       padding: 10px 12px;
-      box-shadow: 0 14px 30px rgba(45,91,255,.25);
+      box-shadow: 0 14px 28px rgba(14,165,233,.20);
       transition: var(--transition);
-      font-weight:900;
+      font-weight:950;
       cursor:pointer;
       display:flex;
       align-items:center;
@@ -205,7 +223,7 @@
     }
     .btn:hover{ transform: translateY(-1px); }
 
-    /* CHIPS TIPO */
+    /* CHIPS */
     .chips{
       display:flex; gap:10px; overflow-x:auto;
       padding: 8px 0 10px; -webkit-overflow-scrolling: touch;
@@ -222,7 +240,7 @@
       padding: 10px 14px;
       border-radius: 999px;
       font-size: 13px;
-      font-weight: 900;
+      font-weight: 950;
       cursor:pointer;
       transition: var(--transition);
       box-shadow: var(--shadow2);
@@ -236,20 +254,22 @@
       color: var(--text);
     }
 
+    /* DISPONIBILIDAD (compacto) */
     .toggle-row{
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      display:flex; align-items:center; justify-content:flex-end;
+      gap:10px;
       border:1px solid var(--chip-border);
       background: var(--chip);
       box-shadow: var(--shadow2);
-      padding: 12px 14px;
-      border-radius: var(--r2);
+      padding: 8px 12px;
+      border-radius: 18px;
       margin-bottom: 10px;
-      flex-wrap:wrap;
+      flex-wrap:nowrap;
     }
-    .toggle-row span{ font-size: 13px; font-weight:900; color: var(--muted); }
-    .toggle-row #toggleLabel{ color: var(--text); }
+    .toggle-row span{ font-size: 12px; font-weight:950; color: var(--muted); }
+    .toggle-row #toggleLabel{ color: var(--text); font-size:12px; white-space:nowrap; }
 
-    .switch{ position: relative; display:inline-block; width:54px; height:28px; }
+    .switch{ position: relative; display:inline-block; width:44px; height:24px; }
     .switch input{ display:none; }
     .slider{
       position:absolute; inset:0;
@@ -260,10 +280,10 @@
     }
     .slider:before{
       content:""; position:absolute;
-      width:22px; height:22px; left:3px; top:50%;
+      width:18px; height:18px; left:3px; top:50%;
       transform: translateY(-50%);
       background:#fff; border-radius:999px;
-      box-shadow: 0 10px 18px rgba(0,0,0,.25);
+      box-shadow: 0 10px 18px rgba(0,0,0,.20);
       transition:.25s ease;
     }
     input:checked + .slider{
@@ -271,7 +291,7 @@
       border-color: rgba(16,185,129,.35);
     }
     input:checked + .slider:before{
-      transform: translate(26px, -50%);
+      transform: translate(20px, -50%);
       background: #eafff4;
     }
 
@@ -280,7 +300,7 @@
       color: var(--muted);
       text-align:center;
       padding: 6px 0 12px;
-      font-weight: 800;
+      font-weight: 850;
     }
 
     /* MAIN GRID */
@@ -310,7 +330,7 @@
       isolation:isolate;
     }
     .card.loaded{ opacity:1; transform: translateY(0); }
-    .card:hover{ transform: translateY(-4px); box-shadow: 0 22px 60px rgba(0,0,0,.18); }
+    .card:hover{ transform: translateY(-3px); box-shadow: 0 22px 60px rgba(0,0,0,.16); }
     [data-theme="dark"] .card:hover{ box-shadow: 0 22px 60px rgba(0,0,0,.55); }
 
     .card::before{
@@ -328,42 +348,48 @@
     .media{ position:relative; border-bottom:1px solid var(--line); background: rgba(255,255,255,.05); }
     .card img{
       width:100%;
-      height: 180px;
+      height: 170px;
       object-fit:cover;
       display:block;
-      filter: saturate(1.06) contrast(1.05);
+      filter: saturate(1.05) contrast(1.04);
       transform: scale(1.02);
       transition: .35s ease;
     }
     .card:hover img{ transform: scale(1.06); }
-    .overlay{ position:absolute; inset:0; background: linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,.08), transparent); pointer-events:none; z-index:1; }
 
+    .overlay{
+      position:absolute; inset:0;
+      background: linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,.10), transparent);
+      pointer-events:none; z-index:1;
+    }
+
+    /* BADGES en la imagen (más chicos) */
     .status{
-      position:absolute; top:12px; left:12px; z-index:3;
-      display:inline-flex; align-items:center; gap:8px;
-      padding: 8px 10px; border-radius: 999px;
+      position:absolute; top:10px; left:10px; z-index:3;
+      display:inline-flex; align-items:center; gap:7px;
+      padding: 6px 9px; border-radius: 999px;
       border:1px solid rgba(255,255,255,.18);
-      background: rgba(0,0,0,.38);
+      background: rgba(0,0,0,.34);
       backdrop-filter: blur(10px);
       color: rgba(255,255,255,.94);
-      font-size: 12px; font-weight: 900;
+      font-size: 11px; font-weight: 950;
       white-space:nowrap;
-      max-width: calc(100% - 24px);
+      max-width: calc(100% - 20px);
       overflow:hidden; text-overflow:ellipsis;
     }
-    .status.open{ border-color: rgba(2, 247, 145, 0.85); box-shadow: 0 0 3px rgba(0, 255, 170, .6); }
-    .status.closed{ border-color: rgba(255, 0, 0, 0.85); box-shadow: 0 0 3px rgba(255, 80, 80, .6); }
+    .status.open{ border-color: rgba(2, 247, 145, 0.80); box-shadow: 0 0 3px rgba(0, 255, 170, .55); }
+    .status.closed{ border-color: rgba(255, 0, 0, 0.80); box-shadow: 0 0 3px rgba(255, 80, 80, .55); }
 
     .nivel{
-      position:absolute; top:12px; right:12px; z-index:3;
-      display:inline-flex; align-items:center; gap:8px;
-      padding: 9px 12px; border-radius: 999px;
-      font-size: 12px; font-weight: 900;
+      position:absolute; top:10px; right:10px; z-index:3;
+      display:inline-flex; align-items:center; gap:7px;
+      padding: 7px 10px; border-radius: 999px;
+      font-size: 11px; font-weight: 950;
       border:1px solid rgba(255,255,255,.18);
-      box-shadow: 0 10px 28px rgba(0,0,0,.25);
+      box-shadow: 0 10px 24px rgba(0,0,0,.22);
       backdrop-filter: blur(10px);
       white-space:nowrap;
-      max-width: calc(100% - 24px);
+      max-width: calc(100% - 20px);
       overflow:hidden; text-overflow:ellipsis;
     }
     .nivel[data-nivel="bronce"]{ background: linear-gradient(135deg, rgba(205,127,50,.92), rgba(122,59,17,.76)); color:#fff; }
@@ -372,27 +398,31 @@
     .nivel[data-nivel="diamante"]{background: linear-gradient(135deg, rgba(185,242,255,.92), rgba(59,184,255,.70)); color:#002a44; }
 
     .tipo-badge{
-      position:absolute; left:12px; bottom:12px; z-index:3;
-      display:inline-flex; align-items:center; gap:8px;
-      padding: 8px 10px; border-radius: 999px;
+      position:absolute; left:10px; bottom:10px; z-index:3;
+      display:inline-flex; align-items:center; gap:7px;
+      padding: 6px 9px; border-radius: 999px;
       border:1px solid rgba(255,255,255,.18);
-      background: rgba(0,0,0,.36);
+      background: rgba(0,0,0,.32);
       backdrop-filter: blur(10px);
       color: rgba(255,255,255,.94);
-      font-size: 12px; font-weight: 900;
+      font-size: 11px; font-weight: 950;
       white-space:nowrap;
-      max-width: calc(100% - 24px);
+      max-width: calc(100% - 20px);
       overflow:hidden; text-overflow:ellipsis;
     }
 
-    .card-content{ padding: 14px 14px 16px; }
+    .card-content{ padding: 12px 12px 14px; }
     .card-content h3{
-      font-size: 16px; font-weight: 900; text-align: center;
+      font-size: 15px; font-weight: 950; text-align: center;
       letter-spacing:.2px; text-transform: uppercase;
       line-height:1.2; margin-bottom: 6px;
       white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
     }
-    .card-content p{ font-size: 13px; color: var(--muted); font-weight: 800; margin-bottom: 10px; text-align:center; }
+    .card-content p{
+      font-size: 12px; color: var(--muted); font-weight: 850;
+      margin-bottom: 10px; text-align:center;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
 
     .tags{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; }
     .tag{
@@ -402,20 +432,24 @@
       border-radius: 999px;
       padding: 7px 10px;
       font-size: 12px;
-      font-weight: 900;
+      font-weight: 950;
       cursor:pointer;
       transition:.2s ease;
       max-width: 100%;
       user-select:none;
     }
-    [data-theme="dark"] .tag{ background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.10); color: var(--text); }
+    [data-theme="dark"] .tag{
+      background: rgba(255,255,255,.06);
+      border-color: rgba(255,255,255,.10);
+      color: var(--text);
+    }
 
     .hint-row{
-      margin-top: 12px; padding-top: 12px;
+      margin-top: 10px; padding-top: 10px;
       border-top: 1px solid var(--line);
       display:flex; align-items:center; justify-content:space-between;
       gap:10px; color: var(--muted);
-      font-size: 12px; font-weight: 900;
+      font-size: 12px; font-weight: 950;
     }
     .hint-row .go{
       display:inline-flex; align-items:center; gap:8px;
@@ -446,7 +480,7 @@
       padding: 10px 14px;
       box-shadow: var(--shadow2);
       transition: var(--transition);
-      font-weight:900;
+      font-weight:950;
       cursor:pointer;
     }
     .pagination button:hover{ transform: translateY(-1px); }
@@ -459,9 +493,10 @@
       color: var(--muted);
       text-align:center;
       font-size: 12px;
-      font-weight:800;
+      font-weight:850;
     }
 
+    /* Skeleton */
     .skeleton{ position:relative; overflow:hidden; background: rgba(255,255,255,.10); border-radius: 16px; }
     [data-theme="dark"] .skeleton{ background: rgba(255,255,255,.06); }
     .skeleton::after{
@@ -477,7 +512,7 @@
     .section-strip{
       grid-column: 1 / -1;
       border: 1px solid var(--line);
-      border-radius: var(--r2);
+      border-radius: var(--r26);
       background: var(--panel);
       box-shadow: var(--shadow2);
       overflow:hidden;
@@ -490,7 +525,7 @@
     }
     .strip-title{
       display:flex; align-items:center; gap:10px;
-      font-weight: 900;
+      font-weight: 950;
       font-size: 13px;
       color: var(--text);
     }
@@ -504,7 +539,7 @@
     }
     .strip-sub{
       font-size: 12px;
-      font-weight: 900;
+      font-weight: 950;
       color: var(--muted);
       text-align:right;
       white-space:nowrap;
@@ -522,7 +557,7 @@
     [data-theme="dark"] .strip-row::-webkit-scrollbar-thumb{ background: rgba(255,255,255,.12); }
 
     .mini{
-      flex: 0 0 280px;
+      flex: 0 0 260px;
       border:1px solid var(--line);
       border-radius: 18px;
       overflow:hidden;
@@ -530,27 +565,38 @@
       box-shadow: var(--shadow2);
       cursor:pointer;
       transition: var(--transition);
-      min-width: 240px;
+      min-width: 220px;
     }
     .mini:hover{ transform: translateY(-2px); border-color: rgba(45,91,255,.28); }
     .mini img{ width:100%; height: 120px; object-fit:cover; display:block; }
     .mini .mini-content{ padding: 10px 12px 12px; }
-    .mini .mini-title{ font-weight: 900; font-size: 13px; color: var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .mini .mini-meta{ margin-top:6px; font-size: 12px; font-weight: 900; color: var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .mini .mini-title{ font-weight: 950; font-size: 13px; color: var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .mini .mini-meta{ margin-top:6px; font-size: 12px; font-weight: 950; color: var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
+    /* Layout responsivo */
     @media (max-width: 980px){
       .card{ grid-column: span 6; }
     }
+    /* ✅ 2 cards por fila en móvil */
     @media (max-width: 640px){
       .container, main{ width: calc(100% - 22px); }
-      .card{ grid-column: span 12; }
-      .card img{ height: 180px; }
+      .card{ grid-column: span 6; }
+      .card img{ height: 150px; }
+      main{ gap: 12px; }
       .filters{ grid-template-columns: 1fr 1fr; }
+    }
+    /* ultra chico: vuelve a 1 */
+    @media (max-width: 380px){
+      .card{ grid-column: span 12; }
+      .card img{ height: 170px; }
     }
   </style>
 </head>
 
 <body data-theme="light">
+  <div class="bgfx"></div>
+  <div class="grain"></div>
+
   <header>
     <div class="container">
       <div class="topbar">
@@ -597,7 +643,7 @@
       </div>
 
       <div class="toggle-row">
-        <span>Disponibilidad:</span>
+        <span>Disponibilidad</span>
         <label class="switch" title="Filtrar disponibles">
           <input type="checkbox" id="toggleActivos" checked>
           <span class="slider"></span>
@@ -659,10 +705,10 @@
     const P = {
       q: (params.get("q") || "").trim(),
       zona: (params.get("zona") || "").trim(),
-      open: (params.get("open") || "").trim(),  // "1" si viene del botón ABIERTO
-      cat: (params.get("cat") || "").trim(),    // desde rubro.html
-      sub: (params.get("sub") || "").trim(),    // desde rubro.html
-      tipo: (params.get("tipo") || "").trim()   // opcional
+      open: (params.get("open") || "").trim(),  // "1" si viene de ABIERTO
+      cat: (params.get("cat") || "").trim(),
+      sub: (params.get("sub") || "").trim(),
+      tipo: (params.get("tipo") || "").trim()
     };
 
     // ===== Helpers
@@ -710,6 +756,7 @@
         "eventos":"evento",
         "turístico":"turismo",
         "punto de interés":"turismo",
+        "punto de interes":"turismo",
         "poi":"turismo",
         "delivery sin local":"delivery"
       };
@@ -737,8 +784,6 @@
     }
 
     // ===== RUBRO/SUB desde Home/Rubro (cat/sub)
-    // home manda cat IDs: gastronomia, profesionales, servicios, transporte, comercios, turismo
-    // en datos reales puede venir en: v.categoria, v.rubro, v.cat, v.tipo, v.tipoMacro, v.subcategoria
     const CAT_ALIASES = {
       gastronomia: ["gastronomia","comida","restaurant","restaurante","pizzeria","parrilla","cafeteria","bar","heladeria"],
       profesionales: ["profesional","profesionales","salud","doctor","medico","odontologia","abogado","contador","psicologo"],
@@ -759,14 +804,14 @@
       const catKey = slugify(P.cat);
       const subKey = slugify(P.sub);
 
-      // Match cat: por alias o por inclusión en campos
       let okCat = true;
       if(catKey){
         const aliases = CAT_ALIASES[catKey] ? CAT_ALIASES[catKey].map(slugify) : [catKey];
-        okCat = fields.some(f => aliases.some(a => f.includes(a) || a.includes(f))) || aliases.some(a => fields.includes(a));
+        okCat =
+          fields.some(f => aliases.some(a => f.includes(a) || a.includes(f))) ||
+          aliases.some(a => fields.includes(a));
       }
 
-      // Match sub: sub debe aparecer en algún campo
       let okSub = true;
       if(subKey){
         okSub = fields.some(f => f.includes(subKey) || subKey.includes(f));
@@ -899,7 +944,7 @@
         sk.style.cursor = 'default';
         sk.innerHTML = `
           <div class="media">
-            <div class="skeleton" style="height:190px;"></div>
+            <div class="skeleton" style="height:170px;"></div>
           </div>
           <div class="card-content">
             <div class="skeleton" style="height:16px; width:70%; border-radius:999px; margin: 0 auto 10px;"></div>
@@ -947,7 +992,7 @@
       });
     }
 
-    // ===== Strip sections (solo primera página si no hay búsqueda dura)
+    // ===== Strip sections (mini cards)
     function renderStrip({iconClass, title, subtitle, items}){
       if(!items || items.length === 0) return null;
 
@@ -995,32 +1040,30 @@
     function renderAll(){
       contenedor.innerHTML = "";
 
-      // --- estado filtros UI
       const busqueda = (input.value || "").toLowerCase().trim();
       const distrito = selectDistrito.value;
 
-      // 1) base list + pago
       let list = [...vendedores];
 
       if(HIDE_EXPIRED_ALWAYS){
         list = list.filter(v => isVisibleByPayment(v));
       }
 
-      // 2) filtros por params cat/sub
+      // cat/sub
       list = list.filter(matchesCatSub);
 
-      // 3) zona/distrito (params zona o select)
+      // zona/distrito (params zona o select)
       const zonaReal = (P.zona ? P.zona : distrito);
       if(zonaReal && zonaReal !== "todos"){
         list = list.filter(v => slugify(v.distrito) === slugify(zonaReal) || String(v.distrito) === String(zonaReal));
       }
 
-      // 4) tipo chip (macro)
+      // tipo chip
       if(selectedTipo !== "todos"){
         list = list.filter(v => normTipo(v.tipo) === selectedTipo);
       }
 
-      // 5) búsqueda
+      // búsqueda
       if(busqueda){
         list = list.filter(v => {
           const nombre = (v.nombre || '').toString().toLowerCase();
@@ -1042,48 +1085,11 @@
         });
       }
 
-      // 6) disponibles (si open=1 viene desde Home, forzamos ON)
+      // disponibles (open=1 fuerza ON)
       const forceOpen = (P.open === "1");
       const filtroDisponibles = forceOpen ? true : mostrarSoloActivos;
-
       if(filtroDisponibles){
         list = list.filter(v => disponibilidad(v).ok);
-      }
-
-      // ===== Secciones premium (solo si NO hay búsqueda dura y estás en página 1)
-      const showPremium = !busqueda && currentPage === 1 && selectedTipo === "todos" && !P.sub;
-
-      if(showPremium){
-        const eventos = vendedores
-          .filter(v => isVisibleByPayment(v))
-          .filter(v => matchesCatSub(v))
-          .filter(v => normTipo(v.tipo) === 'evento')
-          .filter(v => {
-            const st = disponibilidad(v);
-            return st.label === "En curso" || st.label === "Próximo" || st.kind === "evento";
-          })
-          .slice(0, 10);
-
-        const turismo = vendedores
-          .filter(v => isVisibleByPayment(v))
-          .filter(v => matchesCatSub(v))
-          .filter(v => normTipo(v.tipo) === 'turismo')
-          .slice(0, 10);
-
-        const destacados = vendedores
-          .filter(v => isVisibleByPayment(v))
-          .filter(v => matchesCatSub(v))
-          .filter(v => ['diamante','oro'].includes(normNivel(v.nivel)))
-          .sort((a,b) => (nivelRank[normNivel(a.nivel)] - nivelRank[normNivel(b.nivel)]))
-          .slice(0, 10);
-
-        const s1 = renderStrip({ iconClass:"fa-solid fa-calendar-star", title:"Eventos destacados", subtitle:"Lo que hay en la zona", items:eventos });
-        const s2 = renderStrip({ iconClass:"fa-solid fa-mountain-sun", title:"Turismo & Puntos de interés", subtitle:"Lugares para visitar", items:turismo });
-        const s3 = renderStrip({ iconClass:"fa-solid fa-crown", title:"Destacados", subtitle:"Top posicionados", items:destacados });
-
-        if(s1) contenedor.appendChild(s1);
-        if(s2) contenedor.appendChild(s2);
-        if(s3) contenedor.appendChild(s3);
       }
 
       // ===== Orden
@@ -1116,13 +1122,12 @@
 
       pageTitle.textContent = "UBIX | Catálogo";
       pageSub.textContent = parts.length ? parts.join(" • ") : "Encontrá lo que buscás, rápido.";
-
       resultsInfo.textContent = `Mostrando ${pageItems.length} de ${list.length} (Página ${currentPage} de ${totalPages})`;
 
-      // si no hay resultados
+      // ===== Si no hay resultados
       if (pageItems.length === 0) {
         contenedor.innerHTML += `
-          <p style="grid-column:1/-1;text-align:center; color:var(--muted); padding:18px 0; font-weight:900;">
+          <p style="grid-column:1/-1;text-align:center; color:var(--muted); padding:18px 0; font-weight:950;">
             😕 No se encontraron resultados con esos filtros.
           </p>`;
         return;
@@ -1135,13 +1140,16 @@
         const nivel = normNivel(v.nivel);
         const categoria = (v.categoria || v.rubro || v.tipo || 'Sin categoría');
 
+        const img = (v.imagen || '').toString().trim();
+        const safeImg = img ? img : "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=900&q=60";
+
         const card = document.createElement('div');
         card.className = 'card';
         card.dataset.nivel = nivel;
 
         card.innerHTML = `
           <div class="media">
-            <img src="${(v.imagen || '').toString()}" alt="${(v.nombre || '').toString()}" loading="lazy" decoding="async">
+            <img src="${safeImg}" alt="${(v.nombre || '').toString()}" loading="lazy" decoding="async">
             <div class="overlay" aria-hidden="true"></div>
 
             <span class="status ${st.ok ? 'open' : 'closed'}">
@@ -1155,7 +1163,7 @@
 
           <div class="card-content">
             <h3 title="${(v.nombre || '').toString()}">${(v.nombre || 'Sin nombre').toString()}</h3>
-            <p>${categoria}</p>
+            <p title="${categoria}">${categoria}</p>
             <div class="tags">${tagsHTML}</div>
 
             <div class="hint-row">
@@ -1166,7 +1174,6 @@
         `;
 
         card.addEventListener('click', () => {
-          // suma visualización en catálogo (si en detalle también suma, duplicás)
           updateDoc(doc(db, "comercios", v.id), {
             visualizaciones: (v.visualizaciones || 0) + 1
           }).catch(()=>{});
@@ -1185,6 +1192,46 @@
 
         contenedor.appendChild(card);
       });
+
+      // ===== Premium sections (AL FINAL, no antes)
+      // Solo si NO hay búsqueda dura, solo en página 1, y solo si no venís por rubro/sub/open
+      const showPremium =
+        !busqueda &&
+        currentPage === 1 &&
+        selectedTipo === "todos" &&
+        !P.sub &&
+        !P.cat &&
+        !P.open &&
+        (zonaReal === "todos" || !zonaReal);
+
+      if(showPremium){
+        const base = vendedores.filter(v => isVisibleByPayment(v));
+
+        const eventos = base
+          .filter(v => normTipo(v.tipo) === 'evento')
+          .filter(v => {
+            const st = disponibilidad(v);
+            return st.label === "En curso" || st.label === "Próximo" || st.kind === "evento";
+          })
+          .slice(0, 10);
+
+        const turismo = base
+          .filter(v => normTipo(v.tipo) === 'turismo')
+          .slice(0, 10);
+
+        const destacados = base
+          .filter(v => ['diamante','oro'].includes(normNivel(v.nivel)))
+          .sort((a,b) => (nivelRank[normNivel(a.nivel)] - nivelRank[normNivel(b.nivel)]))
+          .slice(0, 10);
+
+        const s1 = renderStrip({ iconClass:"fa-solid fa-calendar-star", title:"Eventos destacados", subtitle:"Lo que hay en la zona", items:eventos });
+        const s2 = renderStrip({ iconClass:"fa-solid fa-mountain-sun", title:"Turismo & Puntos de interés", subtitle:"Lugares para visitar", items:turismo });
+        const s3 = renderStrip({ iconClass:"fa-solid fa-crown", title:"Destacados", subtitle:"Top posicionados", items:destacados });
+
+        if(s1) contenedor.appendChild(s1);
+        if(s2) contenedor.appendChild(s2);
+        if(s3) contenedor.appendChild(s3);
+      }
 
       // ===== Paginación
       const pagination = document.createElement('div');
@@ -1220,14 +1267,14 @@
 
         // ===== Aplicar defaults desde URL (q/zona/open/tipo)
         if(P.q) input.value = P.q;
+
         if(P.zona){
-          // si la zona no existe como option exacta, igual la dejamos en "todos"
           const z = [...selectDistrito.options].some(o => slugify(o.value) === slugify(P.zona));
           if(z) selectDistrito.value = P.zona;
         }
+
         if(P.tipo){
           selectedTipo = normTipo(P.tipo);
-          // marcar chip si existe
           const chip = [...tipoChips.querySelectorAll(".chip")].find(c => c.dataset.tipo === selectedTipo);
           if(chip){
             [...tipoChips.querySelectorAll(".chip")].forEach(x=>x.classList.remove("active"));
@@ -1235,7 +1282,6 @@
           }
         }
 
-        // open=1 fuerza “solo disponibles”
         if(P.open === "1"){
           checkbox.checked = true;
           mostrarSoloActivos = true;
@@ -1245,7 +1291,7 @@
         renderAll();
       } catch(e){
         console.error("Error al cargar", e);
-        contenedor.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:#ff4d6d;padding:18px 0;font-weight:900;">Error al cargar datos.</p>`;
+        contenedor.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:#ff4d6d;padding:18px 0;font-weight:950;">Error al cargar datos.</p>`;
       }
     }
 
@@ -1254,7 +1300,6 @@
 
     selectDistrito.addEventListener('change', () => {
       currentPage = 1;
-      // si cambias manualmente la zona, anulamos el param zona (a nivel lógico)
       P.zona = "";
       renderAll();
     });
@@ -1273,11 +1318,11 @@
       mostrarSoloActivos = true;
       label.textContent = "Solo disponibles";
       selectedTipo = "todos";
+
       [...tipoChips.querySelectorAll(".chip")].forEach(x=>x.classList.remove("active"));
       const all = tipoChips.querySelector('.chip[data-tipo="todos"]');
       if(all) all.classList.add("active");
 
-      // limpiar params visibles de la URL (sin recargar)
       history.replaceState({}, "", "./catalogo.html");
       P.q=""; P.zona=""; P.open=""; P.cat=""; P.sub=""; P.tipo="";
       currentPage = 1;
