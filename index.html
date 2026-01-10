@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>UBIX | Catálogo Digital Local</title>
+  <title>INDX | Catálogo Digital Local</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -162,7 +162,7 @@
       max-width: 340px;
     }
 
-    /* Primary actions (clean) */
+    /* Actions */
     .actions{
       display:grid;
       grid-template-columns: 1fr 1fr;
@@ -200,12 +200,6 @@
       background: rgba(16,185,129,.10);
       border: 1px solid rgba(16,185,129,.20);
     }
-    [data-theme="dark"] .mini-cta{
-      background: rgba(16,185,129,.10);
-    }
-    .mini-cta .left{
-      display:flex; gap:10px; align-items:flex-start;
-    }
     .badge{
       width:34px; height:34px; border-radius: 14px;
       background: rgba(16,185,129,.18);
@@ -242,24 +236,11 @@
       display:flex; align-items:flex-end; justify-content:space-between; gap:10px;
       padding: 4px 4px 10px;
     }
-    .shead h2{
-      font-size: 14px;
-      font-weight: 950;
-      letter-spacing: -.2px;
-    }
-    .shead small{
-      font-size: 12px;
-      color: var(--muted);
-      font-weight: 850;
-    }
+    .shead h2{ font-size: 14px; font-weight: 950; letter-spacing: -.2px; }
+    .shead small{ font-size: 12px; color: var(--muted); font-weight: 850; }
 
-    /* Categories - premium tiles */
-    .cats{
-      display:grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      padding: 4px;
-    }
+    /* Categories */
+    .cats{ display:grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 4px; }
     .cat{
       border-radius: 20px;
       overflow:hidden;
@@ -276,226 +257,80 @@
     [data-theme="dark"] .cat{
       background: linear-gradient(180deg, rgba(15,23,42,.78), rgba(15,23,42,.54));
       border: 1px solid var(--border);
-      box-shadow: 0 14px 28px rgba(0,0,0,.35);
     }
-    .cat:hover{ transform: translateY(-2px); border-color: rgba(45,91,255,.30); }
     .cat .bg{
       position:absolute; inset:0;
-      background-size: cover;
-      background-position: center;
-      filter: saturate(1.05);
-      opacity:.26;
-      transform: scale(1.06);
+      background-size: cover; background-position: center;
+      opacity:.26; transform: scale(1.06);
     }
-    [data-theme="dark"] .cat .bg{ opacity:.22; }
-    .cat::after{
-      content:"";
-      position:absolute; inset:0;
-      background: linear-gradient(180deg, transparent 0%, rgba(11,18,32,.62) 100%);
-      opacity:.30;
-    }
-    [data-theme="dark"] .cat::after{ opacity:.36; }
-    .cat .content{
-      position:relative; z-index:1;
-      display:flex; align-items:center; justify-content:space-between;
-      width:100%;
-      gap: 10px;
-    }
-    .cat .txt b{
-      display:block;
-      color: var(--text);
-      font-weight: 950;
-      font-size: 13px;
-      letter-spacing: -.2px;
-    }
-    .cat .txt span{
-      display:block;
-      margin-top: 2px;
-      color: var(--muted);
-      font-weight: 850;
-      font-size: 11.5px;
-    }
+    .cat .txt b{ display:block; color: var(--text); font-weight: 950; font-size: 13px; }
+    .cat .txt span{ display:block; margin-top: 2px; color: var(--muted); font-weight: 850; font-size: 11.5px; }
     .cat .pill{
-      width: 36px; height: 36px;
-      border-radius: 14px;
+      width: 36px; height: 36px; border-radius: 14px;
       background: rgba(255,255,255,.78);
       border: 1px solid rgba(12,18,32,.10);
-      display:grid; place-items:center;
-      flex: 0 0 auto;
-      box-shadow: 0 10px 18px rgba(11,18,32,.08);
-    }
-    [data-theme="dark"] .cat .pill{
-      background: rgba(15,23,42,.85);
-      border: 1px solid var(--border);
-      box-shadow: 0 12px 20px rgba(0,0,0,.35);
+      display:grid; place-items:center; flex: 0 0 auto;
     }
 
-    /* Search (clean) */
+    /* Search */
     .searchbox{
       display:flex; gap:10px; align-items:center;
-      padding: 12px 12px;
-      border-radius: 18px;
+      padding: 12px 12px; border-radius: 18px;
       border: 1px solid var(--border);
       background: rgba(255,255,255,.55);
-      transition: box-shadow .18s ease, border-color .18s ease;
       margin: 4px;
     }
-    [data-theme="dark"] .searchbox{ background: rgba(15,23,42,.55); }
-    .searchbox:focus-within{ border-color: rgba(45,91,255,.45); box-shadow: var(--focus); }
     .searchbox input{
       border:none; outline:none; background:transparent;
-      width:100%;
-      font-weight: 850;
-      color: var(--text);
-      font-size: 14px;
+      width:100%; font-weight: 850; color: var(--text); font-size: 14px;
     }
-    .searchbox input::placeholder{ color: var(--muted); font-weight: 800; }
-    .row{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      padding: 4px;
-    }
+    .row{ display:grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 4px; }
     .sel{
-      position:relative;
-      display:flex; align-items:center; gap:10px;
+      position:relative; display:flex; align-items:center; gap:10px;
       background: rgba(255,255,255,.55);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 10px 12px;
+      border: 1px solid var(--border); border-radius: 18px; padding: 10px 12px;
     }
-    [data-theme="dark"] .sel{ background: rgba(15,23,42,.55); }
-    .sel select{
-      appearance:none; -webkit-appearance:none; -moz-appearance:none;
-      border:none; outline:none; background:transparent;
-      width:100%;
-      font-weight: 950;
-      color: var(--text);
-      cursor:pointer;
-      font-size: 13px;
-    }
-    .sel::after{
-      content:"▾";
-      position:absolute; right:12px; top:50%;
-      transform: translateY(-50%);
-      color: var(--muted);
-      font-weight: 950;
-      pointer-events:none;
-    }
+    .sel select{ appearance:none; border:none; outline:none; background:transparent; width:100%; font-weight: 950; color: var(--text); font-size: 13px; }
+    .sel::after{ content:"▾"; position:absolute; right:12px; color: var(--muted); pointer-events:none; }
     .btn-search{
-      border:none;
-      border-radius: 18px;
-      padding: 12px 12px;
-      font-weight: 950;
-      cursor:pointer;
+      border:none; border-radius: 18px; padding: 12px 12px;
+      font-weight: 950; cursor:pointer;
       background: linear-gradient(135deg, var(--primary2), var(--primary));
       color:#fff;
-      box-shadow: 0 14px 28px rgba(14,165,233,.22);
     }
 
-    /* Quick actions - better */
-    .quick{
-      display:grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      padding: 4px;
-      margin-top: 8px;
-    }
+    /* Quick actions */
+    .quick{ display:grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 4px; margin-top: 8px; }
     .qbtn{
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.55);
-      border-radius: 18px;
-      padding: 10px 8px;
-      cursor:pointer;
-      box-shadow: 0 10px 18px rgba(11,18,32,.05);
-      transition: transform .16s ease, border-color .16s ease;
-      text-align:center;
+      border:1px solid var(--border); background: rgba(255,255,255,.55);
+      border-radius: 18px; padding: 10px 8px; text-align:center;
     }
-    [data-theme="dark"] .qbtn{ background: rgba(15,23,42,.55); box-shadow: 0 12px 18px rgba(0,0,0,.35);color: #1A3EBF; }
-    .qbtn:hover{ transform: translateY(-2px); border-color: rgba(45,91,255,.28); }
     .qbtn b{ display:block; font-size: 11px; font-weight: 950; }
-    .qbtn span{ display:block; font-size: 10.5px; color: var(--muted); font-weight: 850; margin-top: 2px; }
+    .qbtn span{ display:block; font-size: 10.5px; color: var(--muted); font-weight: 850; }
 
     /* Allies */
-    .allies{
-      margin-top: 14px;
-      text-align:center;
-    }
-    .allies h4{
-      font-size: 11px;
-      color: var(--muted);
-      letter-spacing: 2px;
-      font-weight: 950;
-      margin-bottom: 10px;
-    }
-    .logos{
-      display:flex; gap: 10px; justify-content:center;
-      overflow-x:auto; padding: 6px 2px 2px;
-      scrollbar-width:none;
-    }
-    .logos::-webkit-scrollbar{ display:none; }
-    .logoBox{
-  flex: 0 0 auto;
-  width: 92px; height: 56px;
-  border-radius: 16px;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  box-shadow: var(--s1);
-  display: grid;
-  place-items: center;
-  overflow: hidden;           /* importante */
-  padding: 8px;               /* deja aire */
-}
-.logoBox img{
-  width: 100%;
-  height: 100%;
-  object-fit: contain;        /* para logos */
-  display: block;
-  filter: saturate(1.02);
-}
-[data-theme="dark"] .logoBox img{
-  filter: brightness(1.15) contrast(1.05);
-}
-
+    .allies{ margin-top: 14px; text-align:center; }
+    .allies h4{ font-size: 11px; color: var(--muted); letter-spacing: 2px; font-weight: 950; margin-bottom: 10px; }
+    .logos{ display:flex; gap: 10px; justify-content:center; overflow-x:auto; padding: 6px 2px; }
+    .logoBox{ flex: 0 0 auto; width: 92px; height: 56px; border-radius: 16px; border: 1px solid var(--border); background: var(--surface); display: grid; place-items: center; overflow: hidden; padding: 8px; }
+    .logoBox img{ width: 100%; height: 100%; object-fit: contain; }
 
     /* Footer */
     footer{
-      margin-top: 14px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--r-26);
-      box-shadow: var(--shadow-1);
-      padding: 18px 16px;
-      text-align:center;
+      margin-top: 14px; background: var(--surface);
+      border: 1px solid var(--border); border-radius: var(--r-26);
+      padding: 18px 16px; text-align:center;
     }
-    .footLinks{
-      display:flex; gap: 14px; flex-wrap:wrap; justify-content:center;
-      margin: 12px 0;
-    }
+    .footLinks{ display:flex; gap: 14px; flex-wrap:wrap; justify-content:center; margin: 12px 0; }
     .footLinks a{ color: var(--primary); font-weight: 950; font-size: 12px; }
-    .footText{ color: var(--muted); font-weight: 800; font-size: 12px; line-height: 1.55; max-width: 320px; margin: 0 auto; }
+    .footText{ color: var(--muted); font-weight: 800; font-size: 12px; line-height: 1.55; }
     .copy{ margin-top: 12px; font-size: 11px; color: rgba(91,102,122,.85); font-weight: 850; }
 
-    /* WhatsApp floating */
+    /* WhatsApp */
     .wa{
-      position: fixed;
-      right: 16px;
-      bottom: 18px;
-      width: 60px; height: 60px;
-      border-radius: 50%;
-      background: #25D366;
-      display:grid; place-items:center;
-      box-shadow: 0 16px 34px rgba(37,211,102,.30);
-      z-index: 50;
-      transition: transform .18s ease;
-    }
-    .wa:hover{ transform: scale(1.06); }
-
-    /* Mobile */
-    @media (max-width: 360px){
-      .actions{ grid-template-columns: 1fr; }
-      .quick{ grid-template-columns: repeat(2, 1fr); }
-      .title{ font-size: 26px; }
+      position: fixed; right: 16px; bottom: 18px; width: 60px; height: 60px;
+      border-radius: 50%; background: #25D366; display:grid; place-items:center;
+      box-shadow: 0 16px 34px rgba(37,211,102,.30); z-index: 50;
     }
   </style>
 </head>
@@ -505,173 +340,114 @@
   <div class="grain"></div>
 
   <a id="waLink" class="wa" href="#" aria-label="WhatsApp">
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="white" aria-hidden="true">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
       <path d="M20.52 3.48A11.91 11.91 0 0 0 12.03 0C5.4 0 .01 5.39.01 12.02c0 2.12.55 4.18 1.6 6.02L0 24l6.12-1.6a11.99 11.99 0 0 0 5.9 1.5h.01c6.63 0 12.02-5.39 12.02-12.02 0-3.2-1.25-6.2-3.53-8.4zM12.03 21.9h-.01a9.93 9.93 0 0 1-5.06-1.39l-.36-.21-3.63.95.97-3.54-.23-.36a9.94 9.94 0 1 1 8.32 4.55zm5.77-7.47c-.31-.16-1.85-.91-2.13-1.01-.29-.1-.5-.16-.71.16-.21.31-.81 1.01-.99 1.22-.18.21-.37.23-.68.08-.31-.16-1.32-.49-2.51-1.56-.93-.83-1.56-1.86-1.74-2.17-.18-.31-.02-.48.14-.64.14-.14.31-.37.47-.55.16-.18.21-.31.31-.52.1-.21.05-.39-.03-.55-.08-.16-.71-1.71-.97-2.34-.26-.62-.52-.53-.71-.54h-.6c-.21 0-.55.08-.83.39-.29.31-1.09 1.06-1.09 2.58 0 1.51 1.12 2.98 1.27 3.19.16.21 2.2 3.36 5.33 4.71.74.32 1.32.51 1.77.65.74.24 1.42.2 1.95.12.6-.09 1.85-.76 2.11-1.49.26-.74.26-1.37.18-1.49-.08-.12-.29-.2-.6-.36z"/>
     </svg>
   </a>
 
   <div class="wrap">
-    <!-- Header -->
     <div class="topbar">
       <div class="brand">
         <div class="mark"></div>
         <div>
-          <h1>UBIX</h1>
+          <h1>INDX</h1>
           <small>Catálogo Digital Local</small>
         </div>
       </div>
-      <button class="iconbtn" id="themeBtn" type="button" title="Cambiar tema" aria-label="Cambiar tema">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path d="M12 3v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          <path d="M12 19v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          <path d="M4.22 4.22l1.42 1.42" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          <path d="M18.36 18.36l1.42 1.42" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          <path d="M3 12h2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          <path d="M19 12h2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          <path d="M4.22 19.78l1.42-1.42" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          <path d="M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/>
+      <button class="iconbtn" id="themeBtn" type="button" title="Cambiar tema">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="4"/><path d="M12 3v2m0 14v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M3 12h2m14 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
         </svg>
       </button>
     </div>
 
-    <!-- Hero -->
-    <section class="hero" aria-label="Inicio UBIX">
+    <section class="hero">
       <div class="inner">
         <div class="title">El departamento de Iglesia<br> en tus manos.</div>
         <p class="subtitle">Explorá rubros locales, profesionales, encontrá servicios abiertos y contactá directo por WhatsApp.</p>
-
         <div class="actions">
-          <button class="btn btn-primary" id="exploreBtn" type="button">Explorar rubros</button>
-          <button class="btn btn-ghost" id="allBtn" type="button">Ver todo</button>
+          <button class="btn btn-primary" id="exploreBtn">Explorar rubros</button>
+          <button class="btn btn-ghost" id="allBtn">Ver todo</button>
         </div>
-
-        <div class="mini-cta" role="note" aria-label="Sumar negocio">
+        <div class="mini-cta">
           <div class="left">
-            <div class="badge" aria-hidden="true">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                <path d="M12 2v20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                <path d="M2 12h20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-            </div>
+            <div class="badge">+</div>
             <div>
               <b>¿Tenés un negocio?</b>
-              <p>Sumate como <span style="color: #0EA5E9;">Unidad Local Adherida</span> y aparecé en nuesto catalogo.</p>
+              <p>Sumate como <span style="color: #0EA5E9;">Unidad Local Adherida</span> a INDX.</p>
             </div>
           </div>
-          <button class="btn-mini" id="joinBtn" type="button">Sumar ULA</button>
+          <button class="btn-mini" id="joinBtn">Sumar ULA</button>
         </div>
       </div>
     </section>
 
-    <!-- Categories -->
-    <section class="section" id="exploreSection" aria-label="Explorar rubros">
-      <div class="shead">
-        <h2>Explorar por rubro</h2>
-        <small>Elegí para comenzar</small>
-      </div>
+    <section class="section" id="exploreSection">
+      <div class="shead"><h2>Explorar por rubro</h2><small>Elegí para comenzar</small></div>
       <div class="cats" id="catsGrid"></div>
     </section>
 
-    <!-- Search -->
-    <section class="section" aria-label="Buscar rápido">
-      <div class="shead">
-        <h2>Buscar rápido</h2>
-        <small>Nombre, rubro o palabra</small>
-      </div>
-
+    <section class="section">
+      <div class="shead"><h2>Buscar rápido</h2><small>Nombre o rubro</small></div>
       <div class="searchbox">
-        <span aria-hidden="true">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/>
-            <path d="M20 20l-3.2-3.2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </span>
-        <input id="q" type="text" placeholder="Ej: panadería, médico, cabañas..." autocomplete="off">
+        <input id="q" type="text" placeholder="Ej: panadería, médico, cabañas...">
       </div>
-
       <div class="row">
         <div class="sel">
-          <span aria-hidden="true">📍</span>
-          <select id="zona" aria-label="Zona">
-            <option value="">Toda la zona</option>
-            <option value="iglesia-centro">Iglesia Centro</option>
+          <span>📍</span>
+          <select id="zona">
+           <option value="todos">Toda la zona</option>
             <option value="rodeo">Rodeo</option>
             <option value="las-flores">Las Flores</option>
             <option value="tudcum">Tudcum</option>
+            <option value="bella-vista">Bella Vista</option>
+            <option value="villa-iglesia">Villa Iglesia</option>
           </select>
         </div>
-        <button class="btn-search" id="searchBtn" type="button">Buscar</button>
+        <button class="btn-search" id="searchBtn">Buscar</button>
       </div>
-
-      <div class="quick" aria-label="Accesos rápidos">
-        <button class="qbtn" type="button" data-go="./catalogo.html?open=1"><b>ABIERTOS</b><span>Ahora</span></button>
-        <button class="qbtn" type="button" data-go="./eventos.html"><b>EVENTOS</b><span>Zona</span></button>
-        <button class="qbtn" type="button" data-go="./urgencias.html"><b>CONTACTOS</b><span>Útiles</span></button>
-        <button class="qbtn" type="button" data-go="./turismo.html"><b>TURISMO</b><span>Puntos</span></button>
+      <div class="quick">
+        <button class="qbtn" data-go="./catalogo.html?open=1"><b>ABIERTOS</b><span>Ahora</span></button>
+        <button class="qbtn" data-go="./eventos.html"><b>EVENTOS</b><span>Zona</span></button>
+        <button class="qbtn" data-go="./urgencias.html"><b>CONTACTOS</b><span>Útiles</span></button>
+        <button class="qbtn" data-go="./turismo.html"><b>TURISMO</b><span>Puntos</span></button>
       </div>
     </section>
 
-    <!-- Allies -->
-    <section class="allies" aria-label="Aliados locales">
+    <section class="allies">
       <h4>ALIADOS LOCALES</h4>
       <div class="logos" id="alliesGrid">
-        <div class="logoBox">
-  <img src="radio.jpg" alt="Radio Local">
-</div>
-        <div class="logoBox">
-  <img src="radio.jpg" alt="Radio Local">
-</div>
-        <div class="logoBox">
-  <img src="radio.jpg" alt="Radio Local">
-</div>
-        <div class="logoBox">
-  <img src="radio.jpg" alt="Radio Local">
-</div>
-<div class="logoBox">
-  <img src="radio.jpg" alt="Radio Local">
-</div>
-<div class="logoBox">
-  <img src="radio.jpg" alt="Radio Local">
-</div>
+        <div class="logoBox"><img src="radio.jpg" alt="Radio"></div>
+        <div class="logoBox"><img src="radio.jpg" alt="Radio"></div>
+        <div class="logoBox"><img src="radio.jpg" alt="Radio"></div>
+        <div class="logoBox"><img src="radio.jpg" alt="Radio"></div>
       </div>
     </section>
 
-    <!-- Footer -->
     <footer>
       <div class="brand" style="justify-content:center;">
-        <div class="mark" style="width:34px;height:34px;border-radius:12px;"></div>
-        <div>
-          <h1 style="font-size:16px;">UBIX</h1>
-          <small style="font-size:11px;">Catálogo Digital Local</small>
-        </div>
+        <div class="mark" style="width:34px;height:34px;"></div>
+        <div><h1>INDX</h1><small>Catálogo Digital Local</small></div>
       </div>
-
-      <p class="footText" style="margin-top:10px;">
-        Red local de presencia digital: catálogo + datos verificados + contacto directo.
-      </p>
-
+      <p class="footText" style="margin-top:10px;">Red local de presencia digital: catálogo + datos verificados.</p>
       <div class="footLinks">
         <a href="./privacidad.html">Privacidad</a>
-        <a href="./sumate.html">Sumate a UbiX</a>
-        
-        
+        <a href="./sumate.html">Sumate a INDX</a>
       </div>
-
-      <div class="copy">© 2026 UBIX. Todos los derechos reservados.</div>
+      <div class="copy">© 2026 INDX. Todos los derechos reservados.</div>
     </footer>
   </div>
 
   <script>
-    const UBIX = {
+    const INDX_CONFIG = {
       routes: {
         catalogo: "./catalogo.html",
         rubro: "./rubro.html",
         sumate: "./sumate.html"
       },
       whatsapp: {
-        number: "5492646246834", // TODO: tu número real
-        message: "Hola! Quiero ayuda con UBIX."
+        number: "5492646246834",
+        message: "Hola! Quiero ayuda con INDX."
       },
       categories: [
         { id:"gastronomia", name:"Gastronomía", hint:"Comida y bebidas", icon:"🍔", img:"https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=60&w=900" },
@@ -689,66 +465,47 @@
     const themeBtn = document.getElementById("themeBtn");
     function setTheme(theme){
       document.body.setAttribute("data-theme", theme);
-      localStorage.setItem("ubix_theme", theme);
+      localStorage.setItem("indx_theme", theme);
     }
-    setTheme(localStorage.getItem("ubix_theme") || "light");
+    setTheme(localStorage.getItem("indx_theme") || "light");
     themeBtn.addEventListener("click", ()=>{
       const isDark = document.body.getAttribute("data-theme")==="dark";
       setTheme(isDark ? "light" : "dark");
     });
 
     // WhatsApp
-    const waLink = document.getElementById("waLink");
-    waLink.href = "https://wa.me/" + UBIX.whatsapp.number + "?text=" + encodeURIComponent(UBIX.whatsapp.message);
+    document.getElementById("waLink").href = "https://wa.me/" + INDX_CONFIG.whatsapp.number + "?text=" + encodeURIComponent(INDX_CONFIG.whatsapp.message);
 
-    // Primary actions
-    document.getElementById("exploreBtn").addEventListener("click", ()=>{
-      document.getElementById("exploreSection").scrollIntoView({behavior:"smooth", block:"start"});
-    });
-    document.getElementById("allBtn").addEventListener("click", ()=>{
-      location.href = UBIX.routes.catalogo;
-    });
-    document.getElementById("joinBtn").addEventListener("click", ()=>{
-      location.href = UBIX.routes.sumate;
-    });
-
-    // Quick buttons
-    document.querySelectorAll("[data-go]").forEach(btn=>{
-      btn.addEventListener("click", ()=> location.href = btn.getAttribute("data-go"));
-    });
+    // Navigation
+    document.getElementById("exploreBtn").addEventListener("click", ()=> document.getElementById("exploreSection").scrollIntoView({behavior:"smooth"}));
+    document.getElementById("allBtn").addEventListener("click", ()=> location.href = INDX_CONFIG.routes.catalogo);
+    document.getElementById("joinBtn").addEventListener("click", ()=> location.href = INDX_CONFIG.routes.sumate);
+    document.querySelectorAll("[data-go]").forEach(btn=> btn.addEventListener("click", ()=> location.href = btn.getAttribute("data-go")));
 
     // Categories
-    const catsGrid = document.getElementById("catsGrid");
-    catsGrid.innerHTML = UBIX.categories.map(c=>{
-      const href = c.href ? c.href : `${UBIX.routes.rubro}?cat=${encodeURIComponent(c.id)}`;
+    document.getElementById("catsGrid").innerHTML = INDX_CONFIG.categories.map(c=>{
+      const href = c.href || `${INDX_CONFIG.routes.rubro}?cat=${encodeURIComponent(c.id)}`;
       return `
-        <a class="cat" href="${href}" aria-label="Abrir ${c.name}">
+        <a class="cat" href="${href}">
           <div class="bg" style="background-image:url('${c.img}')"></div>
           <div class="content">
-            <div class="txt">
-              <b>${c.name}</b>
-              <span>${c.hint || ""}</span>
-            </div>
-            <div class="pill" aria-hidden="true">${c.icon || "➜"}</div>
+            <div class="txt"><b>${c.name}</b><span>${c.hint}</span></div>
+            <div class="pill">${c.icon}</div>
           </div>
-        </a>
-      `;
+        </a>`;
     }).join("");
 
     // Search
-    const qEl = document.getElementById("q");
-    const zonaEl = document.getElementById("zona");
-    document.getElementById("searchBtn").addEventListener("click", runSearch);
-    qEl.addEventListener("keydown", (e)=>{ if(e.key==="Enter") runSearch(); });
-
     function runSearch(){
-      const q = (qEl.value || "").trim();
-      const zona = (zonaEl.value || "").trim();
-      const url = new URL(UBIX.routes.catalogo, location.href);
+      const q = document.getElementById("q").value.trim();
+      const zona = document.getElementById("zona").value;
+      const url = new URL(INDX_CONFIG.routes.catalogo, location.href);
       if(q) url.searchParams.set("q", q);
       if(zona) url.searchParams.set("zona", zona);
       location.href = url.toString();
     }
+    document.getElementById("searchBtn").addEventListener("click", runSearch);
+    document.getElementById("q").addEventListener("keydown", e => e.key === "Enter" && runSearch());
   </script>
 </body>
 </html>
