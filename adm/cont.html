@@ -1,0 +1,2142 @@
+    <!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel de Administración - igw</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <style>
+    :root {
+      --color-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --color-accent: #10b981;
+      --color-danger: #ef4444;
+      --color-warning: #f59e0b;
+      --color-bg: #f8fafc;
+      --color-card: #ffffff;
+      --color-secondary: #eef2ff;
+      --text-dark: #0f172a;
+      --text-light: #64748b;
+      --border-color: rgba(148, 163, 184, 0.35);
+      --shadow-sm: 0 1px 3px rgba(2, 6, 23, 0.08);
+      --shadow-md: 0 8px 20px rgba(2, 6, 23, 0.10);
+      --shadow-lg: 0 18px 50px rgba(2, 6, 23, 0.12);
+      --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      --radius: 16px;
+
+      --ring: 0 0 0 4px rgba(102,126,234,0.18);
+      --glass: rgba(255,255,255,0.65);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      background:
+        radial-gradient(1100px 380px at 10% -10%, rgba(102,126,234,0.18), transparent 55%),
+        radial-gradient(900px 320px at 95% 0%, rgba(16,185,129,0.14), transparent 55%),
+        radial-gradient(900px 320px at 50% 110%, rgba(245,158,11,0.10), transparent 55%),
+        var(--color-bg);
+      color: var(--text-dark);
+      font-family: 'Poppins', sans-serif;
+      line-height: 1.55;
+      overflow-x: hidden;
+    }
+
+    /* ===== Loader ===== */
+    .loader-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(248, 250, 252, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      backdrop-filter: blur(8px);
+    }
+    .loader {
+      border: 4px solid #e0e7ff;
+      border-top: 4px solid #667eea;
+      border-radius: 50%;
+      width: 42px;
+      height: 42px;
+      animation: spin 1s linear infinite;
+      box-shadow: var(--shadow-sm);
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ===== Header ===== */
+    header {
+      background: var(--color-primary);
+      color: white;
+      padding: 1.2rem 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow-lg);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    header .brand { display: flex; align-items: center; gap: .9rem; }
+    .brand-badge {
+      width: 44px; height: 44px; border-radius: 14px;
+      background: rgba(255,255,255,0.18);
+      display: grid; place-items: center;
+      border: 1px solid rgba(255,255,255,0.25);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+    }
+    header h1 {
+      font-weight: 800;
+      font-size: 1.35rem;
+      letter-spacing: .2px;
+      display: flex;
+      align-items: center;
+      gap: .55rem;
+      margin: 0;
+      line-height: 1.2;
+    }
+    header .subtitle { font-size: .85rem; opacity: .9; margin-top: .15rem; }
+    header a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.16);
+      padding: 0.75rem 1rem;
+      border-radius: 14px;
+      transition: var(--transition);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      white-space: nowrap;
+    }
+    header a:hover {
+      background: rgba(255, 255, 255, 0.24);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+
+    /* ===== Layout ===== */
+    main {
+      max-width: 1400px;
+      margin: 1.25rem auto 2.5rem;
+      padding: 1.25rem;
+    }
+
+    .card-wrap {
+      background: var(--glass);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+
+    .section-head {
+      padding: 1.2rem 1.2rem 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.22);
+      background: rgba(255,255,255,0.55);
+    }
+    .section-head h2 {
+      margin: 0;
+      color: var(--text-dark);
+      font-weight: 800;
+      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
+      gap: .55rem;
+    }
+    .section-head .hint { font-size: .85rem; color: var(--text-light); }
+
+    /* ===== Dashboard ===== */
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1rem;
+      padding: 1.15rem;
+    }
+
+    .stat-card {
+      grid-column: span 3;
+      color: white;
+      padding: 1.1rem 1.1rem;
+      border-radius: 18px;
+      box-shadow: var(--shadow-md);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.18);
+    }
+    .stat-card::after {
+      content: "";
+      position: absolute;
+      inset: -40px -80px auto auto;
+      width: 180px;
+      height: 180px;
+      background: rgba(255,255,255,0.18);
+      transform: rotate(25deg);
+      border-radius: 40px;
+      filter: blur(1px);
+    }
+    .stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+    .stat-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .8rem;
+      position: relative;
+      z-index: 1;
+    }
+    .stat-icon {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.18);
+    }
+    .stat-card h3 { font-size: 1.9rem; margin: 0; line-height: 1; letter-spacing: .3px; }
+    .stat-card p { margin-top: .55rem; font-size: .9rem; opacity: 0.92; position: relative; z-index: 1; }
+
+    .grad-pink { background: linear-gradient(135deg, #f43f5e 0%, #8b5cf6 100%); }
+    .grad-blue { background: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%); }
+    .grad-green { background: linear-gradient(135deg, #10b981 0%, #22c55e 100%); }
+    .grad-gold { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); }
+
+    /* ===== Buttons ===== */
+    .btn {
+      cursor: pointer;
+      border: none;
+      padding: .95rem 1.25rem;
+      border-radius: 14px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      font-size: 1rem;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .55rem;
+      white-space: nowrap;
+    }
+    .btn:disabled { opacity: .6; cursor: not-allowed; }
+    .btn-primary { background: var(--color-primary); color: #fff; }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
+    .btn-success { background: linear-gradient(135deg, #10b981, #22c55e); color: #fff; }
+    .btn-success:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
+    .btn-danger { background: linear-gradient(135deg, #ef4444, #f43f5e); color: #fff; }
+    .btn-danger:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
+    .btn-ghost {
+      background: rgba(255,255,255,0.7);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      color: var(--text-dark);
+    }
+    .btn-ghost:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
+
+    /* ===== Form container toggle ===== */
+    #formContainer { display: none; }
+    .add-button-container {
+      padding: 1.15rem;
+      display: flex;
+      justify-content: flex-end;
+      gap: .75rem;
+      border-top: 1px solid rgba(148, 163, 184, 0.18);
+      background: rgba(255,255,255,0.55);
+    }
+
+    /* ===== Form ===== */
+    form {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1.25rem;
+      padding: 1.25rem;
+      background: rgba(255,255,255,0.55);
+      border-top: 1px solid rgba(148, 163, 184, 0.18);
+    }
+    form .field { grid-column: span 6; }
+    form .field.small { grid-column: span 4; }
+    form .field.full { grid-column: 1 / -1; }
+    form label {
+      font-weight: 700;
+      display: block;
+      margin-bottom: 0.45rem;
+      color: var(--text-dark);
+      font-size: 0.9rem;
+    }
+
+    form input, form select, form textarea {
+      width: 100%;
+      padding: 0.85rem 0.95rem;
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      font-size: 1rem;
+      background: rgba(255,255,255,0.85);
+      color: var(--text-dark);
+      transition: var(--transition);
+      outline: none;
+    }
+    form input:focus, form select:focus, form textarea:focus {
+      border-color: rgba(102,126,234,0.8);
+      box-shadow: var(--ring);
+      background: #fff;
+    }
+    form input.error, form select.error, form textarea.error { border-color: var(--color-danger); }
+
+    textarea { min-height: 120px; resize: vertical; }
+
+    .error-msg { color: var(--color-danger); font-size: .8rem; margin-top: .25rem; }
+
+    .days-container { grid-column: 1 / -1; }
+    .days {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .6rem;
+      margin-top: .5rem;
+    }
+    .days label {
+      background: rgba(255,255,255,0.8);
+      padding: .6rem 1rem;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: .9rem;
+      font-weight: 600;
+      transition: var(--transition);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      color: var(--text-light);
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      user-select: none;
+    }
+    .days label:hover { transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+    .days input { display: none; }
+    .days input:checked + span {
+      background: rgba(16,185,129,0.12);
+      color: #064e3b;
+      border-radius: 999px;
+      padding: .15rem .5rem;
+      border: 1px solid rgba(16,185,129,0.35);
+      font-weight: 800;
+    }
+
+    .form-horario { display: flex; gap: .65rem; align-items: center; }
+    .form-horario input { flex: 1; }
+
+    .form-actions {
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: flex-end;
+      gap: .8rem;
+      padding-top: .25rem;
+    }
+
+    /* ===== Upload blocks ===== */
+    .image-upload {
+      border: 1px dashed rgba(102,126,234,0.55);
+      border-radius: 18px;
+      padding: 1.05rem;
+      text-align: center;
+      background: rgba(255,255,255,0.75);
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      gap: .6rem;
+      min-height: 210px;
+    }
+    .image-upload:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); background: #fff; }
+
+    .image-upload .title {
+      font-weight: 900;
+      color: #4338ca;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+    }
+    .image-upload label {
+      cursor: pointer;
+      color: #4338ca;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      margin: .2rem auto .2rem;
+      padding: .55rem .9rem;
+      border: 1px solid rgba(67,56,202,0.45);
+      border-radius: 14px;
+      transition: var(--transition);
+      width: fit-content;
+      background: rgba(99,102,241,0.08);
+    }
+    .image-upload label:hover { background: rgba(99,102,241,0.16); transform: translateY(-1px); }
+    .preview-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .75rem;
+      margin-top: .35rem;
+      justify-content: center;
+    }
+    .preview-item { display: flex; flex-direction: column; align-items: center; width: 110px; }
+    .preview {
+      position: relative;
+      width: 110px;
+      height: 110px;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid rgba(148,163,184,0.25);
+      background: rgba(255,255,255,0.8);
+      display: grid;
+      place-items: center;
+    }
+    .preview img { width: 100%; height: 100%; object-fit: cover; }
+    .preview .remove {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(239,68,68,0.95);
+      color: white;
+      border: 2px solid rgba(255,255,255,0.9);
+      border-radius: 999px;
+      width: 28px;
+      height: 28px;
+      font-size: 1rem;
+      font-weight: 900;
+      cursor: pointer;
+      line-height: 1;
+      transition: var(--transition);
+      padding: 0;
+      display: grid;
+      place-items: center;
+    }
+    .preview .remove:hover { transform: scale(1.08); box-shadow: var(--shadow-sm); }
+    .url-field {
+      width: 100%;
+      font-size: .72rem;
+      padding: 6px 8px;
+      border: 1px solid rgba(148,163,184,0.35);
+      border-radius: 12px;
+      color: var(--text-light);
+      background: rgba(248,250,252,0.9);
+      text-align: center;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* ===== Filters + Table ===== */
+    .filters {
+      padding: 1.15rem;
+      display: grid;
+      grid-template-columns: 1fr 220px 220px 220px;
+      gap: .9rem;
+      align-items: center;
+      background: rgba(255,255,255,0.55);
+      border-top: 1px solid rgba(148, 163, 184, 0.18);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+    }
+    .filters input, .filters select {
+      padding: 0.8rem 0.9rem;
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      background: rgba(255,255,255,0.85);
+      outline: none;
+      transition: var(--transition);
+    }
+    .filters input:focus, .filters select:focus {
+      border-color: rgba(102,126,234,0.8);
+      box-shadow: var(--ring);
+      background: #fff;
+    }
+
+    .table-container {
+      overflow-x: auto;
+      border-radius: 0 0 var(--radius) var(--radius);
+      box-shadow: none;
+      background: rgba(255,255,255,0.6);
+    }
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: transparent;
+    }
+    thead th {
+      background: rgba(15,23,42,0.04);
+      color: var(--text-light);
+      font-weight: 800;
+      text-transform: uppercase;
+      font-size: .78rem;
+      letter-spacing: .09em;
+      cursor: pointer;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+      padding: 1.05rem 1rem;
+      white-space: nowrap;
+    }
+    thead th:hover { background: rgba(15,23,42,0.07); }
+    th.sort-asc::after, th.sort-desc::after { position: absolute; right: 10px; }
+    th.sort-asc::after { content: ' ▲'; }
+    th.sort-desc::after { content: ' ▼'; }
+
+    tbody td {
+      padding: 1rem 1rem;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+      color: var(--text-dark);
+      vertical-align: middle;
+      background: transparent;
+    }
+    tbody tr:hover td { background: rgba(102,126,234,0.06); }
+
+    td:last-child { width: 1%; white-space: nowrap; }
+
+    .actions { display: inline-flex; gap: .5rem; flex-wrap: wrap; }
+    .actions button {
+      margin: 0;
+      padding: .55rem .7rem;
+      font-size: .8rem;
+      font-weight: 800;
+      border-radius: 12px;
+      transition: var(--transition);
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .45rem;
+    }
+    .btn-edit { background: rgba(16,185,129,0.16); color: #065f46; border: 1px solid rgba(16,185,129,0.25); }
+    .btn-edit:hover { background: rgba(16,185,129,0.24); transform: translateY(-1px); }
+    .btn-delete { background: rgba(239,68,68,0.16); color: #7f1d1d; border: 1px solid rgba(239,68,68,0.25); }
+    .btn-delete:hover { background: rgba(239,68,68,0.24); transform: translateY(-1px); }
+    .btn-move { background: rgba(245,158,11,0.18); color: #7c2d12; border: 1px solid rgba(245,158,11,0.25); }
+    .btn-move:hover { background: rgba(245,158,11,0.26); transform: translateY(-1px); }
+
+    /* ===== Modal (login) ===== */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 23, 0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 1.25rem;
+      backdrop-filter: blur(6px);
+    }
+    .modal-content {
+      background: rgba(15, 23, 42, 0.92);
+      padding: 1.6rem;
+      border-radius: 18px;
+      box-shadow: var(--shadow-lg);
+      max-width: 520px;
+      width: 100%;
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .modal-content h3 {
+      margin-bottom: 1rem;
+      color: #34d399;
+      font-weight: 900;
+      letter-spacing: .2px;
+    }
+    .modal-content input {
+      width: 100%;
+      padding: .9rem 1rem;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.06);
+      color: #fff;
+      outline: none;
+      margin-bottom: .7rem;
+      transition: var(--transition);
+    }
+    .modal-content input:focus { box-shadow: 0 0 0 4px rgba(52,211,153,0.18); border-color: rgba(52,211,153,0.55); }
+    .modal-content .buttons { display: flex; gap: .7rem; justify-content: center; margin-top: 1rem; flex-wrap: wrap; }
+    .modal-content .buttons button {
+      padding: .8rem 1.1rem;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.10);
+      cursor: pointer;
+      font-weight: 900;
+      transition: var(--transition);
+      color: #fff;
+      background: rgba(148, 163, 184, 0.16);
+    }
+    .modal-content .buttons button:hover { transform: translateY(-1px); background: rgba(148, 163, 184, 0.22); }
+
+    /* ===== Toast ===== */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--color-accent);
+      color: white;
+      padding: 1rem 1.1rem;
+      border-radius: 14px;
+      box-shadow: var(--shadow-lg);
+      z-index: 1001;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: var(--transition);
+      max-width: min(420px, calc(100vw - 40px));
+      font-weight: 800;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast.error { background: linear-gradient(135deg, #ef4444, #f43f5e); }
+    .toast.warning { background: linear-gradient(135deg, #f59e0b, #ef4444); }
+    .toast.success { background: linear-gradient(135deg, #10b981, #22c55e); }
+
+    /* ===== Bloques por tipo ===== */
+    .rubro-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .55rem .8rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.35);
+      background: rgba(255,255,255,0.75);
+      font-weight: 900;
+      color: rgba(15,23,42,0.75);
+      font-size: .85rem;
+    }
+    .subhead {
+      grid-column: 1 / -1;
+      margin-top: .25rem;
+      padding: .85rem 1rem;
+      border-radius: 16px;
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      background: rgba(255,255,255,0.7);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .9rem;
+      flex-wrap: wrap;
+    }
+    .subhead strong { font-weight: 900; }
+    .muted { color: var(--text-light); font-weight: 700; font-size: .88rem; }
+
+    .rubro-block {
+      grid-column: 1 / -1;
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      background: rgba(255,255,255,0.68);
+      border-radius: 18px;
+      padding: 1rem;
+      box-shadow: var(--shadow-sm);
+      display: none;
+    }
+    .rubro-block.show { display: block; }
+    .rubro-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1rem;
+    }
+    .rubro-grid .field { grid-column: span 6; }
+    .rubro-grid .field.small { grid-column: span 4; }
+    .rubro-grid .field.full { grid-column: 1 / -1; }
+    .help {
+      grid-column: 1 / -1;
+      font-size: .85rem;
+      color: rgba(15,23,42,0.72);
+      background: rgba(102,126,234,0.08);
+      border: 1px solid rgba(102,126,234,0.16);
+      padding: .65rem .8rem;
+      border-radius: 14px;
+      font-weight: 700;
+      margin-bottom: .75rem;
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 1100px) {
+      .stat-card { grid-column: span 6; }
+      .filters { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      header { padding: 1rem; flex-direction: column; text-align: center; gap: .75rem; }
+      header a { width: 100%; justify-content: center; }
+      main { padding: 1rem; margin: 1rem auto 2rem; }
+      .stat-card { grid-column: span 12; }
+      form { grid-template-columns: 1fr; }
+      form .field, form .field.small, form .field.full { grid-column: 1 / -1; }
+      .rubro-grid { grid-template-columns: 1fr; }
+      .rubro-grid .field, .rubro-grid .field.small, .rubro-grid .field.full { grid-column: 1 / -1; }
+      .form-actions { justify-content: stretch; flex-direction: column; }
+      .form-actions .btn { width: 100%; }
+      .add-button-container { justify-content: stretch; }
+      .add-button-container .btn { width: 100%; }
+      .filters { grid-template-columns: 1fr; }
+      thead th { position: static; }
+      table, thead, tbody, th, td, tr { display: block; }
+      thead { display: none; }
+      tbody tr { border-bottom: 1px solid rgba(148, 163, 184, 0.25); padding: .75rem 0; }
+      tbody td {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: .6rem 0.6rem;
+        border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+      }
+      tbody td::before { content: attr(data-label); font-weight: 900; color: rgba(15,23,42,0.7); }
+      td:last-child { width: auto; white-space: normal; }
+      .actions { justify-content: flex-end; width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="loader" class="loader-overlay">
+    <div class="loader"></div>
+  </div>
+
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <h3>🔐 Iniciar Sesión</h3>
+      <input type="email" id="loginEmail" placeholder="Email" required>
+      <input type="password" id="loginPassword" placeholder="Contraseña" required>
+      <div class="buttons">
+        <button id="loginBtn"><i class="fas fa-right-to-bracket"></i> Iniciar</button>
+        <button onclick="document.getElementById('loginModal').style.display='none'"><i class="fas fa-xmark"></i> Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <header>
+    <div class="brand">
+      <div class="brand-badge"><i class="fas fa-cogs"></i></div>
+      <div>
+        <h1>Panel de Administración</h1>
+        <div class="subtitle">Gestión de publicaciones • IGW</div>
+      </div>
+    </div>
+    <a href="index.html"><i class="fas fa-arrow-left"></i> Volver al sitio</a>
+  </header>
+
+  <main>
+    <div class="card-wrap">
+      <div class="section-head">
+        <div>
+          <h2><i class="fas fa-chart-line"></i> Resumen</h2>
+          <div class="hint">Vista rápida de tu catálogo</div>
+        </div>
+        <button id="showAddFormBtnTop" class="btn btn-success"><i class="fas fa-plus-circle"></i> Agregar publicación</button>
+      </div>
+
+      <div class="dashboard" id="dashboard"></div>
+
+      <div id="formContainer">
+        <div class="section-head" style="border-top: 1px solid rgba(148,163,184,0.18);">
+          <div>
+            <h2 id="formTitle"><i class="fas fa-plus-circle"></i> Agregar Publicación</h2>
+            <div class="hint">Completá los datos para publicar en el catálogo</div>
+          </div>
+          <button type="button" id="cancelBtnTop" class="btn btn-ghost"><i class="fas fa-xmark"></i> Cerrar</button>
+        </div>
+
+        <form id="formVendedor">
+          <input type="hidden" id="id" />
+
+          <div class="field">
+            <label for="nombre">Nombre / Título *</label>
+            <input type="text" id="nombre" required />
+            <div class="error-msg" id="error-nombre"></div>
+          </div>
+
+          <div class="field">
+            <label for="tipo">Tipo (macro) *</label>
+            <select id="tipo" required>
+              <option value="comercio">🏪 Comercio</option>
+              <option value="profesional">🧑‍⚕️ Profesional</option>
+              <option value="servicio">🧰 Servicio</option>
+              <option value="transporte">🚗 Transporte</option>
+              <option value="farmacia">💊 Farmacia</option>
+              <option value="turismo">🗺️ Turismo / Punto de interés</option>
+              <option value="evento">📅 Evento</option>
+              <option value="delivery">🛵 Delivery</option>
+              <option value="emprendedor">🧑‍💼 Emprendedor</option>
+              <option value="otro">📌 Otro</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="categoria">Categoría</label>
+            <select id="categoria">
+              <option value="restaurantes">🍽️ Restaurantes</option>
+              <option value="hoteles">🏨 Hoteles</option>
+              <option value="peluquerias">✂️ Peluquerías</option>
+              <option value="maxikioscos">🛒 Maxikioscos</option>
+              <option value="supermercados">🏪 Supermercados</option>
+              <option value="ferreterias">🧰 Ferreterías</option>
+
+              <option value="servicios">🧑‍🔧 Servicios</option>
+              <option value="transporte">🚗 Transporte</option>
+              <option value="salud">🩺 Salud</option>
+              <option value="profesionales">📑 Profesionales</option>
+              <option value="otros">📌 Otros</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="subcategoria">Subcategoría (opcional)</label>
+            <input type="text" id="subcategoria" placeholder="Ej: plomero, electricista, remis, flete..." />
+          </div>
+
+          <div class="field small">
+            <label for="nivel">Nivel</label>
+            <select id="nivel">
+              <option value="bronce">Bronce</option>
+              <option value="plata">Plata</option>
+              <option value="oro">Oro</option>
+              <option value="diamante">Diamante</option>
+            </select>
+          </div>
+
+          <div class="field small">
+            <label for="distrito">Distrito *</label>
+            <select id="distrito" required>
+              <option value="1">Las Flores</option>
+              <option value="2">Rodeo</option>
+              <option value="3">Tudcum</option>
+              <option value="4">Bella Vista</option>
+              <option value="5">Villa Iglesia</option>
+            </select>
+            <div class="error-msg" id="error-distrito"></div>
+          </div>
+
+          <div class="field small">
+            <label for="telefono">Teléfono</label>
+            <input type="tel" id="telefono" placeholder="+54 9 111 222 333" />
+          </div>
+
+          <div class="field">
+            <label for="direccion">Dirección / Zona</label>
+            <input type="text" id="direccion" placeholder="Ej: Calle 123 / o 'Rodeo y alrededores'" />
+          </div>
+
+          <div class="field">
+            <label for="mapLink">Link de mapas (opcional)</label>
+            <input type="url" id="mapLink" placeholder="https://www.google.com/maps/..." />
+          </div>
+
+          <div class="field full">
+            <label for="descripcion">Descripción</label>
+            <textarea id="descripcion" rows="3"></textarea>
+          </div>
+
+          <!-- BLOQUE INFO SEGÚN TIPO -->
+          <div class="subhead">
+            <div class="rubro-chip" id="rubroChip"><i class="fa-solid fa-layer-group"></i> <span id="rubroText">Comercio</span></div>
+            <div class="muted" id="rubroHint">Mostrando campos recomendados para este tipo.</div>
+          </div>
+
+          <!-- SERVICIO -->
+          <div class="rubro-block" id="blockServicio">
+            <div class="help"><i class="fa-solid fa-circle-info"></i> Para servicios: zona, urgencias, visita a domicilio, matrícula y precio desde.</div>
+            <div class="rubro-grid">
+              <div class="field">
+                <label for="zonaCobertura">Zona de cobertura (opcional)</label>
+                <input type="text" id="zonaCobertura" placeholder="Ej: Las Flores, Rodeo, Tudcum..." />
+              </div>
+              <div class="field small">
+                <label for="urgencias">¿Atiende urgencias?</label>
+                <select id="urgencias">
+                  <option value="no">No</option>
+                  <option value="si">Sí</option>
+                </select>
+              </div>
+              <div class="field small">
+                <label for="visitaDomicilio">¿Visita a domicilio?</label>
+                <select id="visitaDomicilio">
+                  <option value="si">Sí</option>
+                  <option value="no">No</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="matricula">Matrícula (opcional)</label>
+                <input type="text" id="matricula" placeholder="Ej: N° 12345" />
+              </div>
+              <div class="field small">
+                <label for="precioDesde">Precio desde (opcional)</label>
+                <input type="number" id="precioDesde" min="0" step="1" placeholder="Ej: 10000" />
+              </div>
+            </div>
+          </div>
+
+          <!-- TRANSPORTE -->
+          <div class="rubro-block" id="blockTransporte">
+            <div class="help"><i class="fa-solid fa-circle-info"></i> Para transportes: tipo de servicio, disponibilidad y datos del vehículo.</div>
+            <div class="rubro-grid">
+              <div class="field">
+                <label for="tipoServicioTransporte">Tipo de servicio</label>
+                <select id="tipoServicioTransporte">
+                  <option value="">(Sin especificar)</option>
+                  <option value="remis">Remis</option>
+                  <option value="taxi">Taxi</option>
+                  <option value="flete">Flete</option>
+                  <option value="traslado">Traslado</option>
+                  <option value="delivery_mensajeria">Mensajería / Delivery</option>
+                </select>
+              </div>
+              <div class="field small">
+                <label for="disponibilidadTransporte">Disponibilidad</label>
+                <select id="disponibilidadTransporte">
+                  <option value="diurno">Diurno</option>
+                  <option value="nocturno">Nocturno</option>
+                  <option value="24hs">24hs</option>
+                </select>
+              </div>
+              <div class="field small">
+                <label for="tarifaBase">Tarifa base (opcional)</label>
+                <input type="number" id="tarifaBase" min="0" step="1" placeholder="Ej: 2000" />
+              </div>
+              <div class="field">
+                <label for="capacidad">Capacidad / Vehículo (opcional)</label>
+                <input type="text" id="capacidad" placeholder="Ej: 4 pasajeros / utilitario / camioneta..." />
+              </div>
+              <div class="field">
+                <label for="baseEmpresa">Base / Empresa (opcional)</label>
+                <input type="text" id="baseEmpresa" placeholder="Ej: Remis Centro, Cooperativa..." />
+              </div>
+            </div>
+          </div>
+
+          <!-- PROFESIONAL -->
+          <div class="rubro-block" id="blockProfesional">
+            <div class="help"><i class="fa-solid fa-circle-info"></i> Para profesionales: modalidad (turnos/horario fijo), especialidad y matrícula.</div>
+            <div class="rubro-grid">
+              <div class="field">
+                <label for="modalidadProfesional">Modalidad *</label>
+                <select id="modalidadProfesional">
+                  <option value="turnos">Atención con turnos</option>
+                  <option value="horario_fijo">Horario fijo</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="especialidad">Especialidad *</label>
+                <input type="text" id="especialidad" placeholder="Ej: Abogado, Psicóloga, Contador..." />
+              </div>
+              <div class="field small">
+                <label for="matriculaProfesional">Matrícula (opcional)</label>
+                <input type="text" id="matriculaProfesional" placeholder="Ej: MP 1234" />
+              </div>
+              <div class="field small">
+                <label for="zonaAtencion">Zona de atención (distrito)</label>
+                <select id="zonaAtencion">
+                  <option value="">(No especifica)</option>
+                  <option value="1">Las Flores</option>
+                  <option value="2">Rodeo</option>
+                  <option value="3">Tudcum</option>
+                  <option value="4">Bella Vista</option>
+                  <option value="5">Villa Iglesia</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- TURISMO -->
+          <div class="rubro-block" id="blockTurismo">
+            <div class="help"><i class="fa-solid fa-circle-info"></i> Turismo/POI: asistencia y galería hasta 10.</div>
+            <div class="rubro-grid">
+              <div class="field">
+                <label for="asistenciaTipo">Asistencia (tipo)</label>
+                <select id="asistenciaTipo">
+                  <option value="">(No aplica)</option>
+                  <option value="whatsapp">WhatsApp</option>
+                  <option value="tel">Teléfono</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="asistenciaValor">Asistencia (número)</label>
+                <input type="text" id="asistenciaValor" placeholder="+549..." />
+              </div>
+              <div class="field full">
+                <label for="asistenciaTexto">Texto del botón (opcional)</label>
+                <input type="text" id="asistenciaTexto" placeholder="Ej: Necesito asistencia" />
+              </div>
+            </div>
+          </div>
+
+          <!-- EVENTO -->
+          <div class="rubro-block" id="blockEvento">
+            <div class="help"><i class="fa-solid fa-circle-info"></i> Evento: fechas, lugar y contacto. Galería ideal hasta 10.</div>
+            <div class="rubro-grid">
+              <div class="field">
+                <label for="fechaInicio">Fecha inicio *</label>
+                <input type="datetime-local" id="fechaInicio" />
+                <div class="error-msg" id="error-fechaInicio"></div>
+              </div>
+              <div class="field">
+                <label for="fechaFin">Fecha fin (opcional)</label>
+                <input type="datetime-local" id="fechaFin" />
+              </div>
+              <div class="field full">
+                <label for="lugarEvento">Lugar / Dirección *</label>
+                <input type="text" id="lugarEvento" placeholder="Ej: Plaza principal, Las Flores..." />
+                <div class="error-msg" id="error-lugarEvento"></div>
+              </div>
+              <div class="field">
+                <label for="contactoEventoTipo">Contacto (tipo)</label>
+                <select id="contactoEventoTipo">
+                  <option value="">(No aplica)</option>
+                  <option value="whatsapp">WhatsApp</option>
+                  <option value="tel">Teléfono</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="contactoEventoValor">Contacto (número)</label>
+                <input type="text" id="contactoEventoValor" placeholder="+549..." />
+              </div>
+            </div>
+          </div>
+
+          <!-- FARMACIA -->
+          <div class="rubro-block" id="blockFarmacia">
+            <div class="help"><i class="fa-solid fa-circle-info"></i> Farmacia: marcar si está de turno (y podés cargar horarios en la sección de horarios).</div>
+            <div class="rubro-grid">
+              <div class="field small">
+                <label for="farmaciaTurno">¿Está de turno?</label>
+                <select id="farmaciaTurno">
+                  <option value="no">No</option>
+                  <option value="si">Sí</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- HORARIOS / DÍAS -->
+          <div class="field full days-container">
+            <label>Días de atención</label>
+            <div class="days">
+              <label><input type="checkbox" value="lunes" /><span>Lunes</span></label>
+              <label><input type="checkbox" value="martes" /><span>Martes</span></label>
+              <label><input type="checkbox" value="miercoles" /><span>Miércoles</span></label>
+              <label><input type="checkbox" value="jueves" /><span>Jueves</span></label>
+              <label><input type="checkbox" value="viernes" /><span>Viernes</span></label>
+              <label><input type="checkbox" value="sabado" /><span>Sábado</span></label>
+              <label><input type="checkbox" value="domingo" /><span>Domingo</span></label>
+            </div>
+            <div class="error-msg" id="error-dias"></div>
+          </div>
+
+          <div class="field">
+            <label>Horario Semanal (L-V) 1er Turno</label>
+            <div class="form-horario">
+              <input type="time" id="apertura1" />
+              <input type="time" id="cierre1" />
+            </div>
+            <div class="error-msg" id="error-horario1"></div>
+          </div>
+
+          <div class="field">
+            <label>Horario Semanal (L-V) 2do Turno</label>
+            <div class="form-horario">
+              <input type="time" id="apertura2" />
+              <input type="time" id="cierre2" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Horario Sábado 1er Turno (Opcional)</label>
+            <div class="form-horario">
+              <input type="time" id="aperturaSabado1" />
+              <input type="time" id="cierreSabado1" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Horario Sábado 2do Turno (Opcional)</label>
+            <div class="form-horario">
+              <input type="time" id="aperturaSabado2" />
+              <input type="time" id="cierreSabado2" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Horario Domingo 1er Turno (Opcional)</label>
+            <div class="form-horario">
+              <input type="time" id="aperturaDomingo1" />
+              <input type="time" id="cierreDomingo1" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Horario Domingo 2do Turno (Opcional)</label>
+            <div class="form-horario">
+              <input type="time" id="aperturaDomingo2" />
+              <input type="time" id="cierreDomingo2" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="metodos">Métodos de pago</label>
+            <select id="metodos" multiple>
+              <option>Efectivo</option>
+              <option>Tarjeta</option>
+              <option>QR</option>
+              <option>Transferencia</option>
+              <option>Otro</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="delivery">¿Hace delivery?</label>
+            <select id="delivery">
+              <option value="no">No</option>
+              <option value="si">Sí</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="whatsapp">WhatsApp (para botón directo)</label>
+            <input type="tel" id="whatsapp" placeholder="+549111222333" />
+          </div>
+
+          <div class="field">
+            <label for="tags">Etiquetas (separadas por coma)</label>
+            <input type="text" id="tags" placeholder="pizza, bebidas, postres" />
+          </div>
+
+          <div class="field image-upload">
+            <div class="title"><i class="fas fa-camera"></i> Imagen principal *</div>
+            <label for="imagenPrincipal"><i class="fas fa-upload"></i> Seleccionar archivo</label>
+            <input type="file" id="imagenPrincipal" accept="image/*" />
+            <div id="previewPrincipal" class="preview-container"></div>
+            <div class="error-msg" id="error-imagen"></div>
+          </div>
+
+          <div class="field image-upload" id="galeriaBlock">
+            <div class="title" id="galeriaTitle"><i class="fas fa-images"></i> Galería (máx. 5)</div>
+            <label for="galeria"><i class="fas fa-upload"></i> Subir fotos</label>
+            <input type="file" id="galeria" multiple accept="image/*" />
+            <div id="previewGaleria" class="preview-container"></div>
+          </div>
+
+          <div class="field">
+            <label for="instagram">Instagram</label>
+            <input type="url" id="instagram" placeholder="https://instagram.com/tucomercio" />
+          </div>
+
+          <div class="field">
+            <label for="facebook">Facebook</label>
+            <input type="url" id="facebook" placeholder="https://facebook.com/tucomercio" />
+          </div>
+
+          <div class="field">
+            <label for="tiktok">TikTok</label>
+            <input type="url" id="tiktok" placeholder="https://tiktok.com/@tucomercio" />
+          </div>
+
+          <div class="field">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="contacto@tucomercio.com" />
+          </div>
+
+          <div class="field">
+            <label for="web">Sitio web</label>
+            <input type="url" id="web" placeholder="https://www.tucomercio.com" />
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
+            <button type="button" id="cancelBtn" class="btn btn-danger"><i class="fas fa-times"></i> Cancelar</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="add-button-container">
+        <button id="showAddFormBtn" class="btn btn-success"><i class="fas fa-plus-circle"></i> Agregar publicación</button>
+        <button class="btn btn-ghost" id="exportBtn"><i class="fas fa-download"></i> Exportar CSV</button>
+      </div>
+
+      <div class="section-head">
+        <div>
+          <h2><i class="fas fa-list"></i> Lista</h2>
+          <div class="hint">Buscar, filtrar, ordenar y editar</div>
+        </div>
+        <div class="hint" id="tableCount"></div>
+      </div>
+
+      <div class="filters">
+        <input type="text" id="searchTable" placeholder="Buscar por nombre..." />
+        <select id="filterDistrito">
+          <option value="">Todos los distritos</option>
+          <option value="1">Las Flores</option>
+          <option value="2">Rodeo</option>
+          <option value="3">Tudcum</option>
+          <option value="4">Bella Vista</option>
+          <option value="5">Villa Iglesia</option>
+        </select>
+        <select id="filterNivel">
+          <option value="">Todos los niveles</option>
+          <option value="bronce">Bronce</option>
+          <option value="plata">Plata</option>
+          <option value="oro">Oro</option>
+          <option value="diamante">Diamante</option>
+        </select>
+        <button class="btn btn-success" id="exportBtn2"><i class="fas fa-download"></i> Exportar CSV</button>
+      </div>
+
+      <div class="table-container">
+        <table id="tablaVendedores">
+          <thead>
+            <tr>
+              <th data-sort="id">ID</th>
+              <th data-sort="nombre">Nombre</th>
+              <th data-sort="tipo">Tipo</th>
+              <th data-sort="categoria">Categoría</th>
+              <th data-sort="subcategoria">Subcategoría</th>
+              <th data-sort="nivel">Nivel</th>
+              <th data-sort="distrito">Distrito</th>
+              <th data-sort="visualizaciones">Visualizaciones</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <div id="toast" class="toast"></div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDYNLhKi2h_JoPlDYK9_ZhKaHnKQ3DJhbk",
+      authDomain: "cweb-ac414.firebaseapp.com",
+      projectId: "cweb-ac414",
+      storageBucket: "cweb-ac414.firebasestorage.app",
+      messagingSenderId: "174144272082",
+      appId: "1:174144272082:web:68b9d5aefc1aef07ab9f0b"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // ImgBB
+    const API_KEY = "86db997f09d5db12c1f731dc79e4d83d";
+
+    let currentUser = null;
+    let vendedores = [];
+    let galeriaData = [];
+    let sortColumn = 'orden';
+    let sortDirection = 'asc';
+
+    const formContainer = document.getElementById('formContainer');
+    const formTitle = document.getElementById('formTitle');
+    const showAddFormBtn = document.getElementById('showAddFormBtn');
+    const showAddFormBtnTop = document.getElementById('showAddFormBtnTop');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const cancelBtnTop = document.getElementById('cancelBtnTop');
+
+    // Tipo macro + blocks
+    const tipoEl = document.getElementById('tipo');
+    const categoriaEl = document.getElementById('categoria');
+    const rubroChipText = document.getElementById('rubroText');
+    const rubroHint = document.getElementById('rubroHint');
+
+    const blockServicio = document.getElementById('blockServicio');
+    const blockTransporte = document.getElementById('blockTransporte');
+    const blockProfesional = document.getElementById('blockProfesional');
+    const blockTurismo = document.getElementById('blockTurismo');
+    const blockEvento = document.getElementById('blockEvento');
+    const blockFarmacia = document.getElementById('blockFarmacia');
+
+    const galeriaTitle = document.getElementById('galeriaTitle');
+
+    // ====== Normalización de días (sin acentos) ======
+    function stripAccents(str) {
+      return String(str || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    }
+    function normalizeDia(v) {
+      return stripAccents(String(v || '').toLowerCase().trim());
+    }
+    // Compatibilidad con datos viejos con acentos
+    function diaMatches(storedArray, checkboxValue) {
+      const target = normalizeDia(checkboxValue);
+      return (storedArray || []).some(d => normalizeDia(d) === target);
+    }
+
+    function parseDateToMs(v) {
+      if (!v) return null;
+      const d = new Date(v);
+      const ms = d.getTime();
+      return Number.isFinite(ms) ? ms : null;
+    }
+
+    function getGaleriaMax(tipo){
+      return (tipo === 'turismo' || tipo === 'evento') ? 10 : 5;
+    }
+    function setGaleriaLabel(tipo){
+      const max = getGaleriaMax(tipo);
+      if (galeriaTitle) galeriaTitle.innerHTML = `<i class="fas fa-images"></i> Galería (máx. ${max})`;
+    }
+
+    function setRubroUI(tipo) {
+      [blockServicio, blockTransporte, blockProfesional, blockTurismo, blockEvento, blockFarmacia]
+        .forEach(b => b && b.classList.remove('show'));
+
+      const map = {
+        comercio: { label:'Comercio', hint:'Dirección fija + (si querés) horarios/pagos/delivery.', cat:'otros' },
+        servicio: { label:'Servicio', hint:'Zona, urgencias, matrícula, precio desde.', show:blockServicio, cat:'servicios' },
+        transporte:{ label:'Transporte', hint:'Disponibilidad (diurno/nocturno/24hs) y datos del servicio.', show:blockTransporte, cat:'transporte' },
+        profesional:{ label:'Profesional', hint:'Modalidad (turnos/horario fijo), especialidad y matrícula.', show:blockProfesional, cat:'profesionales' },
+        turismo:{ label:'Turismo / POI', hint:'Asistencia y galería hasta 10.', show:blockTurismo, cat:'otros' },
+        evento:{ label:'Evento', hint:'Fechas, lugar, contacto y galería hasta 10.', show:blockEvento, cat:'otros' },
+        farmacia:{ label:'Farmacia', hint:'De turno + (si aplica) horarios.', show:blockFarmacia, cat:'salud' },
+        delivery:{ label:'Delivery', hint:'Servicio de entregas/mensajería.', cat:'servicios' },
+        emprendedor:{ label:'Emprendedor', hint:'Perfil de emprendedor/servicio.', cat:'otros' },
+        otro:{ label:'Otro', hint:'Usá los campos generales y completá lo importante.', cat:'otros' }
+      };
+
+      const cfg = map[tipo] || map.otro;
+      rubroChipText.textContent = cfg.label;
+      rubroHint.textContent = cfg.hint;
+
+      if (cfg.show) cfg.show.classList.add('show');
+
+      // sugerencia de categoría por defecto
+      if (cfg.cat && (!categoriaEl.value || categoriaEl.value === 'otros')) categoriaEl.value = cfg.cat;
+
+      setGaleriaLabel(tipo);
+
+      // Si baja el max, recorta galería en memoria y re-render
+      const max = getGaleriaMax(tipo);
+      if (galeriaData.length > max) {
+        galeriaData = galeriaData.slice(0, max);
+        renderGaleriaPreview();
+      }
+    }
+
+    tipoEl.addEventListener('change', () => setRubroUI(tipoEl.value));
+    setRubroUI(tipoEl.value);
+
+    // Autenticación con timeout
+    let authTimeout = setTimeout(() => {
+      document.getElementById('loginModal').style.display = 'flex';
+      document.getElementById('loader').style.display = 'none';
+    }, 5000);
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        clearTimeout(authTimeout);
+        currentUser = user;
+        document.getElementById('loginModal').style.display = 'none';
+        document.getElementById('loader').style.display = 'none';
+        cargarComercios();
+        cargarDashboard();
+      } else {
+        clearTimeout(authTimeout);
+        document.getElementById('loginModal').style.display = 'flex';
+        document.getElementById('loader').style.display = 'none';
+      }
+    });
+
+    document.getElementById('loginBtn').addEventListener('click', async () => {
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        showToast('Login exitoso', 'success');
+      } catch (error) {
+        showToast('Error de login: ' + error.message, 'error');
+      }
+    });
+
+    // Mostrar / ocultar formulario
+    function openForm(mode = 'add') {
+      if (mode === 'add') {
+        resetForm();
+        formTitle.innerHTML = '<i class="fas fa-plus-circle"></i> Agregar Publicación';
+        document.getElementById('imagenPrincipal').required = true;
+      }
+      formContainer.style.display = 'block';
+      formContainer.scrollIntoView({ behavior: 'smooth' });
+    }
+    function closeForm() {
+      formContainer.style.display = 'none';
+      resetForm();
+    }
+
+    showAddFormBtn.addEventListener('click', () => openForm('add'));
+    showAddFormBtnTop.addEventListener('click', () => openForm('add'));
+    cancelBtn.addEventListener('click', closeForm);
+    cancelBtnTop.addEventListener('click', closeForm);
+
+    // Dashboard
+    async function cargarDashboard() {
+      try {
+        const snapshot = await getDocs(collection(db, "comercios"));
+        const data = snapshot.docs.map(d => d.data());
+        const total = data.length;
+
+        const porDistrito = {};
+        const porNivel = {};
+        const porTipo = {};
+        let totalVisualizaciones = 0;
+
+        data.forEach(com => {
+          porDistrito[com.distrito] = (porDistrito[com.distrito] || 0) + 1;
+          porNivel[com.nivel] = (porNivel[com.nivel] || 0) + 1;
+          porTipo[com.tipo] = (porTipo[com.tipo] || 0) + 1;
+          totalVisualizaciones += com.visualizaciones || 0;
+        });
+
+        document.getElementById('dashboard').innerHTML = `
+          <div class="stat-card grad-blue">
+            <div class="stat-top">
+              <div>
+                <h3>${total}</h3>
+                <p style="margin:0;opacity:.92">Total Publicaciones</p>
+              </div>
+              <div class="stat-icon"><i class="fas fa-layer-group"></i></div>
+            </div>
+            <p>Todos los registros cargados</p>
+          </div>
+
+          <div class="stat-card grad-green">
+            <div class="stat-top">
+              <div>
+                <h3>${Object.keys(porDistrito).length}</h3>
+                <p style="margin:0;opacity:.92">Distritos</p>
+              </div>
+              <div class="stat-icon"><i class="fas fa-map-location-dot"></i></div>
+            </div>
+            <p>Zonas cubiertas por el catálogo</p>
+          </div>
+
+          <div class="stat-card grad-pink">
+            <div class="stat-top">
+              <div>
+                <h3>${Object.keys(porTipo).length}</h3>
+                <p style="margin:0;opacity:.92">Tipos</p>
+              </div>
+              <div class="stat-icon"><i class="fas fa-shapes"></i></div>
+            </div>
+            <p>Tipos activos (comercio, profesional, etc.)</p>
+          </div>
+
+          <div class="stat-card grad-gold">
+            <div class="stat-top">
+              <div>
+                <h3>${totalVisualizaciones}</h3>
+                <p style="margin:0;opacity:.92">Visualizaciones</p>
+              </div>
+              <div class="stat-icon"><i class="fas fa-eye"></i></div>
+            </div>
+            <p>Visitas acumuladas (detalle)</p>
+          </div>
+        `;
+      } catch (error) {
+        showToast('Error cargando estadísticas', 'error');
+      }
+    }
+
+    // Geolocalización para ubicación
+    async function getLocation() {
+      return new Promise((resolve, reject) => {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            (position) => resolve({ lat: position.coords.latitude, lng: position.coords.longitude }),
+            reject,
+            { enableHighAccuracy: true, timeout: 8000 }
+          );
+        } else reject(new Error('Geolocalización no soportada'));
+      });
+    }
+
+    // Upload a ImgBB
+    async function uploadToImgbb(file) {
+      const formData = new FormData();
+      formData.append("image", file);
+      const res = await fetch(`https://api.imgbb.com/1/upload?key=${API_KEY}`, { method: "POST", body: formData });
+      const data = await res.json();
+      if (data.success) return data.data.url;
+      throw new Error("Error al subir imagen");
+    }
+
+    // Imagen principal
+    document.getElementById('imagenPrincipal').addEventListener("change", async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      document.getElementById('previewPrincipal').innerHTML = `<div class="preview"><div class="loader"></div></div>`;
+      try {
+        const url = await uploadToImgbb(file);
+        document.getElementById('previewPrincipal').innerHTML = `
+          <div class="preview-item">
+            <div class="preview">
+              <img src="${url}" alt="Principal">
+              <button class="remove" onclick="removeImage('principal')">×</button>
+            </div>
+            <input class="url-field" id="urlPrincipal" value="${url}" readonly>
+          </div>
+        `;
+      } catch (err) {
+        document.getElementById('previewPrincipal').innerHTML = `<p style="color:#ef4444; font-weight:800;">❌ Error al subir imagen</p>`;
+      }
+    });
+
+    // Galería (máx. depende de tipo)
+    document.getElementById('galeria').addEventListener("change", async (e) => {
+      const max = getGaleriaMax(tipoEl.value);
+
+      if (galeriaData.length >= max) {
+        showToast(`Máximo ${max} imágenes para este tipo`, 'warning');
+        return;
+      }
+
+      const files = [...e.target.files].slice(0, Math.max(0, max - galeriaData.length));
+      for (const file of files) {
+        const idx = galeriaData.length;
+        galeriaData.push({ loading: true });
+        renderGaleriaPreview();
+        try {
+          const url = await uploadToImgbb(file);
+          galeriaData[idx] = { url };
+        } catch (err) {
+          galeriaData[idx] = { error: true };
+        }
+        renderGaleriaPreview();
+      }
+
+      e.target.value = "";
+    });
+
+    function renderGaleriaPreview() {
+      document.getElementById('previewGaleria').innerHTML = galeriaData.map((g, i) => {
+        if (g.loading) return `<div class="preview"><div class="loader"></div></div>`;
+        if (g.error) return `<div class="preview"><p style='color:#ef4444;font-weight:900;'>Error</p></div>`;
+        return `
+          <div class="preview-item">
+            <div class="preview">
+              <img src="${g.url}" alt="Imagen ${i + 1}">
+              <button class="remove" onclick="removeImage('galeria_${i}')">×</button>
+            </div>
+            <input class="url-field" value="${g.url}" readonly>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function removeImage(tipo) {
+      if (tipo === 'principal') {
+        document.getElementById('previewPrincipal').innerHTML = "";
+        document.getElementById('imagenPrincipal').value = "";
+        const existing = document.getElementById('urlPrincipal');
+        if (existing) existing.remove();
+      } else if (tipo.startsWith("galeria")) {
+        const idx = parseInt(tipo.split("_")[1]);
+        galeriaData.splice(idx, 1);
+        renderGaleriaPreview();
+      }
+    }
+    window.removeImage = removeImage;
+
+    function tipoLabel(t) {
+      return ({
+        comercio:'Comercio',
+        profesional:'Profesional',
+        servicio:'Servicio',
+        transporte:'Transporte',
+        farmacia:'Farmacia',
+        turismo:'Turismo/POI',
+        evento:'Evento',
+        delivery:'Delivery',
+        emprendedor:'Emprendedor',
+        otro:'Otro'
+      }[t] || '');
+    }
+
+    function toNumberSafe(v) {
+      const n = Number(v);
+      return Number.isFinite(n) ? n : 0;
+    }
+
+    // Submit
+    document.getElementById("formVendedor").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      let valid = true;
+
+      const nombre = document.getElementById("nombre").value.trim();
+      if (!nombre) { document.getElementById("error-nombre").textContent = "Nombre requerido"; valid = false; }
+      else document.getElementById("error-nombre").textContent = "";
+
+      const distrito = document.getElementById("distrito").value;
+      if (!distrito) { document.getElementById("error-distrito").textContent = "Distrito requerido"; valid = false; }
+      else document.getElementById("error-distrito").textContent = "";
+
+      const tipo = tipoEl.value;
+
+      // ✅ Horarios/días SOLO si aplica
+      const requiereHorarios = (tipo === 'comercio' || tipo === 'servicio' || tipo === 'farmacia');
+
+      // DÍAS: guardamos normalizados sin acentos
+      const dias = [...document.querySelectorAll(".days input:checked")]
+        .map(i => normalizeDia(i.value))
+        .filter(Boolean);
+
+      if (requiereHorarios && dias.length === 0) {
+        document.getElementById("error-dias").textContent = "Al menos un día requerido";
+        valid = false;
+      } else document.getElementById("error-dias").textContent = "";
+
+      const ap1 = document.getElementById("apertura1").value;
+      const ci1 = document.getElementById("cierre1").value;
+
+      const diasSemana = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes'];
+      if (requiereHorarios && dias.some(d => diasSemana.includes(d)) && (!ap1 || !ci1)) {
+        document.getElementById("error-horario1").textContent = "Horario semanal requerido si se marcan días de semana";
+        valid = false;
+      } else document.getElementById("error-horario1").textContent = "";
+
+      // ✅ Evento: fechaInicio + lugar obligatorios
+      if (tipo === 'evento') {
+        const fi = document.getElementById("fechaInicio").value;
+        const lugar = document.getElementById("lugarEvento").value.trim();
+        if (!fi) { document.getElementById("error-fechaInicio").textContent = "Fecha inicio requerida"; valid = false; }
+        else document.getElementById("error-fechaInicio").textContent = "";
+        if (!lugar) { document.getElementById("error-lugarEvento").textContent = "Lugar requerido"; valid = false; }
+        else document.getElementById("error-lugarEvento").textContent = "";
+      } else {
+        document.getElementById("error-fechaInicio").textContent = "";
+        document.getElementById("error-lugarEvento").textContent = "";
+      }
+
+      // ✅ Profesional: especialidad obligatoria
+      if (tipo === 'profesional') {
+        const esp = document.getElementById("especialidad").value.trim();
+        if (!esp) { showToast("Especialidad requerida para profesionales", "warning"); valid = false; }
+      }
+
+      const imagen = document.getElementById("urlPrincipal")?.value;
+      if (!imagen) { document.getElementById("error-imagen").textContent = "Imagen principal requerida"; valid = false; }
+      else document.getElementById("error-imagen").textContent = "";
+
+      if (!valid) return;
+
+      const submitButton = e.target.querySelector('button[type="submit"]');
+      submitButton.disabled = true;
+      submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
+
+      // Horarios (si no aplica, guardamos estructura vacía para no romper detalle/catalogo)
+      const horarios = { semana: [], sabado: [], domingo: [] };
+
+      if (ap1 && ci1) horarios.semana.push({ apertura: ap1, cierre: ci1 });
+      const ap2 = document.getElementById("apertura2").value;
+      const ci2 = document.getElementById("cierre2").value;
+      if (ap2 && ci2) horarios.semana.push({ apertura: ap2, cierre: ci2 });
+
+      const apSab1 = document.getElementById("aperturaSabado1").value;
+      const ciSab1 = document.getElementById("cierreSabado1").value;
+      if (apSab1 && ciSab1) horarios.sabado.push({ apertura: apSab1, cierre: ciSab1 });
+      const apSab2 = document.getElementById("aperturaSabado2").value;
+      const ciSab2 = document.getElementById("cierreSabado2").value;
+      if (apSab2 && ciSab2) horarios.sabado.push({ apertura: apSab2, cierre: ciSab2 });
+
+      const apDom1 = document.getElementById("aperturaDomingo1").value;
+      const ciDom1 = document.getElementById("cierreDomingo1").value;
+      if (apDom1 && ciDom1) horarios.domingo.push({ apertura: apDom1, cierre: ciDom1 });
+      const apDom2 = document.getElementById("aperturaDomingo2").value;
+      const ciDom2 = document.getElementById("cierreDomingo2").value;
+      if (apDom2 && ciDom2) horarios.domingo.push({ apertura: apDom2, cierre: ciDom2 });
+
+      const metodos_pago = [...document.getElementById("metodos").options]
+        .filter(opt => opt.selected)
+        .map(opt => opt.value);
+
+      const categoria = document.getElementById("categoria").value;
+      const subcategoria = document.getElementById("subcategoria").value.trim();
+
+      // Extras por tipo
+      const servicio = {
+        zona_cobertura: document.getElementById("zonaCobertura").value.trim(),
+        urgencias: document.getElementById("urgencias").value,
+        visita_domicilio: document.getElementById("visitaDomicilio").value,
+        matricula: document.getElementById("matricula").value.trim(),
+        precio_desde: toNumberSafe(document.getElementById("precioDesde").value || 0)
+      };
+
+      const transporte = {
+        tipo_servicio: document.getElementById("tipoServicioTransporte").value,
+        disponibilidad: document.getElementById("disponibilidadTransporte").value,
+        tarifa_base: toNumberSafe(document.getElementById("tarifaBase").value || 0),
+        capacidad: document.getElementById("capacidad").value.trim(),
+        base_empresa: document.getElementById("baseEmpresa").value.trim()
+      };
+
+      const profesional = {
+        modalidad: document.getElementById("modalidadProfesional").value,
+        especialidad: document.getElementById("especialidad").value.trim(),
+        matricula: document.getElementById("matriculaProfesional").value.trim(),
+        zona_atencion: document.getElementById("zonaAtencion").value
+      };
+
+      const asistencia = {
+        tipo: document.getElementById("asistenciaTipo").value,
+        valor: document.getElementById("asistenciaValor").value.trim(),
+        texto: document.getElementById("asistenciaTexto").value.trim()
+      };
+
+      // Evento con timestamps robustos
+      const fiStr = document.getElementById("fechaInicio").value;
+      const ffStr = document.getElementById("fechaFin").value;
+
+      const evento = {
+        fecha_inicio: fiStr || "",
+        fecha_fin: ffStr || "",
+        inicio_ms: parseDateToMs(fiStr),
+        fin_ms: parseDateToMs(ffStr),
+        lugar: document.getElementById("lugarEvento").value.trim(),
+        contacto_tipo: document.getElementById("contactoEventoTipo").value,
+        contacto_valor: document.getElementById("contactoEventoValor").value.trim()
+      };
+
+      const farmacia = {
+        de_turno: document.getElementById("farmaciaTurno").value
+      };
+
+      const comercioData = {
+        schema_version: 2,
+        updated_ms: Date.now(),
+
+        nombre,
+        tipo,
+        categoria,
+        subcategoria,
+
+        nivel: document.getElementById("nivel").value,
+        distrito,
+        telefono: document.getElementById("telefono").value,
+        direccion: document.getElementById("direccion").value,
+        mapLink: document.getElementById("mapLink").value,
+        descripcion: document.getElementById("descripcion").value,
+
+        dias: requiereHorarios ? dias : [],
+        horarios: requiereHorarios ? horarios : { semana: [], sabado: [], domingo: [] },
+
+        metodos_pago,
+        delivery: document.getElementById("delivery").value,
+        whatsapp: document.getElementById("whatsapp").value,
+        tags: document.getElementById("tags").value.split(",").map(t => t.trim()).filter(Boolean),
+
+        imagen,
+        galeria: galeriaData.map(g => g.url).filter(Boolean),
+
+        redes: {
+          instagram: document.getElementById("instagram").value,
+          facebook: document.getElementById("facebook").value,
+          tiktok: document.getElementById("tiktok").value,
+          email: document.getElementById("email").value,
+          web: document.getElementById("web").value,
+        },
+
+        servicio: (tipo === 'servicio') ? servicio : {},
+        transporte: (tipo === 'transporte') ? transporte : {},
+        profesional: (tipo === 'profesional') ? profesional : {},
+        asistencia: (tipo === 'turismo') ? asistencia : {},
+        evento: (tipo === 'evento') ? evento : {},
+        farmacia: (tipo === 'farmacia') ? farmacia : {}
+      };
+
+      const id = document.getElementById("id").value;
+
+      try {
+        if (id) {
+          await updateDoc(doc(db, "comercios", id), comercioData);
+          showToast("✅ Publicación actualizada", "success");
+        } else {
+          comercioData.visualizaciones = 0;
+          comercioData.orden = vendedores.length;
+          comercioData.created_ms = Date.now();
+
+          try {
+            const coords = await getLocation();
+            comercioData.ubicacion = coords;
+          } catch (geoError) {
+            showToast("⚠️ No se pudo obtener ubicación", "warning");
+          }
+
+          await addDoc(collection(db, "comercios"), comercioData);
+          showToast("🎉 Publicación agregada", "success");
+        }
+
+        closeForm();
+        await cargarComercios();
+        await cargarDashboard();
+      } catch (error) {
+        showToast("Error al guardar: " + error.message, "error");
+      } finally {
+        submitButton.disabled = false;
+        submitButton.innerHTML = '<i class="fas fa-save"></i> Guardar';
+      }
+    });
+
+    // ========= LISTA =========
+    async function cargarComercios() {
+      try {
+        const snapshot = await getDocs(collection(db, "comercios"));
+        vendedores = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+        vendedores.forEach((v, i) => { if (typeof v.orden !== 'number') v.orden = i; });
+
+        sortLocal();
+        renderTabla();
+      } catch (error) {
+        showToast('Error cargando la lista', 'error');
+      }
+    }
+
+    function sortLocal() {
+      const col = sortColumn;
+      const dir = (sortDirection === 'asc') ? 1 : -1;
+
+      const getVal = (v) => {
+        if (col === 'id') return (v.id || '');
+        const val = v[col];
+        return (val === undefined || val === null) ? '' : val;
+      };
+
+      vendedores.sort((a, b) => {
+        const va = getVal(a);
+        const vb = getVal(b);
+
+        const na = Number(va);
+        const nb = Number(vb);
+        const bothNum = Number.isFinite(na) && Number.isFinite(nb) && (String(va).trim() !== '' || String(vb).trim() !== '');
+
+        if (bothNum) return (na - nb) * dir;
+        return String(va).localeCompare(String(vb), 'es', { sensitivity: 'base' }) * dir;
+      });
+    }
+
+    function renderTabla(data = vendedores) {
+      const tbody = document.querySelector("#tablaVendedores tbody");
+      const distritosMap = { "1": "Las Flores", "2": "Rodeo", "3": "Tudcum", "4": "Bella Vista", "5": "Villa Iglesia" };
+
+      document.getElementById("tableCount").textContent = `${data.length} resultados`;
+
+      tbody.innerHTML = data.map((v, index) => `
+        <tr>
+          <td data-label="ID">${(v.id||"").substring(0, 5)}...</td>
+          <td data-label="Nombre">${v.nombre || ""}</td>
+          <td data-label="Tipo">${tipoLabel(v.tipo)}</td>
+          <td data-label="Categoría">${v.categoria || ""}</td>
+          <td data-label="Subcategoría">${v.subcategoria || ""}</td>
+          <td data-label="Nivel">${v.nivel || ""}</td>
+          <td data-label="Distrito">${distritosMap[v.distrito] || "N/A"}</td>
+          <td data-label="Visualizaciones">${v.visualizaciones || 0}</td>
+          <td data-label="Acciones">
+            <div class="actions">
+              <button class="btn-edit" onclick="editar('${v.id}')"><i class="fas fa-edit"></i></button>
+              <button class="btn-delete" onclick="eliminar('${v.id}')"><i class="fas fa-trash"></i></button>
+              <button class="btn-move" onclick="mover('${v.id}', 'up')" ${index === 0 ? 'disabled' : ''}><i class="fas fa-arrow-up"></i></button>
+              <button class="btn-move" onclick="mover('${v.id}', 'down')" ${index === data.length - 1 ? 'disabled' : ''}><i class="fas fa-arrow-down"></i></button>
+            </div>
+          </td>
+        </tr>
+      `).join("");
+
+      document.querySelectorAll('#tablaVendedores th[data-sort]').forEach(th => {
+        th.classList.remove('sort-asc', 'sort-desc');
+        if (th.dataset.sort === sortColumn) th.classList.add(sortDirection === 'asc' ? 'sort-asc' : 'sort-desc');
+      });
+    }
+
+    function resetForm() {
+      document.getElementById("formVendedor").reset();
+      document.getElementById("id").value = "";
+
+      [...document.querySelectorAll(".days input:checked")].forEach(i => i.checked = false);
+      [...document.getElementById("metodos").options].forEach(opt => opt.selected = false);
+
+      document.getElementById('previewPrincipal').innerHTML = "";
+      document.getElementById('imagenPrincipal').value = "";
+
+      galeriaData = [];
+      renderGaleriaPreview();
+      setGaleriaLabel(tipoEl.value);
+
+      document.querySelectorAll('.error-msg').forEach(el => el.textContent = "");
+
+      document.getElementById("subcategoria").value = "";
+
+      document.getElementById("zonaCobertura").value = "";
+      document.getElementById("urgencias").value = "no";
+      document.getElementById("visitaDomicilio").value = "si";
+      document.getElementById("matricula").value = "";
+      document.getElementById("precioDesde").value = "";
+
+      document.getElementById("tipoServicioTransporte").value = "";
+      document.getElementById("disponibilidadTransporte").value = "diurno";
+      document.getElementById("tarifaBase").value = "";
+      document.getElementById("capacidad").value = "";
+      document.getElementById("baseEmpresa").value = "";
+
+      document.getElementById("modalidadProfesional").value = "turnos";
+      document.getElementById("especialidad").value = "";
+      document.getElementById("matriculaProfesional").value = "";
+      document.getElementById("zonaAtencion").value = "";
+
+      document.getElementById("asistenciaTipo").value = "";
+      document.getElementById("asistenciaValor").value = "";
+      document.getElementById("asistenciaTexto").value = "";
+
+      document.getElementById("fechaInicio").value = "";
+      document.getElementById("fechaFin").value = "";
+      document.getElementById("lugarEvento").value = "";
+      document.getElementById("contactoEventoTipo").value = "";
+      document.getElementById("contactoEventoValor").value = "";
+
+      document.getElementById("farmaciaTurno").value = "no";
+
+      setRubroUI(tipoEl.value);
+    }
+
+    // Editar
+    window.editar = async function(id) {
+      try {
+        const docSnap = await getDoc(doc(db, "comercios", id));
+        if (!docSnap.exists()) {
+          showToast("Error: Registro no encontrado", "error");
+          return;
+        }
+        const data = docSnap.data();
+        resetForm();
+
+        document.getElementById('imagenPrincipal').required = false;
+
+        document.getElementById("id").value = id;
+        document.getElementById("nombre").value = data.nombre || "";
+        document.getElementById("tipo").value = data.tipo || "comercio";
+        setRubroUI(document.getElementById("tipo").value);
+
+        document.getElementById("categoria").value = data.categoria || "otros";
+        document.getElementById("subcategoria").value = data.subcategoria || "";
+
+        document.getElementById("nivel").value = data.nivel || "bronce";
+        document.getElementById("distrito").value = data.distrito || "1";
+        document.getElementById("telefono").value = data.telefono || "";
+        document.getElementById("direccion").value = data.direccion || "";
+        document.getElementById("mapLink").value = data.mapLink || "";
+        document.getElementById("descripcion").value = data.descripcion || "";
+        document.getElementById("delivery").value = data.delivery || "no";
+        document.getElementById("whatsapp").value = data.whatsapp || "";
+        document.getElementById("tags").value = (data.tags || []).join(", ");
+
+        if ((data.tipo || '') === 'servicio') {
+          document.getElementById("zonaCobertura").value = data.servicio?.zona_cobertura || "";
+          document.getElementById("urgencias").value = data.servicio?.urgencias || "no";
+          document.getElementById("visitaDomicilio").value = data.servicio?.visita_domicilio || "si";
+          document.getElementById("matricula").value = data.servicio?.matricula || "";
+          document.getElementById("precioDesde").value = (data.servicio?.precio_desde ?? "") || "";
+        }
+
+        if ((data.tipo || '') === 'transporte') {
+          document.getElementById("tipoServicioTransporte").value = data.transporte?.tipo_servicio || "";
+          document.getElementById("disponibilidadTransporte").value = data.transporte?.disponibilidad || "diurno";
+          document.getElementById("tarifaBase").value = (data.transporte?.tarifa_base ?? "") || "";
+          document.getElementById("capacidad").value = data.transporte?.capacidad || "";
+          document.getElementById("baseEmpresa").value = data.transporte?.base_empresa || "";
+        }
+
+        if ((data.tipo || '') === 'profesional') {
+          document.getElementById("modalidadProfesional").value = data.profesional?.modalidad || "turnos";
+          document.getElementById("especialidad").value = data.profesional?.especialidad || "";
+          document.getElementById("matriculaProfesional").value = data.profesional?.matricula || "";
+          document.getElementById("zonaAtencion").value = data.profesional?.zona_atencion || "";
+        }
+
+        if ((data.tipo || '') === 'turismo') {
+          document.getElementById("asistenciaTipo").value = data.asistencia?.tipo || "";
+          document.getElementById("asistenciaValor").value = data.asistencia?.valor || "";
+          document.getElementById("asistenciaTexto").value = data.asistencia?.texto || "";
+        }
+
+        // EVENTO: con fallback a docs viejos
+        if ((data.tipo || '') === 'evento') {
+          const ev = data.evento || {};
+          document.getElementById("fechaInicio").value = ev.fecha_inicio || data.fecha_inicio || data.fechaInicio || "";
+          document.getElementById("fechaFin").value = ev.fecha_fin || data.fecha_fin || data.fechaFin || "";
+          document.getElementById("lugarEvento").value = ev.lugar || data.lugar || "";
+          document.getElementById("contactoEventoTipo").value = ev.contacto_tipo || "";
+          document.getElementById("contactoEventoValor").value = ev.contacto_valor || "";
+        }
+
+        if ((data.tipo || '') === 'farmacia') {
+          document.getElementById("farmaciaTurno").value = data.farmacia?.de_turno || "no";
+        }
+
+        // días (compatibilidad: si vienen con acento, igual matchea)
+        const storedDias = data.dias || [];
+        [...document.querySelectorAll(".days input")].forEach(input => {
+          input.checked = diaMatches(storedDias, input.value);
+        });
+
+        // horarios
+        const horarios = data.horarios || { semana: [], sabado: [], domingo: [] };
+        document.getElementById("apertura1").value = horarios.semana?.[0]?.apertura || "";
+        document.getElementById("cierre1").value = horarios.semana?.[0]?.cierre || "";
+        document.getElementById("apertura2").value = horarios.semana?.[1]?.apertura || "";
+        document.getElementById("cierre2").value = horarios.semana?.[1]?.cierre || "";
+        document.getElementById("aperturaSabado1").value = horarios.sabado?.[0]?.apertura || "";
+        document.getElementById("cierreSabado1").value = horarios.sabado?.[0]?.cierre || "";
+        document.getElementById("aperturaSabado2").value = horarios.sabado?.[1]?.apertura || "";
+        document.getElementById("cierreSabado2").value = horarios.sabado?.[1]?.cierre || "";
+        document.getElementById("aperturaDomingo1").value = horarios.domingo?.[0]?.apertura || "";
+        document.getElementById("cierreDomingo1").value = horarios.domingo?.[0]?.cierre || "";
+        document.getElementById("aperturaDomingo2").value = horarios.domingo?.[1]?.apertura || "";
+        document.getElementById("cierreDomingo2").value = horarios.domingo?.[1]?.cierre || "";
+
+        // métodos pago
+        [...document.getElementById("metodos").options].forEach(opt => {
+          opt.selected = (data.metodos_pago || []).includes(opt.value);
+        });
+
+        // imagen principal
+        if (data.imagen) {
+          document.getElementById('previewPrincipal').innerHTML = `
+            <div class="preview-item">
+              <div class="preview">
+                <img src="${data.imagen}" alt="Principal">
+                <button class="remove" onclick="removeImage('principal')">×</button>
+              </div>
+              <input class="url-field" id="urlPrincipal" value="${data.imagen}" readonly>
+            </div>
+          `;
+        }
+
+        // galería
+        galeriaData = (data.galeria || []).map(url => ({ url }));
+        const max = getGaleriaMax(document.getElementById("tipo").value);
+        if (galeriaData.length > max) galeriaData = galeriaData.slice(0, max);
+        renderGaleriaPreview();
+        setGaleriaLabel(document.getElementById("tipo").value);
+
+        // redes
+        document.getElementById("instagram").value = data.redes?.instagram || "";
+        document.getElementById("facebook").value = data.redes?.facebook || "";
+        document.getElementById("tiktok").value = data.redes?.tiktok || "";
+        document.getElementById("email").value = data.redes?.email || "";
+        document.getElementById("web").value = data.redes?.web || "";
+
+        formTitle.innerHTML = '<i class="fas fa-edit"></i> Editar Publicación';
+        openForm('edit');
+      } catch (error) {
+        showToast('Error editando registro', 'error');
+      }
+    };
+
+    // Eliminar
+    window.eliminar = async function(id) {
+      if (!confirm("¿Seguro que querés eliminar este registro?")) return;
+      try {
+        await deleteDoc(doc(db, "comercios", id));
+        await cargarComercios();
+        await cargarDashboard();
+        showToast("🗑️ Eliminado", "success");
+      } catch (error) {
+        showToast('Error eliminando', 'error');
+      }
+    };
+
+    // Mover orden
+    window.mover = async function(id, direction) {
+      const index = vendedores.findIndex(v => v.id === id);
+      if (index === -1) return;
+
+      if (direction === 'up' && index > 0) [vendedores[index], vendedores[index - 1]] = [vendedores[index - 1], vendedores[index]];
+      else if (direction === 'down' && index < vendedores.length - 1) [vendedores[index], vendedores[index + 1]] = [vendedores[index + 1], vendedores[index]];
+
+      try {
+        for (let i = 0; i < vendedores.length; i++) {
+          await updateDoc(doc(db, "comercios", vendedores[i].id), { orden: i });
+          vendedores[i].orden = i;
+        }
+        sortColumn = 'orden';
+        sortDirection = 'asc';
+        sortLocal();
+        renderTabla();
+        showToast('✅ Orden actualizado', 'success');
+      } catch (error) {
+        showToast('Error moviendo orden', 'error');
+      }
+    };
+
+    // Filtros y búsqueda
+    document.getElementById('searchTable').addEventListener('input', filterTable);
+    document.getElementById('filterDistrito').addEventListener('change', filterTable);
+    document.getElementById('filterNivel').addEventListener('change', filterTable);
+
+    function filterTable() {
+      const search = document.getElementById('searchTable').value.toLowerCase();
+      const distrito = document.getElementById('filterDistrito').value;
+      const nivel = document.getElementById('filterNivel').value;
+
+      const filtered = vendedores.filter(v =>
+        (v.nombre && v.nombre.toLowerCase().includes(search)) &&
+        (distrito === "" || v.distrito == distrito) &&
+        (nivel === "" || v.nivel === nivel)
+      );
+      renderTabla(filtered);
+    }
+
+    // Sort
+    document.querySelectorAll('#tablaVendedores th[data-sort]').forEach(th => {
+      th.addEventListener('click', () => {
+        const column = th.dataset.sort;
+        if (sortColumn === column) sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+        else { sortColumn = column; sortDirection = 'asc'; }
+
+        document.getElementById('searchTable').value = "";
+        document.getElementById('filterDistrito').value = "";
+        document.getElementById('filterNivel').value = "";
+
+        sortLocal();
+        renderTabla();
+      });
+    });
+
+    // Export CSV
+    function exportCSV() {
+      const header = 'ID,Nombre,Tipo,Categoría,Subcategoría,Nivel,Distrito,Visualizaciones\n';
+      const csv = header + vendedores.map(v =>
+        `${v.id},"${(v.nombre||'').replaceAll('"','""')}","${(v.tipo||'')}","${v.categoria||''}","${v.subcategoria||''}","${v.nivel||''}","${v.distrito||''}",${v.visualizaciones||0}`
+      ).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'catalogo.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+    document.getElementById('exportBtn').addEventListener('click', exportCSV);
+    document.getElementById('exportBtn2').addEventListener('click', exportCSV);
+
+    // Toast
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = `toast ${type}`;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+  </script>
+</body>
+</html>
