@@ -264,7 +264,6 @@
       box-shadow: var(--shadow2);
       padding: 8px 12px;
       border-radius: 18px;
-      
       margin-bottom: 10px;
       flex-wrap:nowrap;
       max-width: fit-content;
@@ -606,7 +605,7 @@
         <a class="brand" href="./index.html" title="Volver al inicio">
           <div class="logo" aria-hidden="true"></div>
           <div class="t">
-            <h1 id="pageTitle"> INDX | Catálogo</h1>
+            <h1 id="pageTitle">INDX | Catálogo</h1>
             <div class="subhead" id="pageSub">Encontrá lo que buscás, rápido.</div>
           </div>
         </a>
@@ -623,15 +622,16 @@
           <input type="text" id="searchInput" placeholder="Buscar por nombre, descripción, tags...">
         </div>
 
-        <div class="select" title="Zona / distrito">
+        <!-- ✅ DISTRITO NUMÉRICO (compat con rubro.html + firestore) -->
+        <div class="select" title="Distrito">
           <span>📍</span>
           <select id="districtSelect">
-            <option value="todos">Toda la zona</option>
-            <option value="rodeo">Rodeo</option>
-            <option value="las-flores">Las Flores</option>
-            <option value="tudcum">Tudcum</option>
-            <option value="bella-vista">Bella Vista</option>
-            <option value="villa-iglesia">Villa Iglesia</option>
+            <option value="">Todos los distritos</option>
+            <option value="4">Bella Vista</option>
+            <option value="2">Rodeo</option>
+            <option value="5">Villa Iglesia</option>
+            <option value="1">Las Flores</option>
+            <option value="3">Tudcum</option>
           </select>
         </div>
 
@@ -645,17 +645,17 @@
       </div>
 
       <div class="toggle-row">
-  <span id="toggleLabel">Solo abiertos</span>
+        <span id="toggleLabel">Solo abiertos</span>
 
-  <label class="switch" title="Filtrar disponibles">
-    <input type="checkbox" id="toggleActivos" checked>
-    <span class="slider"></span>
-  </label>
+        <label class="switch" title="Filtrar disponibles">
+          <input type="checkbox" id="toggleActivos" checked>
+          <span class="slider"></span>
+        </label>
 
-  <span id="availabilityMessage" style="margin-left:10px; color:#ff4d4d; font-weight:850; display:none;">
-    Algunos lugares están cerrados. Desactivá “Solo abiertos” para verlos.
-  </span>
-</div>
+        <span id="availabilityMessage" style="margin-left:10px; color:#ff4d4d; font-weight:850; display:none;">
+          Algunos lugares están cerrados. Desactivá “Solo abiertos” para verlos.
+        </span>
+      </div>
 
       <div class="results-info" id="resultsInfo"></div>
     </div>
@@ -697,7 +697,7 @@
     const pageSub = document.getElementById('pageSub');
 
     // ===== CONFIG
-    const THEME_KEY = "indx_theme"; // MISMA KEY que Home/Rubro
+    const THEME_KEY = "igw_theme"; // ✅ misma key que rubro/detalle
     const HIDE_EXPIRED_ALWAYS = true;
     const itemsPerPage = 20;
 
@@ -706,11 +706,11 @@
     let currentPage = 1;
     let selectedTipo = 'todos';
 
-    // ===== PARAMS desde Home/Rubro
+    // ===== PARAMS desde Home/Rubro (✅ distrito)
     const params = new URLSearchParams(location.search);
     const P = {
       q: (params.get("q") || "").trim(),
-      zona: (params.get("zona") || "").trim(),
+      distrito: (params.get("distrito") || "").trim(), // ✅
       open: (params.get("open") || "").trim(),  // "1" si viene de ABIERTO
       cat: (params.get("cat") || "").trim(),
       sub: (params.get("sub") || "").trim(),
@@ -751,16 +751,11 @@
       return true;
     }
 
-
-const availabilityMessage = document.getElementById('availabilityMessage');
-function showAvailabilityMsg(show){
-  if(!availabilityMessage) return;
-  availabilityMessage.style.display = show ? "inline" : "none";
-}
-
-
-// Llamá a esta función en tu lógica cuando no haya resultados disponibles.
-
+    const availabilityMessage = document.getElementById('availabilityMessage');
+    function showAvailabilityMsg(show){
+      if(!availabilityMessage) return;
+      availabilityMessage.style.display = show ? "inline" : "none";
+    }
 
     // ===== TIPO NORMALIZADO
     function normTipo(t){
@@ -838,44 +833,79 @@ function showAvailabilityMsg(show){
     }
 
     // ===== DISPONIBILIDAD (tu lógica)
+    function stripAccents(str) {
+      return String(str || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    }
+    function normalizeDia(str) {
+      return stripAccents(str).toLowerCase().trim();
+    }
+
     function estaAbiertoHorario(v) {
       const ahora = new Date();
-      const diasSemana = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
+
+      // Día actual SIN acentos (compat con admin)
+      const diasSemana = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
       const diaActual = diasSemana[ahora.getDay()];
       const horaActual = ahora.getHours() + ahora.getMinutes() / 60;
 
-      if (!v.dias || !Array.isArray(v.dias) || !v.dias.includes(diaActual)) return false;
-      if (!v.horarios || typeof v.horarios !== 'object') return false;
+      const diasGuardados = Array.isArray(v.dias) ? v.dias.map(normalizeDia) : [];
+      if (!diasGuardados.includes(normalizeDia(diaActual))) return false;
+
+      const horariosObj = v.horarios && typeof v.horarios === 'object'
+        ? v.horarios
+        : { semana: [], sabado: [], domingo: [] };
 
       let franjasDelDia = [];
-      if (diaActual === 'sábado') franjasDelDia = v.horarios.sabado || [];
-      else if (diaActual === 'domingo') franjasDelDia = v.horarios.domingo || [];
-      else franjasDelDia = v.horarios.semana || [];
+      if (diaActual === 'sabado') franjasDelDia = horariosObj.sabado || [];
+      else if (diaActual === 'domingo') franjasDelDia = horariosObj.domingo || [];
+      else franjasDelDia = horariosObj.semana || [];
 
-      if (franjasDelDia.length === 0) return false;
+      if (!Array.isArray(franjasDelDia) || franjasDelDia.length === 0) return false;
 
       return franjasDelDia.some(h => {
-        if (!h.apertura || !h.cierre) return false;
+        if (!h?.apertura || !h?.cierre) return false;
+
         const [hA, mA] = h.apertura.split(':').map(Number);
         const [hC, mC] = h.cierre.split(':').map(Number);
+
+        if (!Number.isFinite(hA) || !Number.isFinite(mA) || !Number.isFinite(hC) || !Number.isFinite(mC)) return false;
+
         const horaA = hA + mA / 60;
         const horaC = hC + mC / 60;
+
+        // Cruza medianoche
         if (horaA > horaC) return horaActual >= horaA || horaActual < horaC;
+
         return horaActual >= horaA && horaActual < horaC;
       });
     }
 
     function disponibilidad(v){
       const tipo = normTipo(v.tipo);
-      const modalidad = (v.modalidad || '').toString().toLowerCase().trim();
 
-      if(tipo === 'profesional' && modalidad === 'turnos'){
+      const profesional = v.profesional || {};
+      const transporte  = v.transporte  || {};
+      const farmacia    = v.farmacia    || {};
+      const evento      = v.evento      || {};
+
+      // PROFESIONAL
+      const modalidadProfesional = (profesional.modalidad || v.modalidad || '').toString().toLowerCase().trim();
+      if(tipo === 'profesional' && modalidadProfesional === 'turnos'){
         return { ok:true, label:"Con turno", kind:"turnos" };
       }
 
+      // EVENTO
       if(tipo === 'evento'){
-        const ini = parseDateMaybe(v.fechaInicio || v.inicio || v.startDate);
-        const fin = parseDateMaybe(v.fechaFin || v.fin || v.endDate);
+        const ini =
+          parseDateMaybe(evento.fecha_inicio) ||
+          (Number.isFinite(evento.inicio_ms) ? new Date(evento.inicio_ms) : null) ||
+          parseDateMaybe(v.fechaInicio || v.inicio || v.startDate);
+
+        const fin =
+          parseDateMaybe(evento.fecha_fin) ||
+          (Number.isFinite(evento.fin_ms) ? new Date(evento.fin_ms) : null) ||
+          parseDateMaybe(v.fechaFin || v.fin || v.endDate);
+
         const now = new Date();
         if(ini && fin){
           const ok = (now >= ini && now <= fin);
@@ -888,6 +918,7 @@ function showAvailabilityMsg(show){
         return { ok:true, label:"Evento", kind:"evento" };
       }
 
+      // TURISMO
       if(tipo === 'turismo'){
         const hasHorario = !!(v.horarios && typeof v.horarios === 'object');
         if(!hasHorario) return { ok:true, label:"Visitable", kind:"turismo" };
@@ -895,8 +926,9 @@ function showAvailabilityMsg(show){
         return { ok, label: ok ? "Abierto" : "Cerrado", kind: ok ? "open" : "closed" };
       }
 
+      // TRANSPORTE
       if(tipo === 'transporte'){
-        const disp = (v.disponibilidad || v.turno || '').toString().toLowerCase();
+        const disp = (transporte.disponibilidad || v.disponibilidad || v.turno || '').toString().toLowerCase();
         if(disp.includes('24') || disp.includes('24hs') || disp.includes('noct') || disp.includes('siempre')){
           return { ok:true, label:"Disponible", kind:"open" };
         }
@@ -904,13 +936,15 @@ function showAvailabilityMsg(show){
         return { ok, label: ok ? "Disponible" : "No disponible", kind: ok ? "open" : "closed" };
       }
 
+      // FARMACIA
       if(tipo === 'farmacia'){
-        const turno = (v.turno || v.deTurno || '').toString().toLowerCase();
+        const turno = (farmacia.de_turno || v.turno || v.deTurno || '').toString().toLowerCase();
         if(turno === 'si' || turno === 'true') return { ok:true, label:"De turno", kind:"open" };
         const ok = estaAbiertoHorario(v);
         return { ok, label: ok ? "Abierta" : "Cerrada", kind: ok ? "open" : "closed" };
       }
 
+      // DEFAULT
       const ok = estaAbiertoHorario(v);
       return { ok, label: ok ? "Abierto ahora" : "Cerrado", kind: ok ? "open" : "closed" };
     }
@@ -935,7 +969,7 @@ function showAvailabilityMsg(show){
     function setTheme(theme){
       document.body.setAttribute("data-theme", theme === "dark" ? "dark" : "light");
       localStorage.setItem(THEME_KEY, theme === "dark" ? "dark" : "light");
-      themeToggle.textContent = (document.body.dataset.theme === "dark") ? "🌙" : "🌓";
+      themeToggle.textContent = (document.body.dataset.theme === "dark") ? "🌙" : "🌞";
     }
     function initTheme(){
       const saved = localStorage.getItem(THEME_KEY);
@@ -1004,6 +1038,7 @@ function showAvailabilityMsg(show){
           selectedTipo = t;
           currentPage = 1;
           renderAll();
+          window.scrollTo({top:0, behavior:'smooth'});
         });
         tipoChips.appendChild(div);
       });
@@ -1058,7 +1093,7 @@ function showAvailabilityMsg(show){
       contenedor.innerHTML = "";
 
       const busqueda = (input.value || "").toLowerCase().trim();
-      const distrito = selectDistrito.value;
+      const distritoSel = (selectDistrito.value || "").trim();
 
       let list = [...vendedores];
 
@@ -1069,10 +1104,10 @@ function showAvailabilityMsg(show){
       // cat/sub
       list = list.filter(matchesCatSub);
 
-      // zona/distrito (params zona o select)
-      const zonaReal = (P.zona ? P.zona : distrito);
-      if(zonaReal && zonaReal !== "todos"){
-        list = list.filter(v => slugify(v.distrito) === slugify(zonaReal) || String(v.distrito) === String(zonaReal));
+      // ✅ distrito (prioridad URL, sino select)
+      const distritoReal = (P.distrito ? P.distrito : distritoSel);
+      if(distritoReal){
+        list = list.filter(v => String(v.distrito) === String(distritoReal));
       }
 
       // tipo chip
@@ -1087,8 +1122,10 @@ function showAvailabilityMsg(show){
           const tipo = normTipo(v.tipo);
           const categoria = (v.categoria || v.rubro || v.tipo || '').toString().toLowerCase();
           const desc = (v.descripcion || '').toString().toLowerCase();
-          const profesion = (v.profesion || v.especialidad || '').toString().toLowerCase();
+          const profesion = (v.profesion || v.especialidad || v.profesional?.especialidad || '').toString().toLowerCase();
           const subcat = (v.subcategoria || v.sub || '').toString().toLowerCase();
+          const modalidad = (v.modalidad || v.profesional?.modalidad || '').toString().toLowerCase();
+
           const tags = Array.isArray(v.tags) ? v.tags.join(' ').toLowerCase() : '';
           return (
             nombre.includes(busqueda) ||
@@ -1097,22 +1134,22 @@ function showAvailabilityMsg(show){
             desc.includes(busqueda) ||
             profesion.includes(busqueda) ||
             subcat.includes(busqueda) ||
+            modalidad.includes(busqueda) ||
             tags.includes(busqueda)
           );
         });
       }
 
       // disponibles (open=1 fuerza ON)
-const forceOpen = (P.open === "1");
-const filtroDisponibles = forceOpen ? true : mostrarSoloActivos;
+      const forceOpen = (P.open === "1");
+      const filtroDisponibles = forceOpen ? true : mostrarSoloActivos;
 
-// guardo cuántos habría SIN filtrar por abiertos
-const listBeforeDisponibles = [...list];
+      // guardo cuántos habría SIN filtrar por abiertos
+      const listBeforeDisponibles = [...list];
 
-if(filtroDisponibles){
-  list = list.filter(v => disponibilidad(v).ok);
-}
-
+      if(filtroDisponibles){
+        list = list.filter(v => disponibilidad(v).ok);
+      }
 
       // ===== Orden
       list.sort((a,b) => {
@@ -1133,22 +1170,21 @@ if(filtroDisponibles){
       const start = (currentPage - 1) * itemsPerPage;
       const end = start + itemsPerPage;
       const pageItems = list.slice(start, end);
-// Mensaje: “hay lugares cerrados”
-const hadAnyBefore = listBeforeDisponibles.length > 0;
-const hasNoneAfter = list.length === 0;
 
-// solo mostrar si el filtro “solo abiertos” está activo y sin él había resultados
-showAvailabilityMsg(filtroDisponibles && hasNoneAfter && hadAnyBefore);
+      // Mensaje: “hay lugares cerrados”
+      const hadAnyBefore = listBeforeDisponibles.length > 0;
+      const hasNoneAfter = list.length === 0;
+      showAvailabilityMsg(filtroDisponibles && hasNoneAfter && hadAnyBefore);
 
       // ===== UI texto superior
       const parts = [];
       if(P.cat) parts.push(`Rubro: ${P.cat}`);
       if(P.sub) parts.push(`Sub: ${P.sub}`);
-      if(zonaReal && zonaReal !== "todos") parts.push(`Zona: ${zonaReal}`);
+      if(distritoReal) parts.push(`Distrito: ${distritoReal}`);
       if(forceOpen) parts.push("Solo abiertos");
       if(busqueda) parts.push(`Búsqueda: "${busqueda}"`);
 
-      pageTitle.textContent = "indx | Catálogo";
+      pageTitle.textContent = "INDX | Catálogo";
       pageSub.textContent = parts.length ? parts.join(" • ") : "Encontrá lo que buscás, rápido.";
       resultsInfo.textContent = `Mostrando ${pageItems.length} de ${list.length} (Página ${currentPage} de ${totalPages})`;
 
@@ -1221,8 +1257,7 @@ showAvailabilityMsg(filtroDisponibles && hasNoneAfter && hadAnyBefore);
         contenedor.appendChild(card);
       });
 
-      // ===== Premium sections (AL FINAL, no antes)
-      // Solo si NO hay búsqueda dura, solo en página 1, y solo si no venís por rubro/sub/open
+      // ===== Premium sections (AL FINAL)
       const showPremium =
         !busqueda &&
         currentPage === 1 &&
@@ -1230,7 +1265,7 @@ showAvailabilityMsg(filtroDisponibles && hasNoneAfter && hadAnyBefore);
         !P.sub &&
         !P.cat &&
         !P.open &&
-        (zonaReal === "todos" || !zonaReal);
+        !distritoReal;
 
       if(showPremium){
         const base = vendedores.filter(v => isVisibleByPayment(v));
@@ -1293,12 +1328,12 @@ showAvailabilityMsg(filtroDisponibles && hasNoneAfter && hadAnyBefore);
 
         buildTipoChipsFromData(vendedores);
 
-        // ===== Aplicar defaults desde URL (q/zona/open/tipo)
+        // ===== Aplicar defaults desde URL (q/distrito/open/tipo)
         if(P.q) input.value = P.q;
 
-        if(P.zona){
-          const z = [...selectDistrito.options].some(o => slugify(o.value) === slugify(P.zona));
-          if(z) selectDistrito.value = P.zona;
+        if(P.distrito){
+          const ok = [...selectDistrito.options].some(o => String(o.value) === String(P.distrito));
+          if(ok) selectDistrito.value = String(P.distrito);
         }
 
         if(P.tipo){
@@ -1328,7 +1363,7 @@ showAvailabilityMsg(filtroDisponibles && hasNoneAfter && hadAnyBefore);
 
     selectDistrito.addEventListener('change', () => {
       currentPage = 1;
-      P.zona = "";
+      P.distrito = ""; // ✅
       renderAll();
     });
 
@@ -1341,7 +1376,7 @@ showAvailabilityMsg(filtroDisponibles && hasNoneAfter && hadAnyBefore);
 
     clearBtn.addEventListener("click", ()=>{
       input.value = "";
-      selectDistrito.value = "todos";
+      selectDistrito.value = "";
       checkbox.checked = true;
       mostrarSoloActivos = true;
       label.textContent = "Solo abiertos";
@@ -1352,9 +1387,10 @@ showAvailabilityMsg(filtroDisponibles && hasNoneAfter && hadAnyBefore);
       if(all) all.classList.add("active");
 
       history.replaceState({}, "", "./catalogo.html");
-      P.q=""; P.zona=""; P.open=""; P.cat=""; P.sub=""; P.tipo="";
+      P.q=""; P.distrito=""; P.open=""; P.cat=""; P.sub=""; P.tipo="";
       currentPage = 1;
       renderAll();
+      window.scrollTo({top:0, behavior:'smooth'});
     });
 
     backBtn.addEventListener("click", ()=>{
