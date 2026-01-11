@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=5.0" />
   <title>INDX | Sumate</title>
-  <meta name="description" content="Sumate a indx: publicá tu negocio o servicio en el Catálogo Digital Local. Formulario, requisitos y contacto." />
+  <meta name="description" content="Sumate a INDX: publicá tu negocio o servicio en el Catálogo Digital Local. Formulario, requisitos y contacto." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,6 +18,7 @@
       --sky:#0EA5E9;
       --ok:#10B981;
       --danger:#EF4444;
+      --warn:#F59E0B;
 
       --bg:#F6F7FB;
       --surface: rgba(255,255,255,.76);
@@ -66,7 +67,6 @@
     button,input,select,textarea{ font:inherit; }
     :focus-visible{ outline:none; box-shadow: var(--glow); border-radius: 14px; }
 
-    /* Fondo premium (igual vibe) */
     .bgfx{
       position:fixed; inset:0; z-index:-2; pointer-events:none;
       background:
@@ -84,7 +84,6 @@
 
     .container{ width:min(var(--max), calc(100% - 22px)); margin:0 auto; }
 
-    /* Header (similar al resto) */
     header{
       position:sticky; top:0; z-index:50;
       background: rgba(255,255,255,.60);
@@ -135,8 +134,8 @@
     }
     .icon-btn:hover{ transform: translateY(-1px); }
 
-    /* Layout principal */
     main{ padding: 18px 0 26px; }
+
     .hero{
       display:grid;
       grid-template-columns: 1.1fr .9fr;
@@ -152,10 +151,7 @@
       overflow:hidden;
     }
 
-    .hero-left{
-      padding: 18px;
-      position:relative;
-    }
+    .hero-left{ padding: 18px; position:relative; }
     .kicker{
       display:inline-flex;
       align-items:center;
@@ -231,6 +227,25 @@
     }
     .btn-secondary:hover{ transform: translateY(-1px); }
 
+    .btn-ghost{
+      border:1px dashed rgba(45,91,255,.28);
+      background: rgba(45,91,255,.06);
+      color: var(--text);
+      border-radius: 18px;
+      padding: 12px 14px;
+      box-shadow: var(--shadow2);
+      font-weight: 950;
+      cursor:pointer;
+      transition: var(--transition);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      min-width: 210px;
+      text-align:center;
+    }
+    .btn-ghost:hover{ transform: translateY(-1px); border-style:solid; }
+
     .meta{
       margin-top: 14px;
       display:flex;
@@ -252,7 +267,6 @@
     }
     [data-theme="dark"] .meta .pill{ background: rgba(15,23,42,.55); }
 
-    /* Right card */
     .hero-right{
       padding: 16px;
       display:flex;
@@ -292,7 +306,6 @@
       line-height: 1.45;
     }
 
-    /* Sections */
     .section{
       margin-top: 14px;
       display:grid;
@@ -349,7 +362,6 @@
       line-height: 1.45;
     }
 
-    /* Form area */
     .form-actions{
       display:flex;
       flex-wrap:wrap;
@@ -373,45 +385,30 @@
       color: var(--text);
     }
 
-    /* Embed forms */
-    .embed{
-      margin-top: 14px;
-      border:1px solid var(--line);
-      background: var(--card);
-      border-radius: var(--r26);
-      overflow:hidden;
+    /* Info box para aclarar tema "subida de archivos" */
+    .info{
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 18px;
+      border: 1px solid rgba(245,158,11,.28);
+      background: rgba(245,158,11,.08);
       box-shadow: var(--shadow2);
-    }
-    .embed-head{
-      padding: 12px 14px;
       display:flex;
-      align-items:center;
-      justify-content:space-between;
       gap:10px;
-      border-bottom:1px solid var(--line);
-      background: rgba(255,255,255,.45);
+      align-items:flex-start;
     }
-    [data-theme="dark"] .embed-head{ background: rgba(15,23,42,.55); }
-    .embed-head b{
+    .info .i{
+      width:34px; height:34px; border-radius: 14px;
+      display:grid; place-items:center;
+      background: rgba(245,158,11,.14);
+      border: 1px solid rgba(245,158,11,.28);
+      color: var(--warn);
+      flex:0 0 auto;
       font-weight: 1000;
-      font-size: 13px;
-      letter-spacing: -0.2px;
     }
-    .embed-head span{
-      color: var(--muted);
-      font-weight: 850;
-      font-size: 12px;
-      white-space:nowrap;
-    }
-    .embed iframe{
-      width:100%;
-      height: 760px;
-      border:0;
-      display:block;
-      background: transparent;
-    }
+    .info b{ display:block; font-weight: 1000; font-size: 13px; }
+    .info p{ margin-top:3px; color: var(--muted); font-weight: 850; font-size: 12.5px; line-height:1.45; }
 
-    /* Footer */
     footer{
       padding: 18px 0 22px;
       border-top: 1px solid var(--line);
@@ -422,14 +419,191 @@
       margin-top: 18px;
     }
 
-    /* Responsive */
+    /* ===== Modal ===== */
+    .modal{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.62);
+      backdrop-filter: blur(8px);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 16px;
+      opacity:0;
+      visibility:hidden;
+      transition: var(--transition);
+      z-index: 999;
+    }
+    .modal.show{ opacity:1; visibility:visible; }
+    .modal-card{
+      width: min(720px, 100%);
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--r26);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .modal-head{
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 10px;
+      background: rgba(255,255,255,.40);
+    }
+    [data-theme="dark"] .modal-head{ background: rgba(15,23,42,.55); }
+
+    .modal-title{
+      display:flex;
+      gap: 10px;
+      align-items:flex-start;
+    }
+    .modal-title .icon{
+      width:40px; height:40px; border-radius: 16px;
+      display:grid; place-items:center;
+      background: rgba(37,211,102,.12);
+      border: 1px solid rgba(37,211,102,.25);
+      color: var(--ok);
+      flex:0 0 auto;
+    }
+    .modal-title h3{
+      font-size: 15px;
+      font-weight: 1000;
+      letter-spacing: -.2px;
+    }
+    .modal-title p{
+      margin-top: 3px;
+      font-size: 12.5px;
+      color: var(--muted);
+      font-weight: 850;
+      line-height: 1.45;
+    }
+
+    .modal-close{
+      width:42px; height:42px;
+      border-radius: 16px;
+      border:1px solid var(--line);
+      background: var(--card);
+      box-shadow: var(--shadow2);
+      cursor:pointer;
+      display:grid; place-items:center;
+      font-size: 18px;
+      transition: var(--transition);
+    }
+    .modal-close:hover{ transform: translateY(-1px); }
+
+    .modal-body{
+      padding: 16px;
+      display:grid;
+      gap: 12px;
+    }
+
+    .grid2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .field label{
+      display:block;
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 950;
+      margin-bottom: 6px;
+      letter-spacing: .2px;
+      text-transform: uppercase;
+    }
+    .field input, .field textarea{
+      width:100%;
+      padding: 12px 12px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: var(--card);
+      box-shadow: var(--shadow2);
+      font-weight: 900;
+      outline: none;
+      transition: var(--transition);
+    }
+    .field textarea{ min-height: 96px; resize: vertical; font-weight: 850; }
+
+    .help{
+      font-size: 12.5px;
+      color: var(--muted);
+      font-weight: 850;
+      line-height: 1.45;
+      border: 1px dashed rgba(45,91,255,.28);
+      background: rgba(45,91,255,.06);
+      padding: 10px 12px;
+      border-radius: 18px;
+    }
+
+    .modal-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      padding: 0 16px 16px;
+    }
+
+    .btn-wa{
+      border:1px solid rgba(37,211,102,.28);
+      background: linear-gradient(135deg, rgba(37,211,102,.22), rgba(18,140,126,.18));
+      color: var(--text);
+      border-radius: 18px;
+      padding: 12px 14px;
+      box-shadow: var(--shadow2);
+      font-weight: 950;
+      cursor:pointer;
+      transition: var(--transition);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      min-width: 210px;
+      text-align:center;
+    }
+    .btn-wa:hover{ transform: translateY(-1px); border-color: rgba(37,211,102,.45); }
+
+    .btn-muted{
+      border:1px solid var(--line);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 18px;
+      padding: 12px 14px;
+      box-shadow: var(--shadow2);
+      font-weight: 950;
+      cursor:pointer;
+      transition: var(--transition);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      min-width: 210px;
+      text-align:center;
+    }
+    .btn-muted:hover{ transform: translateY(-1px); }
+
+    .err{
+      display:none;
+      padding: 10px 12px;
+      border-radius: 18px;
+      border: 1px solid rgba(239,68,68,.28);
+      background: rgba(239,68,68,.08);
+      box-shadow: var(--shadow2);
+      color: var(--text);
+      font-weight: 900;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
     @media (max-width: 900px){
       .hero{ grid-template-columns: 1fr; }
     }
     @media (max-width: 720px){
       .section{ grid-template-columns: 1fr; }
       .hero-title{ font-size: 26px; }
-      .btn,.btn-secondary{ width:100%; min-width: unset; }
+      .btn,.btn-secondary,.btn-ghost{ width:100%; min-width: unset; }
+      .grid2{ grid-template-columns: 1fr; }
+      .btn-wa,.btn-muted{ width:100%; min-width: unset; }
     }
   </style>
 </head>
@@ -458,21 +632,26 @@
   </header>
 
   <main class="container">
+
     <!-- HERO -->
     <section class="hero">
       <div class="panel hero-left">
         <div class="kicker"><i class="fa-solid fa-sparkles"></i> Alta visibilidad • Más clientes • Presencia local</div>
-        <h2 class="hero-title">Sumate a <span style="color: #ff9900;">INDX</span> y aparecé en el mapa local.</h2>
+        <h2 class="hero-title">Sumate a <span style="color:#ff9900;">INDX</span> y aparecé en el mapa local.</h2>
         <p class="hero-desc">
           Si tenés un <b>comercio</b>, <b>servicio</b>, sos <b>profesional</b> o brindás <b>transporte</b>, podés formar parte del Catálogo Digital Local.
           Te cargamos con ficha completa, imagen, redes, tags y ubicación para que la gente te encuentre rápido.
         </p>
 
         <div class="cta-row">
-          <!-- ✅ PONÉ ACÁ TU LINK DE GOOGLE FORMS -->
-          <a class="btn" id="formsBtn" href="https://forms.gle/PEGAR_TU_LINK" target="_blank" rel="noopener">
-            <i class="fa-solid fa-pen-to-square"></i> Completar formulario
+          <a class="btn" id="formsBtn" href="https://forms.gle/E6JYgV8WosWtZhwy9" target="_blank" rel="noopener">
+            <i class="fa-solid fa-pen-to-square"></i> Completar formulario (Google)
           </a>
+
+          <button class="btn-ghost" id="contactMeBtn" type="button">
+            <i class="fa-brands fa-whatsapp"></i> Quiero que me contacten
+          </button>
+
           <a class="btn-secondary" href="./catalogo.html" title="Ver el catálogo">
             <i class="fa-solid fa-magnifying-glass"></i> Ver catálogo
           </a>
@@ -485,7 +664,9 @@
         </div>
 
         
-      </div>
+
+        
+      
 
       <aside class="panel hero-right">
         <div class="mini-card">
@@ -516,7 +697,6 @@
 
     <!-- 2 columnas -->
     <section class="section">
-      <!-- Requisitos -->
       <div class="panel">
         <h2>Qué necesitás para sumarte</h2>
         <div class="list">
@@ -551,7 +731,6 @@
         </div>
       </div>
 
-      <!-- Proceso -->
       <div class="panel">
         <h2>Cómo es el proceso</h2>
         <div class="list">
@@ -559,21 +738,21 @@
             <div class="badge"><i class="fa-solid fa-file-signature"></i></div>
             <div>
               <b>1) Completás el formulario</b>
-              <p>En menos de 3 minutos nos dejás tus datos.</p>
+              <p>En menos de 3 minutos nos dejás tus datos (incluye carga de archivos).</p>
             </div>
           </div>
           <div class="item">
             <div class="badge"><i class="fa-solid fa-clipboard-check"></i></div>
             <div>
               <b>2) Validamos y armamos tu ficha</b>
-              <p>Revisamos info, ordenamos tags y mejoramos presentación.</p>
+              <p>Ordenamos tags, categoría y presentación para que se vea pro.</p>
             </div>
           </div>
           <div class="item">
             <div class="badge"><i class="fa-solid fa-rocket"></i></div>
             <div>
               <b>3) Te publicamos en INDX</b>
-              <p>Quedás visible en rubros, búsqueda y en el mapa local.</p>
+              <p>Quedás visible en rubros, búsqueda y con acceso a Maps.</p>
             </div>
           </div>
           <div class="item">
@@ -586,49 +765,110 @@
         </div>
 
         <div class="form-actions">
-          <a class="btn" href="https://forms.gle/PEGAR_TU_LINK" target="_blank" rel="noopener">
-            <i class="fa-solid fa-paper-plane"></i> Enviar mis datos
+          <a class="btn" href="https://forms.gle/E6JYgV8WosWtZhwy9" target="_blank" rel="noopener">
+            <i class="fa-solid fa-paper-plane"></i> Abrir formulario en Google
           </a>
+
           <button class="btn-secondary" id="copyLinkBtn" type="button">
             <i class="fa-solid fa-link"></i> Copiar link del formulario
+          </button>
+
+          <button class="btn-ghost" id="contactMeBtn2" type="button">
+            <i class="fa-brands fa-whatsapp"></i> Prefiero que me contacten
           </button>
         </div>
 
         <p class="note">
-          Si no tenés fotos ahora, igual podés sumarte y las agregamos después.
+          Si te cuesta cargarlo o no tenés fotos ahora, elegí <code>Prefiero que me contacten</code> y coordinamos visita.
         </p>
       </div>
-    </section>
-
-    <!-- Google Forms EMBED (opcional) -->
-    <section class="embed" id="embedBox" aria-label="Formulario de alta">
-      <div class="embed-head">
-        <b><i class="fa-solid fa-list-check"></i> Formulario (Google Forms)</b>
-        <span>Podés completarlo acá mismo</span>
-      </div>
-
-      <!-- ✅ PARA EMBEBER:
-        1) Abrí tu Google Form
-        2) Botón "Enviar"
-        3) ícono "<>" (Insertar HTML)
-        4) Copiá el link del iframe (src="...")
-        5) Pegalo abajo en data-src o directamente en src
-      -->
-      <iframe id="formsEmbed"
-        src=""
-        data-src="https://docs.google.com/forms/d/e/PEGAR_ID_DE_TU_FORM/viewform?embedded=true"
-        loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade"
-        title="Formulario de inscripción INDX">
-      </iframe>
     </section>
 
   </main>
 
   <footer>© 2026 INDX • Catálogo Digital Local</footer>
 
+  <!-- MODAL: Quiero que me contacten -->
+  <div class="modal" id="contactModal" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+      <div class="modal-head">
+        <div class="modal-title">
+          <div class="icon"><i class="fa-brands fa-whatsapp"></i></div>
+          <div>
+            <h3 id="mTitle">Quiero que me contacten</h3>
+            <p>Completá esto y se arma un WhatsApp listo para enviar con tus datos.</p>
+          </div>
+        </div>
+        <button class="modal-close" id="modalCloseBtn" aria-label="Cerrar">×</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="err" id="mErr">Completá al menos <b>Nombre</b>, <b>Teléfono</b> y <b>Ubicación</b>.</div>
+
+        <div class="grid2">
+          <div class="field">
+            <label for="mNombre">Nombre y Apellido *</label>
+            <input id="mNombre" type="text" placeholder="Ej: Juan Pérez" autocomplete="name" />
+          </div>
+
+          <div class="field">
+            <label for="mTelefono">Teléfono / WhatsApp *</label>
+            <input id="mTelefono" type="tel" placeholder="Ej: 2646706973" autocomplete="tel" inputmode="tel" />
+          </div>
+        </div>
+
+        <div class="grid2">
+          <div class="field">
+            <label for="mUbicacion">Ubicación / Dirección *</label>
+            <input id="mUbicacion" type="text" placeholder="Ej: Rodeo - Barrio Centro, Calle..." />
+          </div>
+
+          <div class="field">
+            <label for="mHorario">Horario de visita esperado</label>
+            <input id="mHorario" type="text" placeholder="Ej: Lun a Vie 10 a 13 / 17 a 20" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="mNotas">Notas (opcional)</label>
+          <textarea id="mNotas" placeholder="Ej: No sé cargar el formulario / necesito que vengan a sacar fotos / tengo delivery / etc."></textarea>
+        </div>
+
+        <div class="help">
+          <b>¿Para qué sirve?</b><br/>
+          Si no podés completar el formulario (por ejemplo, por carga de archivos), un colaborador puede ayudarte con el alta y/o visitarte.
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-wa" id="sendWaBtn" type="button">
+          <i class="fa-brands fa-whatsapp"></i> Enviar WhatsApp ahora
+        </button>
+        <button class="btn-muted" id="cancelBtn" type="button">
+          <i class="fa-solid fa-xmark"></i> Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // ===== Theme (misma key del sistema)
+    // ======================
+    // CONFIG
+    // ======================
+    const FORM_LINK = "https://forms.gle/E6JYgV8WosWtZhwy9";
+
+    // ⚠️ IMPORTANTE:
+    // Poné acá el WhatsApp DEL EQUIPO / COLABORADOR que recibe pedidos de contacto.
+    // Formato recomendado: código país + número (Argentina: 54 + 9 + característica + número)
+    // Ej: "5492641234567"
+    const TEAM_WA = "5490000000000";
+
+    // (Opcional) Nombre del sistema/ciudad para el mensaje
+    const BRAND_LABEL = "INDX";
+
+    // ======================
+    // THEME (misma key del sistema)
+    // ======================
     const THEME_KEY = "indx_theme";
     const themeToggle = document.getElementById("themeToggle");
 
@@ -650,6 +890,7 @@
       const isDark = document.body.dataset.theme === "dark";
       setTheme(isDark ? "light" : "dark");
     });
+    initTheme();
 
     // Back
     document.getElementById("backBtn").addEventListener("click", ()=>{
@@ -657,8 +898,7 @@
       else location.href = "./index.html";
     });
 
-    // Copy form link (editalo con tu link real)
-    const FORM_LINK = "https://forms.gle/PEGAR_TU_LINK";
+    // Copy link
     const copyLinkBtn = document.getElementById("copyLinkBtn");
     copyLinkBtn.addEventListener("click", async ()=>{
       try{
@@ -670,31 +910,98 @@
       }
     });
 
-    // Embed lazy-load (carga el iframe solo cuando hace falta)
-    const iframe = document.getElementById("formsEmbed");
-    const dataSrc = iframe.getAttribute("data-src");
-    function loadEmbed(){
-      if(!iframe.src && dataSrc && dataSrc.includes("docs.google.com/forms")){
-        iframe.src = dataSrc;
-      }
+    // ======================
+    // MODAL: Quiero que me contacten
+    // ======================
+    const modal = document.getElementById("contactModal");
+    const openBtns = [document.getElementById("contactMeBtn"), document.getElementById("contactMeBtn2")].filter(Boolean);
+    const closeBtn = document.getElementById("modalCloseBtn");
+    const cancelBtn = document.getElementById("cancelBtn");
+    const sendBtn = document.getElementById("sendWaBtn");
+    const errBox = document.getElementById("mErr");
+
+    const fNombre = document.getElementById("mNombre");
+    const fTelefono = document.getElementById("mTelefono");
+    const fUbic = document.getElementById("mUbicacion");
+    const fHorario = document.getElementById("mHorario");
+    const fNotas = document.getElementById("mNotas");
+
+    function digitsOnly(s){ return (s || "").toString().replace(/\D/g, ""); }
+
+    function openModal(){
+      modal.classList.add("show");
+      modal.setAttribute("aria-hidden", "false");
+      errBox.style.display = "none";
+      setTimeout(()=> fNombre.focus(), 50);
+    }
+    function closeModal(){
+      modal.classList.remove("show");
+      modal.setAttribute("aria-hidden", "true");
+      errBox.style.display = "none";
     }
 
-    // Si querés que el embed se cargue siempre al abrir:
-    // loadEmbed();
+    openBtns.forEach(b=> b.addEventListener("click", openModal));
+    closeBtn.addEventListener("click", closeModal);
+    cancelBtn.addEventListener("click", closeModal);
 
-    // Mejor: cargar cuando el usuario baja hasta el formulario
-    const obs = new IntersectionObserver((entries)=>{
-      entries.forEach(e=>{
-        if(e.isIntersecting){
-          loadEmbed();
-          obs.disconnect();
-        }
-      });
-    }, { rootMargin: "200px" });
-    obs.observe(document.getElementById("embedBox"));
+    modal.addEventListener("click", (e)=>{ if(e.target === modal) closeModal(); });
+    window.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeModal(); });
 
-    // Init
-    initTheme();
+    // Normalizar teléfono mientras escribe
+    fTelefono.addEventListener("input", ()=>{
+      // no forzamos formato, solo limpiamos repetidos raros
+      fTelefono.value = fTelefono.value.replace(/[^\d+()\s-]/g, "");
+    });
+
+    function buildMessage(){
+      const nombre = (fNombre.value || "").trim();
+      const tel = (fTelefono.value || "").trim();
+      const ubic = (fUbic.value || "").trim();
+      const horario = (fHorario.value || "").trim();
+      const notas = (fNotas.value || "").trim();
+
+      return [
+        `Hola ${BRAND_LABEL}, quiero que me contacten para sumarme.`,
+        ``,
+        `👤 Nombre: ${nombre || "-"}`,
+        `📞 Teléfono/WhatsApp: ${tel || "-"}`,
+        `📍 Ubicación: ${ubic || "-"}`,
+        `🕒 Horario de visita: ${horario || "-"}`,
+        notas ? `📝 Notas: ${notas}` : null,
+        ``,
+        `Motivo: No puedo / no sé completar el formulario o prefiero que me visiten.`
+      ].filter(Boolean).join("\n");
+    }
+
+    function openWhatsApp(phoneDigits, text){
+      const phone = digitsOnly(phoneDigits);
+      const msg = encodeURIComponent(text || "");
+      // wa.me funciona bien en móvil/desktop; si no hay WhatsApp, abre web.whatsapp.com en desktop
+      const url = `https://wa.me/${phone}?text=${msg}`;
+      window.open(url, "_blank", "noopener");
+    }
+
+    sendBtn.addEventListener("click", ()=>{
+      const nombre = (fNombre.value || "").trim();
+      const tel = (fTelefono.value || "").trim();
+      const ubic = (fUbic.value || "").trim();
+
+      if(!nombre || digitsOnly(tel).length < 8 || !ubic){
+        errBox.style.display = "block";
+        errBox.innerHTML = 'Completá al menos <b>Nombre</b>, <b>Teléfono</b> (mín. 8 dígitos) y <b>Ubicación</b>.';
+        return;
+      }
+
+      if(digitsOnly(TEAM_WA).length < 10){
+        errBox.style.display = "block";
+        errBox.innerHTML = 'Falta configurar el WhatsApp receptor. Editá <b>TEAM_WA</b> en el script.';
+        return;
+      }
+
+      const msg = buildMessage();
+      openWhatsApp(TEAM_WA, msg);
+      closeModal();
+    });
   </script>
 </body>
 </html>
