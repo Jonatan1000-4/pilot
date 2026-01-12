@@ -73,7 +73,6 @@
     button,input,select{ font:inherit; }
     :focus-visible{ outline:none; box-shadow: var(--glow); border-radius: 14px; }
 
-    /* Fondo premium */
     .bgfx{
       position:fixed; inset:0; z-index:-2; pointer-events:none;
       background:
@@ -91,7 +90,6 @@
 
     .container{ width:min(var(--max), calc(100% - 22px)); margin:0 auto; }
 
-    /* HEADER */
     header{
       position:sticky; top:0; z-index:50;
       background: rgba(255,255,255,.60);
@@ -142,10 +140,7 @@
     }
     .icon-btn:hover{ transform: translateY(-1px); }
 
-    /* HERO bienvenida */
-    .hero{
-      padding: 8px 0 10px;
-    }
+    .hero{ padding: 8px 0 10px; }
     .heroCard{
       border:1px solid var(--line);
       background: linear-gradient(135deg, rgba(45,91,255,.12), rgba(14,165,233,.08), rgba(16,185,129,.06));
@@ -165,9 +160,7 @@
       gap:12px;
       flex-wrap:wrap;
     }
-    .heroTitle{
-      display:flex; gap:10px; align-items:flex-start;
-    }
+    .heroTitle{ display:flex; gap:10px; align-items:flex-start; }
     .heroIcon{
       width:42px; height:42px;
       border-radius: 16px;
@@ -193,7 +186,6 @@
       max-width: 520px;
     }
 
-    /* FILTERS */
     .filters{
       display:grid;
       grid-template-columns: 1fr 1fr;
@@ -275,7 +267,6 @@
       box-shadow: var(--shadow2);
     }
 
-    /* CHIPS (estado eventos / modo vista) */
     .chips{
       display:flex; gap:10px; overflow-x:auto;
       padding: 0 0 12px; -webkit-overflow-scrolling: touch;
@@ -315,14 +306,12 @@
       font-weight: 850;
     }
 
-    /* VIEWS WRAP */
     .views{
       width:min(var(--max), calc(100% - 22px));
       margin: 0 auto;
       padding: 12px 0 26px;
     }
 
-    /* ===== VIEW 1: FLYERS / CAROUSEL ===== */
     .flyerWrap{
       border: 1px solid var(--line);
       border-radius: var(--r26);
@@ -367,10 +356,7 @@
     }
     .miniBtn:hover{ transform: translateY(-1px); }
 
-    .flyerBody{
-      padding: 12px;
-    }
-
+    .flyerBody{ padding: 12px; }
     .flyerFrame{
       border-radius: var(--r22);
       overflow:hidden;
@@ -386,16 +372,13 @@
       display:block;
       filter: saturate(1.05) contrast(1.04);
     }
-    @media (max-width: 640px){
-      .flyerImg{ height: 320px; }
-    }
+    @media (max-width: 640px){ .flyerImg{ height: 320px; } }
 
     .flyerOverlay{
       position:absolute; inset:0;
       background: linear-gradient(to top, rgba(0,0,0,.62), rgba(0,0,0,.08), transparent);
       pointer-events:none;
     }
-
     .flyerMeta{
       position:absolute;
       left:12px; right:12px; bottom:12px;
@@ -406,9 +389,7 @@
       justify-content:space-between;
       gap:12px;
     }
-    .flyerMeta .info{
-      min-width:0;
-    }
+    .flyerMeta .info{ min-width:0; }
     .flyerMeta .title{
       font-weight: 950;
       letter-spacing:.2px;
@@ -442,6 +423,12 @@
     .pill.warn{ border-color: rgba(255, 209, 102, 0.75); }
     .pill.bad{ border-color: rgba(255, 80, 80, 0.75); }
 
+    /* NUEVO: countdown pill */
+    .pill.count{
+      border-color: rgba(255,255,255,.35);
+    }
+    .pill.count i{ opacity:.95; }
+
     .flyerDots{
       display:flex; justify-content:center; gap:8px;
       padding: 12px 8px 2px;
@@ -462,7 +449,6 @@
       border-color: rgba(45,91,255,.35);
     }
 
-    /* ===== VIEW 2: GRID LIST ===== */
     .grid{
       margin-top: 14px;
       display:grid;
@@ -569,7 +555,6 @@
       color: var(--text);
     }
 
-    /* Modal */
     .modal{
       position:fixed; inset:0;
       background: rgba(0,0,0,.42);
@@ -641,9 +626,7 @@
       object-fit: cover;
       display:block;
     }
-    @media (max-width: 640px){
-      .sheetMedia img{ height: 220px; }
-    }
+    @media (max-width: 640px){ .sheetMedia img{ height: 220px; } }
 
     .sheetTitle{
       font-weight: 950;
@@ -689,6 +672,29 @@
       text-overflow:ellipsis;
     }
 
+    /* NUEVO: countdown en modal */
+    .countBox{
+      border:1px dashed rgba(45,91,255,.32);
+      background: rgba(45,91,255,.06);
+      border-radius: 18px;
+      padding: 10px 12px;
+      box-shadow: var(--shadow2);
+    }
+    .countBox b{
+      display:block;
+      font-size: 11px;
+      letter-spacing:.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 950;
+    }
+    .countBox .t{
+      margin-top:6px;
+      font-weight: 1000;
+      font-size: 14px;
+      letter-spacing: .2px;
+    }
+
     .sheetActions{
       display:flex;
       gap:10px;
@@ -719,7 +725,6 @@
     }
     .action:hover{ transform: translateY(-1px); }
 
-    /* Skeleton */
     .skeleton{ position:relative; overflow:hidden; background: rgba(255,255,255,.10); border-radius: 16px; }
     [data-theme="dark"] .skeleton{ background: rgba(255,255,255,.06); }
     .skeleton::after{
@@ -731,18 +736,15 @@
     }
     @keyframes sk{ 0%{ transform: translateX(-60%); } 100%{ transform: translateX(60%); } }
 
-    /* Responsive grid */
-    @media (max-width: 980px){
-      .card{ grid-column: span 6; }
-    }
+    @media (max-width: 980px){ .card{ grid-column: span 6; } }
     @media (max-width: 640px){
-      .card{ grid-column: span 6; } /* 2 por fila en móvil */
+      .card{ grid-column: span 6; }
       .card img{ height: 150px; }
       .grid{ gap: 12px; }
       .sheetGrid{ grid-template-columns: 1fr; }
     }
     @media (max-width: 380px){
-      .card{ grid-column: span 12; } /* ultra chico: 1 */
+      .card{ grid-column: span 12; }
       .card img{ height: 170px; }
     }
 
@@ -756,7 +758,6 @@
       font-weight:850;
     }
 
-    /* Ocultar vistas */
     .hidden{ display:none !important; }
   </style>
 </head>
@@ -817,13 +818,13 @@
         <div class="select" title="Zona / distrito">
           <span>📍</span>
           <select id="districtSelect">
-          <option value="">Todos los distritos</option>
-          <option value="4">Bella Vista</option>
-          <option value="2">Rodeo</option>
-          <option value="5">Villa Iglesia</option>
-          <option value="1">Las Flores</option>
-          <option value="3">Tudcum</option>
-        </select>
+            <option value="">Todos los distritos</option>
+            <option value="4">Bella Vista</option>
+            <option value="2">Rodeo</option>
+            <option value="5">Villa Iglesia</option>
+            <option value="1">Las Flores</option>
+            <option value="3">Tudcum</option>
+          </select>
         </div>
 
         <button class="btn ghost" id="clearBtn" type="button" title="Limpiar filtros">
@@ -848,7 +849,6 @@
   </header>
 
   <section class="views" id="views">
-    <!-- VIEW: Flyers -->
     <div class="flyerWrap" id="flyerView">
       <div class="flyerHead">
         <div class="t"><i class="fa-solid fa-images"></i> Presentación de Eventos</div>
@@ -869,6 +869,7 @@
               <div class="title" id="flyerTitle">Cargando...</div>
               <div class="sub" id="flyerSub">—</div>
             </div>
+            <!-- acá alterna: estado o countdown -->
             <div class="pill" id="flyerPill"><i class="fa-solid fa-calendar-day"></i> —</div>
           </div>
         </div>
@@ -877,13 +878,11 @@
       </div>
     </div>
 
-    <!-- VIEW: Lista -->
     <div class="grid" id="listView"></div>
   </section>
 
   <footer>© 2026 INDX • Eventos del Departamento de Iglesia</footer>
 
-  <!-- MODAL -->
   <div class="modal" id="modal">
     <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
       <div class="sheetHead">
@@ -898,6 +897,12 @@
 
         <div class="sheetTitle" id="modalName">—</div>
         <div class="sheetDesc" id="modalDesc">—</div>
+
+        <!-- NUEVO: countdown -->
+        <div class="countBox hidden" id="countBox">
+          <b>FALTAN</b>
+          <div class="t" id="countText">—</div>
+        </div>
 
         <div class="sheetGrid">
           <div class="infoBox">
@@ -928,6 +933,10 @@
           <button class="action" id="actionMap" type="button">
             <i class="fa-solid fa-location-dot"></i> Ver mapa
           </button>
+          <!-- NUEVO -->
+          <button class="action hidden" id="actionLive" type="button">
+            <i class="fa-solid fa-tower-broadcast"></i> Ver en vivo
+          </button>
         </div>
       </div>
     </div>
@@ -937,7 +946,6 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-    // ===== Firebase (tu config actual)
     const firebaseConfig = {
       apiKey: "AIzaSyDYNLhKi2h_JoPlDYK9_ZhKaHnKQ3DJhbk",
       authDomain: "cweb-ac414.firebaseapp.com",
@@ -950,7 +958,6 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // ===== THEME (misma key que venís usando en INDX)
     const THEME_KEY = "indx_theme";
     const themeToggle = document.getElementById("themeToggle");
 
@@ -961,9 +968,7 @@
     }
     function initTheme(){
       const saved = localStorage.getItem(THEME_KEY);
-      if(saved === "dark" || saved === "light"){
-        setTheme(saved); return;
-      }
+      if(saved === "dark" || saved === "light"){ setTheme(saved); return; }
       const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
       setTheme(prefersDark ? "dark" : "light");
     }
@@ -972,7 +977,6 @@
       setTheme(isDark ? "light" : "dark");
     });
 
-    // ===== DOM
     const backBtn = document.getElementById("backBtn");
     const gotoCatalogBtn = document.getElementById("gotoCatalogBtn");
     const refreshBtn = document.getElementById("refreshBtn");
@@ -989,7 +993,6 @@
     const viewFlyers = document.getElementById("viewFlyers");
     const viewList = document.getElementById("viewList");
 
-    // Flyers UI
     const flyerImg = document.getElementById("flyerImg");
     const flyerTitle = document.getElementById("flyerTitle");
     const flyerSub = document.getElementById("flyerSub");
@@ -999,7 +1002,6 @@
     const nextFlyer = document.getElementById("nextFlyer");
     const openCurrent = document.getElementById("openCurrent");
 
-    // Modal
     const modal = document.getElementById("modal");
     const closeModal = document.getElementById("closeModal");
     const modalTitle = document.getElementById("modalTitle");
@@ -1013,8 +1015,23 @@
     const actionWhats = document.getElementById("actionWhats");
     const actionCall = document.getElementById("actionCall");
     const actionMap = document.getElementById("actionMap");
+    const actionLive = document.getElementById("actionLive");
 
-    // ===== Utils
+    const countBox = document.getElementById("countBox");
+    const countText = document.getElementById("countText");
+
+    const DISTRICT_MAP = {
+      "1":"Las Flores",
+      "2":"Rodeo",
+      "3":"Tudcum",
+      "4":"Bella Vista",
+      "5":"Villa Iglesia"
+    };
+    const districtName = (codeOrName) => {
+      const v = (codeOrName ?? "").toString().trim();
+      return DISTRICT_MAP[v] || v || "Sin zona";
+    };
+
     const slugify = (s) => (s || "")
       .toString()
       .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
@@ -1022,25 +1039,62 @@
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/(^-|-$)/g, "");
 
-    function parseDateMaybe(d){
-      if(!d) return null;
-      if(d.toDate) return d.toDate();
-      const dt = new Date(d);
-      return isNaN(dt.getTime()) ? null : dt;
+    // === FIX CLAVE: parseo dd/mm/yyyy hh:mm + Timestamp + ISO + ms
+    function parseDateMaybe(value){
+      if(!value) return null;
+
+      // Firestore Timestamp
+      if (typeof value === "object" && value?.toDate) {
+        const d = value.toDate();
+        return isNaN(d.getTime()) ? null : d;
+      }
+
+      // Date ya construido
+      if (value instanceof Date) {
+        return isNaN(value.getTime()) ? null : value;
+      }
+
+      // number (ms)
+      if (typeof value === "number") {
+        const d = new Date(value);
+        return isNaN(d.getTime()) ? null : d;
+      }
+
+      const s = value.toString().trim();
+      if(!s) return null;
+
+      // dd/mm/yyyy hh:mm (como tu admin)
+      // Ej: "16/01/2026 17:00"
+      const m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})(?:\s+(\d{1,2}):(\d{2}))?$/);
+      if(m){
+        const dd = parseInt(m[1],10);
+        const mm = parseInt(m[2],10) - 1;
+        const yyyy = parseInt(m[3],10);
+        const hh = m[4] ? parseInt(m[4],10) : 0;
+        const min = m[5] ? parseInt(m[5],10) : 0;
+        const d = new Date(yyyy, mm, dd, hh, min, 0);
+        return isNaN(d.getTime()) ? null : d;
+      }
+
+      // ISO u otros parseables
+      const d = new Date(s);
+      return isNaN(d.getTime()) ? null : d;
     }
-    function fmtDate(d){
+
+    function fmtDateTime(d){
       if(!d) return "Sin fecha";
       try{
-        return new Intl.DateTimeFormat("es-AR", { dateStyle:"medium" }).format(d);
+        return new Intl.DateTimeFormat("es-AR", { dateStyle:"medium", timeStyle:"short" }).format(d);
       }catch{
-        return d.toLocaleDateString();
+        return d.toLocaleString();
       }
     }
+
     function fmtRange(ini, fin){
       const a = parseDateMaybe(ini);
       const b = parseDateMaybe(fin);
-      if(a && b) return `${fmtDate(a)} → ${fmtDate(b)}`;
-      if(a && !b) return fmtDate(a);
+      if(a && b) return `${fmtDateTime(a)} → ${fmtDateTime(b)}`;
+      if(a && !b) return fmtDateTime(a);
       return "Sin fecha";
     }
 
@@ -1049,43 +1103,98 @@
       return u ? u : "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=60";
     }
 
-    // Estado del evento
-    function eventState(v){
-      const ini = parseDateMaybe(v.fechaInicio || v.inicio || v.startDate);
-      const fin = parseDateMaybe(v.fechaFin || v.fin || v.endDate);
-      const now = new Date();
-
-      if(ini && fin){
-        if(now < ini) return { key:"proximos", label:"Próximo", kind:"warn" };
-        if(now > fin) return { key:"pasados", label:"Finalizado", kind:"bad" };
-        return { key:"en_curso", label:"En curso", kind:"ok" };
-      }
-      if(ini && !fin){
-        if(now < ini) return { key:"proximos", label:"Próximo", kind:"warn" };
-        return { key:"en_curso", label:"Activo", kind:"ok" };
-      }
-      return { key:"todos", label:"Evento", kind:"warn" };
-    }
-
     function normTipo(t){
       const v = (t || "").toString().toLowerCase().trim();
       if(v === "eventos") return "evento";
       return v;
     }
 
+    // === Estado del evento por fechas
+    function eventState(v){
+  const ini = getEventStart(v);
+  const fin = getEventEnd(v);
+  const now = new Date();
+
+  if(ini && fin){
+    if(now < ini) return { key:"proximos", label:"Próximo", kind:"warn" };
+    if(now > fin) return { key:"pasados", label:"Finalizado", kind:"bad" };
+    return { key:"en_curso", label:"En curso", kind:"ok" };
+  }
+  if(ini && !fin){
+    if(now < ini) return { key:"proximos", label:"Próximo", kind:"warn" };
+    return { key:"en_curso", label:"En curso", kind:"ok" };
+  }
+  return { key:"todos", label:"Evento", kind:"warn" };
+}
+
+
+    // === Countdown
+    function msToCountdown(ms){
+      if(ms <= 0) return "¡Arrancó!";
+      const sec = Math.floor(ms/1000);
+      const d = Math.floor(sec/86400);
+      const h = Math.floor((sec%86400)/3600);
+      const m = Math.floor((sec%3600)/60);
+      const s = sec%60;
+
+      if(d > 0) return `${d}d ${h}h ${m}m`;
+      if(h > 0) return `${h}h ${m}m ${s}s`;
+      return `${m}m ${s}s`;
+    }
+function getEventStart(v){
+  // Prioridad: ms (lo más confiable) > ISO string > otros legacy
+  return parseDateMaybe(
+    v?.evento?.inicio_ms ??
+    v?.evento?.fecha_inicio ??
+    v?.inicio_ms ??
+    v?.fecha_inicio ??
+    v?.fechaInicio ??
+    v?.inicio ??
+    v?.startDate
+  );
+}
+
+function getEventEnd(v){
+  return parseDateMaybe(
+    v?.evento?.fin_ms ??
+    v?.evento?.fecha_fin ??
+    v?.fin_ms ??
+    v?.fecha_fin ??
+    v?.fechaFin ??
+    v?.fin ??
+    v?.endDate
+  );
+}
+
+
+    function getLiveLink(v){
+      // toma "sitio web" según tu idea: redes.web o web o sitio_web o enVivo
+      const a = (v?.redes?.web || "").toString().trim();
+      const b = (v?.web || "").toString().trim();
+      const c = (v?.sitio_web || "").toString().trim();
+      const d = (v?.enVivo || v?.en_vivo || "").toString().trim();
+      const link = a || b || c || d;
+      if(!link) return "";
+      // si no tiene protocolo, lo corregimos
+      if(/^https?:\/\//i.test(link)) return link;
+      return "https://" + link;
+    }
+
     // ===== State
     let allEvents = [];
     let filtered = [];
     let selectedState = "todos";
-    let currentView = "flyers"; // flyers | lista
+    let currentView = "flyers";
     let flyerIndex = 0;
 
-    // ===== Navigation
+    // timers (evita duplicados)
+    let flyerTimer = null;
+    let modalTimer = null;
+
     backBtn.addEventListener("click", ()=> history.length > 1 ? history.back() : (location.href="./index.html"));
     gotoCatalogBtn.addEventListener("click", ()=> location.href = "./catalogo.html?tipo=evento");
     refreshBtn.addEventListener("click", ()=> loadEvents(true));
 
-    // ===== Chips estado
     stateChips.querySelectorAll(".chip").forEach(ch => {
       const st = ch.dataset.state;
       const vw = ch.dataset.view;
@@ -1113,20 +1222,18 @@
       }
     });
 
-    // ===== UI events
     input.addEventListener("input", ()=> applyFilters());
     selectDistrito.addEventListener("change", ()=> applyFilters());
 
     clearBtn.addEventListener("click", ()=>{
       input.value = "";
-      selectDistrito.value = "todos";
+      selectDistrito.value = ""; // ✅ el option "Todos" es value=""
       selectedState = "todos";
       stateChips.querySelectorAll(".chip[data-state]").forEach(x=>x.classList.remove("active"));
       stateChips.querySelector('.chip[data-state="todos"]').classList.add("active");
       applyFilters();
     });
 
-    // ===== Flyers controls
     prevFlyer.addEventListener("click", ()=>{
       if(!filtered.length) return;
       flyerIndex = (flyerIndex - 1 + filtered.length) % filtered.length;
@@ -1142,8 +1249,10 @@
       openEventModal(filtered[flyerIndex]);
     });
 
-    // ===== Modal
     function openEventModal(v){
+      // limpia timer previo
+      if(modalTimer){ clearInterval(modalTimer); modalTimer = null; }
+
       const st = eventState(v);
 
       modalTitle.textContent = (v.nombre || "Evento").toString();
@@ -1151,24 +1260,31 @@
       modalDesc.textContent = (v.descripcion || "Sin descripción").toString();
       modalImg.src = safeImg(v.imagen);
 
+      const ini = getEventStart(v);
+      const fin = getEventEnd(v);
+
       modalState.textContent = st.label;
-      modalDate.textContent = fmtRange(v.fechaInicio || v.inicio || v.startDate, v.fechaFin || v.fin || v.endDate);
-      modalZone.textContent = (v.distrito || "Sin zona").toString();
+      modalDate.textContent = fmtRange(ini, fin);
+
+      const zonaLabel = districtName(v.distrito);
+      modalZone.textContent = zonaLabel;
       modalPlace.textContent = (v.ubicacion || v.direccion || "Sin ubicación").toString();
 
-      // Acciones
+      // Acciones (WA, TEL, MAPS)
       const phone = (v.telefono || "").toString().trim();
       const wa = (v.whatsapp || phone || "").toString().replace(/\s+/g,'').trim();
-      const maps = (v.maps || "").toString().trim();
+      const maps = (v.mapLink || v.maps || v.map || v.map_url || "").toString().trim(); // ✅ incluye mapLink
 
       actionWhats.disabled = !wa;
       actionCall.disabled = !phone;
-      actionMap.disabled = !(maps || v.ubicacion || v.direccion);
+
+      const hasMap = !!maps || !!(v.ubicacion || v.direccion);
+      actionMap.disabled = !hasMap;
 
       actionWhats.onclick = ()=>{
         if(!wa) return;
         const msg = encodeURIComponent(`Hola! Quiero info sobre el evento: ${v.nombre || ""}`);
-        const num = wa.replace(/[^\d]/g,''); // solo números
+        const num = wa.replace(/[^\d]/g,'');
         window.open(`https://wa.me/${num}?text=${msg}`, "_blank");
       };
 
@@ -1182,68 +1298,92 @@
           window.open(maps, "_blank");
           return;
         }
-        const q = encodeURIComponent(`${v.ubicacion || v.direccion || v.distrito || "Iglesia San Juan"}`);
+        const q = encodeURIComponent(`${v.ubicacion || v.direccion || zonaLabel || "Iglesia San Juan"}`);
         window.open(`https://www.google.com/maps/search/?api=1&query=${q}`, "_blank");
       };
+
+      // Ver en vivo (si hay link)
+      const live = getLiveLink(v);
+      if(live){
+        actionLive.classList.remove("hidden");
+        actionLive.onclick = ()=> window.open(live, "_blank");
+      }else{
+        actionLive.classList.add("hidden");
+        actionLive.onclick = null;
+      }
+
+      // Countdown modal (si es próximo y tiene inicio)
+      if(ini && st.key === "proximos"){
+        countBox.classList.remove("hidden");
+        const tick = ()=>{
+          const diff = ini.getTime() - Date.now();
+          countText.textContent = msToCountdown(diff);
+          if(diff <= 0){
+            // si arrancó, actualizamos estado
+            countText.textContent = "¡Arrancó!";
+          }
+        };
+        tick();
+        modalTimer = setInterval(tick, 1000);
+      }else{
+        countBox.classList.add("hidden");
+        countText.textContent = "—";
+      }
 
       modal.classList.add("show");
     }
 
     function closeEventModal(){
       modal.classList.remove("show");
+      if(modalTimer){ clearInterval(modalTimer); modalTimer = null; }
     }
     closeModal.addEventListener("click", closeEventModal);
     modal.addEventListener("click", (e)=>{ if(e.target === modal) closeEventModal(); });
     document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeEventModal(); });
 
-    // ===== Render
     function applyFilters(){
       const q = (input.value || "").toLowerCase().trim();
-      const zona = (selectDistrito.value || "todos");
+      const zona = (selectDistrito.value || "");
 
       filtered = allEvents.filter(v => {
-        // zona
-        if(zona !== "todos"){
-          const dv = slugify(v.distrito);
-          if(dv !== slugify(zona)) return false;
+        if(zona){
+          const dv = (v.distrito ?? "").toString().trim();
+          if(dv !== zona) return false;
         }
 
-        // estado
         if(selectedState !== "todos"){
           const st = eventState(v);
           if(st.key !== selectedState) return false;
         }
 
-        // búsqueda
         if(q){
           const n = (v.nombre || "").toString().toLowerCase();
           const d = (v.descripcion || "").toString().toLowerCase();
-          const z = (v.distrito || "").toString().toLowerCase();
+          const z = districtName(v.distrito).toLowerCase();
           const p = (v.ubicacion || v.direccion || "").toString().toLowerCase();
           return n.includes(q) || d.includes(q) || z.includes(q) || p.includes(q);
         }
         return true;
       });
 
-      // Orden pro: En curso > Próximos > Pasados, y luego por fechaInicio
       const orderKey = { en_curso:0, proximos:1, pasados:2, todos:3 };
       filtered.sort((a,b)=>{
         const sa = eventState(a).key;
         const sb = eventState(b).key;
         if(orderKey[sa] !== orderKey[sb]) return orderKey[sa] - orderKey[sb];
 
-        const da = parseDateMaybe(a.fechaInicio || a.inicio || a.startDate) || new Date(8640000000000000);
-        const db = parseDateMaybe(b.fechaInicio || b.inicio || b.startDate) || new Date(8640000000000000);
+        const da = getEventStart(a) || new Date(8640000000000000);
+        const db = getEventStart(b) || new Date(8640000000000000);
         return da - db;
       });
 
-      resultsInfo.textContent = `${filtered.length} evento(s) • ${selectedState === "todos" ? "todos" : selectedState.replace("_"," ")} • ${zona === "todos" ? "toda la zona" : zona}`;
+      const zonaTxt = zona ? districtName(zona) : "toda la zona";
+      resultsInfo.textContent = `${filtered.length} evento(s) • ${selectedState === "todos" ? "todos" : selectedState.replace("_"," ")} • ${zonaTxt}`;
       flyerIndex = 0;
       renderViews();
     }
 
     function renderViews(){
-      // alternar vistas
       if(currentView === "flyers"){
         flyerView.classList.remove("hidden");
         listView.classList.add("hidden");
@@ -1255,8 +1395,38 @@
       }
     }
 
+    function setFlyerCountdown(v){
+      // limpia timer previo
+      if(flyerTimer){ clearInterval(flyerTimer); flyerTimer = null; }
+
+      const ini = getEventStart(v);
+      const st = eventState(v);
+
+      // si es próximo y tiene inicio, mostramos countdown en la pill
+      if(ini && st.key === "proximos"){
+        flyerPill.className = "pill count";
+        const tick = ()=>{
+          const diff = ini.getTime() - Date.now();
+          flyerPill.innerHTML = `<i class="fa-solid fa-hourglass-half"></i> ${msToCountdown(diff)}`;
+          if(diff <= 0){
+            flyerPill.className = "pill ok";
+            flyerPill.innerHTML = `<i class="fa-solid fa-circle-check"></i> En curso`;
+          }
+        };
+        tick();
+        flyerTimer = setInterval(tick, 1000);
+        return;
+      }
+
+      // caso normal: estado
+      flyerPill.className = `pill ${st.kind}`;
+      const icon = st.kind === "ok" ? "fa-circle-check" : (st.kind === "bad" ? "fa-circle-xmark" : "fa-clock");
+      flyerPill.innerHTML = `<i class="fa-solid ${icon}"></i> ${st.label}`;
+    }
+
     function renderFlyer(){
       if(!filtered.length){
+        if(flyerTimer){ clearInterval(flyerTimer); flyerTimer = null; }
         flyerImg.src = safeImg("");
         flyerTitle.textContent = "No hay eventos con estos filtros";
         flyerSub.textContent = "Probá cambiar zona, estado o búsqueda.";
@@ -1267,23 +1437,17 @@
       }
 
       const v = filtered[flyerIndex];
-      const st = eventState(v);
-
       flyerImg.src = safeImg(v.imagen);
       flyerTitle.textContent = (v.nombre || "Evento").toString();
 
-      const zona = (v.distrito || "Zona").toString();
-      const fechaTxt = fmtRange(v.fechaInicio || v.inicio || v.startDate, v.fechaFin || v.fin || v.endDate);
+      const zona = districtName(v.distrito);
+      const fechaTxt = fmtRange(getEventStart(v), getEventEnd(v));
       flyerSub.textContent = `${zona} • ${fechaTxt}`;
 
-      flyerPill.className = `pill ${st.kind}`;
-      const icon = st.kind === "ok" ? "fa-circle-check" : (st.kind === "bad" ? "fa-circle-xmark" : "fa-clock");
-      flyerPill.innerHTML = `<i class="fa-solid ${icon}"></i> ${st.label}`;
+      setFlyerCountdown(v);
 
-      // dots
       flyerDots.innerHTML = "";
       const maxDots = Math.min(filtered.length, 12);
-      // Si hay más de 12, mostramos 12 y listo (evita quilombo visual)
       for(let i=0;i<maxDots;i++){
         const d = document.createElement("div");
         d.className = "dot" + (i === flyerIndex ? " active" : "");
@@ -1295,7 +1459,6 @@
         flyerDots.appendChild(d);
       }
 
-      // click en flyer abre modal
       document.getElementById("flyerFrame").onclick = ()=> openEventModal(v);
     }
 
@@ -1314,8 +1477,8 @@
       filtered.forEach((v)=>{
         const st = eventState(v);
         const img = safeImg(v.imagen);
-        const zona = (v.distrito || "Zona").toString();
-        const fechaTxt = fmtRange(v.fechaInicio || v.inicio || v.startDate, v.fechaFin || v.fin || v.endDate);
+        const zona = districtName(v.distrito);
+        const fechaTxt = fmtRange(getEventStart(v), getEventEnd(v));
 
         const card = document.createElement("div");
         card.className = "card";
@@ -1356,7 +1519,6 @@
       });
     }
 
-    // Skeleton (flyer + list)
     function paintLoading(){
       resultsInfo.textContent = "Cargando eventos...";
       flyerImg.src = safeImg("");
@@ -1388,18 +1550,13 @@
       }
     }
 
-    // Load events from Firestore
-    async function loadEvents(force=false){
+    async function loadEvents(){
       paintLoading();
       try{
         const snapshot = await getDocs(collection(db, "comercios"));
         const docs = snapshot.docs.map(d => ({ id: d.id, ...(d.data() || {}) }));
 
-        // Filtrar SOLO eventos
         allEvents = docs.filter(v => normTipo(v.tipo) === "evento");
-
-        // Si no cargaste tipo en algunos, podrías activar esto:
-        // allEvents = docs.filter(v => (normTipo(v.tipo) === "evento") || (slugify(v.categoria||v.rubro).includes("evento")));
 
         applyFilters();
       }catch(e){
@@ -1413,11 +1570,8 @@
       }
     }
 
-    // ===== Init
     initTheme();
     loadEvents();
-
-    // auto refresh suave cada 2 min (por cambios de estado)
     setInterval(()=> loadEvents(), 120000);
   </script>
 </body>
