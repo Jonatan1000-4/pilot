@@ -1,0 +1,1424 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>INDX | Eventos</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+  <style>
+    :root{
+      --primary:#2D5BFF;
+      --primary-dark:#1A3EBF;
+      --sky:#0EA5E9;
+      --ok:#10B981;
+      --danger:#EF4444;
+
+      --bg:#F6F7FB;
+      --surface: rgba(255,255,255,.76);
+      --panel: rgba(255,255,255,.86);
+      --card: rgba(255,255,255,.92);
+
+      --text:#0B1220;
+      --muted:#5B667A;
+      --line: rgba(12,18,32,.10);
+
+      --shadow: 0 18px 60px rgba(11,18,32,.10);
+      --shadow2: 0 10px 26px rgba(11,18,32,.08);
+      --glow: 0 0 0 3px rgba(45,91,255,0.20);
+
+      --r14:14px;
+      --r18:18px;
+      --r22:22px;
+      --r26:26px;
+
+      --max:1200px;
+
+      --chip: rgba(255,255,255,0.62);
+      --chip-border: rgba(12,18,32,.10);
+
+      --transition: all .22s ease;
+    }
+
+    [data-theme="dark"]{
+      --bg:#070A10;
+      --surface: rgba(15,23,42,.65);
+      --panel: rgba(15,23,42,.80);
+      --card: rgba(15,23,42,.88);
+      --text:#F8FAFC;
+      --muted:#A3B2C7;
+      --line: rgba(255,255,255,.08);
+
+      --shadow: 0 18px 70px rgba(0,0,0,.45);
+      --shadow2: 0 10px 30px rgba(0,0,0,.35);
+      --chip: rgba(15,23,42,0.55);
+      --chip-border: rgba(255,255,255,.10);
+    }
+
+    *{ box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color: transparent; }
+    body{
+      font-family:'Plus Jakarta Sans',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background: var(--bg);
+      color:var(--text);
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      overflow-x:hidden;
+    }
+    a{ color:inherit; text-decoration:none; }
+    button,input,select{ font:inherit; }
+    :focus-visible{ outline:none; box-shadow: var(--glow); border-radius: 14px; }
+
+    /* Fondo premium */
+    .bgfx{
+      position:fixed; inset:0; z-index:-2; pointer-events:none;
+      background:
+        radial-gradient(900px 520px at 10% -10%, rgba(45,91,255,.18), transparent 60%),
+        radial-gradient(700px 460px at 110% 10%, rgba(14,165,233,.14), transparent 60%),
+        radial-gradient(650px 520px at 40% 120%, rgba(16,185,129,.10), transparent 55%);
+    }
+    .grain{
+      position:fixed; inset:0; z-index:-1; pointer-events:none;
+      opacity:.05;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
+      mix-blend-mode:multiply;
+    }
+    [data-theme="dark"] .grain{ mix-blend-mode:screen; opacity:.06; }
+
+    .container{ width:min(var(--max), calc(100% - 22px)); margin:0 auto; }
+
+    /* HEADER */
+    header{
+      position:sticky; top:0; z-index:50;
+      background: rgba(255,255,255,.60);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom:1px solid var(--line);
+      box-shadow: 0 8px 24px rgba(0,0,0,.06);
+    }
+    [data-theme="dark"] header{
+      background: rgba(7,10,16,.55);
+      box-shadow: 0 10px 28px rgba(0,0,0,.30);
+    }
+
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:10px; padding:12px 0 8px;
+    }
+    .brand{ display:flex; align-items:center; gap:10px; min-width:0; }
+    .logo{
+      width:40px; height:40px; border-radius:14px;
+      background: url(logo.jpg) center/cover no-repeat;
+      box-shadow: 0 16px 34px rgba(45,91,255,.22);
+      border: 1px solid rgba(255,255,255,.25);
+      flex:0 0 auto;
+    }
+    .brand .t{ min-width:0; display:flex; flex-direction:column; }
+    .brand h1{
+      font-size:16px; font-weight:950; letter-spacing:-.4px;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      max-width: 60vw;
+    }
+    .subhead{
+      margin-top:2px; color: var(--muted); font-size:12px; font-weight:850;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      max-width: 60vw;
+    }
+
+    .controls{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
+    .icon-btn{
+      width:44px; height:44px; border-radius:16px;
+      border:1px solid var(--line);
+      background: var(--panel);
+      box-shadow: var(--shadow2);
+      cursor:pointer;
+      display:grid; place-items:center;
+      font-size:18px;
+      transition: var(--transition);
+    }
+    .icon-btn:hover{ transform: translateY(-1px); }
+
+    /* HERO bienvenida */
+    .hero{
+      padding: 8px 0 10px;
+    }
+    .heroCard{
+      border:1px solid var(--line);
+      background: linear-gradient(135deg, rgba(45,91,255,.12), rgba(14,165,233,.08), rgba(16,185,129,.06));
+      border-radius: var(--r26);
+      box-shadow: var(--shadow2);
+      overflow:hidden;
+      position:relative;
+    }
+    [data-theme="dark"] .heroCard{
+      background: linear-gradient(135deg, rgba(45,91,255,.16), rgba(14,165,233,.10), rgba(16,185,129,.08));
+    }
+    .heroInner{
+      padding: 14px 14px 14px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .heroTitle{
+      display:flex; gap:10px; align-items:flex-start;
+    }
+    .heroIcon{
+      width:42px; height:42px;
+      border-radius: 16px;
+      display:grid; place-items:center;
+      background: rgba(45,91,255,.12);
+      border: 1px solid rgba(45,91,255,.20);
+      color: var(--primary);
+      box-shadow: 0 10px 24px rgba(45,91,255,.12);
+      flex:0 0 auto;
+    }
+    .heroTitle h2{
+      font-size: 15px;
+      font-weight: 950;
+      letter-spacing: -0.2px;
+      margin-top: 2px;
+    }
+    .heroTitle p{
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+      line-height: 1.35;
+      max-width: 520px;
+    }
+
+    /* FILTERS */
+    .filters{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+      padding: 8px 0 12px;
+    }
+    .search-bar{
+      grid-column: 1 / -1;
+      border:1px solid var(--chip-border);
+      background: var(--chip);
+      box-shadow: var(--shadow2);
+      border-radius: var(--r26);
+      display:flex; align-items:center; padding: 12px 14px; gap:10px;
+      transition:.2s;
+    }
+    .search-bar:focus-within{ border-color: rgba(45,91,255,0.55); box-shadow: var(--glow); }
+    .search-bar i{ color: var(--muted); }
+    .search-bar input{
+      width:100%; border:none; outline:none; background:transparent;
+      color: var(--text); font-size: 14px; font-weight:850;
+    }
+    .search-bar input::placeholder{ color: var(--muted); font-weight:800; }
+
+    .select{
+      border:1px solid var(--line);
+      background: var(--panel);
+      color: var(--text);
+      border-radius: 18px;
+      padding: 10px 12px;
+      box-shadow: var(--shadow2);
+      transition: var(--transition);
+      font-weight:950;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      position:relative;
+    }
+    .select::after{
+      content:"▾";
+      position:absolute;
+      right:12px; top:50%;
+      transform: translateY(-50%);
+      pointer-events:none;
+      color: var(--muted);
+      font-weight: 950;
+    }
+    select{
+      appearance:none; -webkit-appearance:none; -moz-appearance:none;
+      border:none; outline:none; background:transparent;
+      width:100%;
+      color: var(--text);
+      font-weight:950;
+      cursor:pointer;
+      padding-right: 18px;
+    }
+    select option { background: #ffffff; color: #0F172A; }
+    [data-theme="dark"] select option { background: #0F172A; color: #F8FAFC; }
+
+    .btn{
+      border:1px solid rgba(45,91,255,.20);
+      background: linear-gradient(135deg, var(--sky), var(--primary));
+      color: #fff;
+      border-radius: 18px;
+      padding: 10px 12px;
+      box-shadow: 0 14px 28px rgba(14,165,233,.20);
+      transition: var(--transition);
+      font-weight:950;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+    }
+    .btn:hover{ transform: translateY(-1px); }
+    .btn.ghost{
+      background: var(--panel);
+      color: var(--text);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow2);
+    }
+
+    /* CHIPS (estado eventos / modo vista) */
+    .chips{
+      display:flex; gap:10px; overflow-x:auto;
+      padding: 0 0 12px; -webkit-overflow-scrolling: touch;
+    }
+    .chips::-webkit-scrollbar{ height:8px; }
+    .chips::-webkit-scrollbar-thumb{ background: rgba(0,0,0,.12); border-radius:999px; }
+    [data-theme="dark"] .chips::-webkit-scrollbar-thumb{ background: rgba(255,255,255,.12); }
+
+    .chip{
+      flex:0 0 auto;
+      border:1px solid var(--line);
+      background: var(--panel);
+      color: var(--muted);
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 950;
+      cursor:pointer;
+      transition: var(--transition);
+      box-shadow: var(--shadow2);
+      white-space:nowrap;
+      user-select:none;
+      display:flex; align-items:center; gap:8px;
+    }
+    .chip:hover{ transform: translateY(-1px); color: var(--text); }
+    .chip.active{
+      background: rgba(45,91,255,.12);
+      border-color: rgba(45,91,255,.35);
+      color: var(--text);
+    }
+
+    .results-info{
+      font-size: 12px;
+      color: var(--muted);
+      text-align:center;
+      padding: 6px 0 12px;
+      font-weight: 850;
+    }
+
+    /* VIEWS WRAP */
+    .views{
+      width:min(var(--max), calc(100% - 22px));
+      margin: 0 auto;
+      padding: 12px 0 26px;
+    }
+
+    /* ===== VIEW 1: FLYERS / CAROUSEL ===== */
+    .flyerWrap{
+      border: 1px solid var(--line);
+      border-radius: var(--r26);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .flyerHead{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:10px;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      flex-wrap:wrap;
+    }
+    .flyerHead .t{
+      display:flex; align-items:center; gap:10px;
+      font-weight: 950;
+      font-size: 13px;
+    }
+    .flyerHead .t i{
+      width: 34px; height: 34px;
+      border-radius: 14px;
+      display:grid; place-items:center;
+      background: rgba(45,91,255,.10);
+      border: 1px solid rgba(45,91,255,.18);
+      color: var(--primary);
+    }
+    .flyerControls{
+      display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+    }
+    .miniBtn{
+      border:1px solid var(--line);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 16px;
+      padding: 10px 12px;
+      box-shadow: var(--shadow2);
+      cursor:pointer;
+      font-weight: 950;
+      display:flex; align-items:center; gap:8px;
+      transition: var(--transition);
+    }
+    .miniBtn:hover{ transform: translateY(-1px); }
+
+    .flyerBody{
+      padding: 12px;
+    }
+
+    .flyerFrame{
+      border-radius: var(--r22);
+      overflow:hidden;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.06);
+      position:relative;
+      box-shadow: var(--shadow2);
+    }
+    .flyerImg{
+      width:100%;
+      height: 360px;
+      object-fit:cover;
+      display:block;
+      filter: saturate(1.05) contrast(1.04);
+    }
+    @media (max-width: 640px){
+      .flyerImg{ height: 320px; }
+    }
+
+    .flyerOverlay{
+      position:absolute; inset:0;
+      background: linear-gradient(to top, rgba(0,0,0,.62), rgba(0,0,0,.08), transparent);
+      pointer-events:none;
+    }
+
+    .flyerMeta{
+      position:absolute;
+      left:12px; right:12px; bottom:12px;
+      z-index:2;
+      color: #fff;
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .flyerMeta .info{
+      min-width:0;
+    }
+    .flyerMeta .title{
+      font-weight: 950;
+      letter-spacing:.2px;
+      text-transform: uppercase;
+      font-size: 14px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .flyerMeta .sub{
+      margin-top:6px;
+      font-size: 12px;
+      font-weight: 900;
+      opacity:.92;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.20);
+      background: rgba(0,0,0,.35);
+      backdrop-filter: blur(10px);
+      font-weight: 950;
+      font-size: 12px;
+      white-space:nowrap;
+    }
+    .pill.ok{ border-color: rgba(2, 247, 145, 0.75); }
+    .pill.warn{ border-color: rgba(255, 209, 102, 0.75); }
+    .pill.bad{ border-color: rgba(255, 80, 80, 0.75); }
+
+    .flyerDots{
+      display:flex; justify-content:center; gap:8px;
+      padding: 12px 8px 2px;
+      flex-wrap:wrap;
+    }
+    .dot{
+      width:8px; height:8px;
+      border-radius:999px;
+      background: rgba(0,0,0,.20);
+      border:1px solid rgba(255,255,255,.00);
+      cursor:pointer;
+      transition: var(--transition);
+    }
+    [data-theme="dark"] .dot{ background: rgba(255,255,255,.18); }
+    .dot.active{
+      width:22px;
+      background: rgba(45,91,255,.75);
+      border-color: rgba(45,91,255,.35);
+    }
+
+    /* ===== VIEW 2: GRID LIST ===== */
+    .grid{
+      margin-top: 14px;
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 14px;
+    }
+    .card{
+      grid-column: span 4;
+      border-radius: 22px;
+      overflow:hidden;
+      border: 1px solid var(--line);
+      background: var(--card);
+      box-shadow: var(--shadow);
+      position:relative;
+      cursor:pointer;
+
+      opacity:0;
+      transform: translateY(14px);
+      transition: .28s ease;
+      min-width:0;
+      isolation:isolate;
+    }
+    .card.loaded{ opacity:1; transform: translateY(0); }
+    .card:hover{ transform: translateY(-3px); box-shadow: 0 22px 60px rgba(0,0,0,.16); }
+    [data-theme="dark"] .card:hover{ box-shadow: 0 22px 60px rgba(0,0,0,.55); }
+
+    .media{ position:relative; border-bottom:1px solid var(--line); background: rgba(255,255,255,.05); }
+    .card img{
+      width:100%;
+      height: 170px;
+      object-fit:cover;
+      display:block;
+      filter: saturate(1.05) contrast(1.04);
+      transform: scale(1.02);
+      transition: .35s ease;
+    }
+    .card:hover img{ transform: scale(1.06); }
+
+    .overlay{
+      position:absolute; inset:0;
+      background: linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,.10), transparent);
+      pointer-events:none; z-index:1;
+    }
+    .badge{
+      position:absolute; top:10px; left:10px; z-index:3;
+      display:inline-flex; align-items:center; gap:7px;
+      padding: 6px 9px; border-radius: 999px;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.34);
+      backdrop-filter: blur(10px);
+      color: rgba(255,255,255,.94);
+      font-size: 11px; font-weight: 950;
+      white-space:nowrap;
+      max-width: calc(100% - 20px);
+      overflow:hidden; text-overflow:ellipsis;
+    }
+    .badge.ok{ border-color: rgba(2, 247, 145, 0.80); }
+    .badge.warn{ border-color: rgba(255, 209, 102, 0.80); }
+    .badge.bad{ border-color: rgba(255, 80, 80, 0.80); }
+
+    .type{
+      position:absolute; right:10px; top:10px; z-index:3;
+      display:inline-flex; align-items:center; gap:7px;
+      padding: 7px 10px; border-radius: 999px;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.30);
+      backdrop-filter: blur(10px);
+      color:#fff;
+      font-size: 11px;
+      font-weight: 950;
+      white-space:nowrap;
+    }
+
+    .card-content{ padding: 12px 12px 14px; }
+    .card-content h3{
+      font-size: 15px; font-weight: 950; text-align: center;
+      letter-spacing:.2px; text-transform: uppercase;
+      line-height:1.2; margin-bottom: 6px;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .card-content p{
+      font-size: 12px; color: var(--muted); font-weight: 850;
+      margin-bottom: 10px; text-align:center;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .metaRow{
+      display:flex; gap:8px; flex-wrap:wrap; justify-content:center;
+      margin-top: 2px;
+    }
+    .tag{
+      background: rgba(45,91,255,.08);
+      border: 1px solid rgba(45,91,255,.18);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 12px;
+      font-weight: 950;
+      user-select:none;
+      max-width:100%;
+    }
+    [data-theme="dark"] .tag{
+      background: rgba(255,255,255,.06);
+      border-color: rgba(255,255,255,.10);
+      color: var(--text);
+    }
+
+    /* Modal */
+    .modal{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.42);
+      display:none;
+      align-items:flex-end;
+      justify-content:center;
+      padding: 16px;
+      z-index:80;
+    }
+    .modal.show{ display:flex; }
+
+    .sheet{
+      width:min(720px, 100%);
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      transform: translateY(10px);
+      opacity:0;
+      transition: .22s ease;
+    }
+    .modal.show .sheet{ transform: translateY(0); opacity:1; }
+
+    .sheetHead{
+      display:flex; align-items:center; justify-content:space-between;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      gap:10px;
+    }
+    .sheetHead b{
+      font-size: 13px; font-weight: 950;
+      display:flex; align-items:center; gap:10px;
+      min-width:0;
+    }
+    .sheetHead b span{
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      max-width: 58vw;
+    }
+    .closeBtn{
+      width:44px; height:44px; border-radius:16px;
+      border:1px solid var(--line);
+      background: var(--surface);
+      box-shadow: var(--shadow2);
+      cursor:pointer;
+      display:grid; place-items:center;
+      font-size:18px;
+      transition: var(--transition);
+      flex:0 0 auto;
+    }
+    .closeBtn:hover{ transform: translateY(-1px); }
+
+    .sheetBody{
+      padding: 14px;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .sheetMedia{
+      border-radius: 20px;
+      overflow:hidden;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.06);
+    }
+    .sheetMedia img{
+      width:100%;
+      height: 260px;
+      object-fit: cover;
+      display:block;
+    }
+    @media (max-width: 640px){
+      .sheetMedia img{ height: 220px; }
+    }
+
+    .sheetTitle{
+      font-weight: 950;
+      letter-spacing:.2px;
+      text-transform: uppercase;
+      font-size: 15px;
+      line-height: 1.25;
+    }
+    .sheetDesc{
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 850;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+
+    .sheetGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    .infoBox{
+      border:1px solid var(--line);
+      background: var(--surface);
+      border-radius: 18px;
+      padding: 10px 12px;
+      box-shadow: var(--shadow2);
+      min-width:0;
+    }
+    .infoBox .k{
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 950;
+      letter-spacing:.14em;
+      text-transform: uppercase;
+    }
+    .infoBox .v{
+      margin-top: 6px;
+      font-size: 13px;
+      font-weight: 950;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .sheetActions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .action{
+      border:1px solid var(--line);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 18px;
+      padding: 11px 12px;
+      box-shadow: var(--shadow2);
+      cursor:pointer;
+      font-weight: 950;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      transition: var(--transition);
+      flex: 1 1 180px;
+      min-width: 160px;
+    }
+    .action.primary{
+      border-color: rgba(45,91,255,.22);
+      background: linear-gradient(135deg, var(--sky), var(--primary));
+      color: #fff;
+      box-shadow: 0 14px 28px rgba(14,165,233,.20);
+    }
+    .action:hover{ transform: translateY(-1px); }
+
+    /* Skeleton */
+    .skeleton{ position:relative; overflow:hidden; background: rgba(255,255,255,.10); border-radius: 16px; }
+    [data-theme="dark"] .skeleton{ background: rgba(255,255,255,.06); }
+    .skeleton::after{
+      content:"";
+      position:absolute; inset:-40% -60%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.12), transparent);
+      transform: translateX(-40%);
+      animation: sk 1.2s ease-in-out infinite;
+    }
+    @keyframes sk{ 0%{ transform: translateX(-60%); } 100%{ transform: translateX(60%); } }
+
+    /* Responsive grid */
+    @media (max-width: 980px){
+      .card{ grid-column: span 6; }
+    }
+    @media (max-width: 640px){
+      .card{ grid-column: span 6; } /* 2 por fila en móvil */
+      .card img{ height: 150px; }
+      .grid{ gap: 12px; }
+      .sheetGrid{ grid-template-columns: 1fr; }
+    }
+    @media (max-width: 380px){
+      .card{ grid-column: span 12; } /* ultra chico: 1 */
+      .card img{ height: 170px; }
+    }
+
+    footer{
+      margin-top:auto;
+      padding: 18px 0 22px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      text-align:center;
+      font-size: 12px;
+      font-weight:850;
+    }
+
+    /* Ocultar vistas */
+    .hidden{ display:none !important; }
+  </style>
+</head>
+
+<body data-theme="light">
+  <div class="bgfx"></div>
+  <div class="grain"></div>
+
+  <header>
+    <div class="container">
+      <div class="topbar">
+        <a class="brand" href="./index.html" title="Volver al inicio">
+          <div class="logo" aria-hidden="true"></div>
+          <div class="t">
+            <h1 id="pageTitle">INDX | Eventos</h1>
+            <div class="subhead" id="pageSub">Eventos del Departamento de Iglesia</div>
+          </div>
+        </a>
+
+        <div class="controls">
+          <button class="icon-btn" id="backBtn" title="Volver">←</button>
+          <button class="icon-btn" id="themeToggle" title="Cambiar tema">🌓</button>
+        </div>
+      </div>
+
+      <div class="hero">
+        <div class="heroCard">
+          <div class="heroInner">
+            <div class="heroTitle">
+              <div class="heroIcon"><i class="fa-solid fa-calendar-star"></i></div>
+              <div>
+                <h2>Bienvenido a Eventos</h2>
+                <p>
+                  Mirá los eventos de la zona en modo <b>Flyers</b> (presentación) o en modo <b>Lista</b>.
+                  Si un evento no tiene flyer, igual aparece con imagen de respaldo y toda la info.
+                </p>
+              </div>
+            </div>
+
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <button class="btn ghost" id="gotoCatalogBtn" type="button" title="Ver en catálogo">
+                <i class="fa-solid fa-layer-group"></i> Ver en Catálogo
+              </button>
+              <button class="btn" id="refreshBtn" type="button" title="Actualizar">
+                <i class="fa-solid fa-rotate"></i> Actualizar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section class="filters">
+        <div class="search-bar">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="searchInput" placeholder="Buscar por nombre, lugar, descripción...">
+        </div>
+
+        <div class="select" title="Zona / distrito">
+          <span>📍</span>
+          <select id="districtSelect">
+          <option value="">Todos los distritos</option>
+          <option value="4">Bella Vista</option>
+          <option value="2">Rodeo</option>
+          <option value="5">Villa Iglesia</option>
+          <option value="1">Las Flores</option>
+          <option value="3">Tudcum</option>
+        </select>
+        </div>
+
+        <button class="btn ghost" id="clearBtn" type="button" title="Limpiar filtros">
+          <i class="fa-solid fa-eraser"></i> Limpiar
+        </button>
+      </section>
+
+      <div class="chips" id="stateChips">
+        <div class="chip active" data-state="todos">✨ Todos</div>
+        <div class="chip" data-state="en_curso">🟢 En curso</div>
+        <div class="chip" data-state="proximos">🟡 Próximos</div>
+        <div class="chip" data-state="pasados">🔴 Pasados</div>
+
+        <div style="width:1px; background: var(--line); margin: 0 2px;"></div>
+
+        <div class="chip active" id="viewFlyers" data-view="flyers">🖼️ Flyers</div>
+        <div class="chip" id="viewList" data-view="lista">📋 Lista</div>
+      </div>
+
+      <div class="results-info" id="resultsInfo"></div>
+    </div>
+  </header>
+
+  <section class="views" id="views">
+    <!-- VIEW: Flyers -->
+    <div class="flyerWrap" id="flyerView">
+      <div class="flyerHead">
+        <div class="t"><i class="fa-solid fa-images"></i> Presentación de Eventos</div>
+        <div class="flyerControls">
+          <button class="miniBtn" id="prevFlyer" type="button"><i class="fa-solid fa-chevron-left"></i> Anterior</button>
+          <button class="miniBtn" id="nextFlyer" type="button">Siguiente <i class="fa-solid fa-chevron-right"></i></button>
+          <button class="miniBtn" id="openCurrent" type="button"><i class="fa-solid fa-circle-info"></i> Ver info</button>
+        </div>
+      </div>
+
+      <div class="flyerBody">
+        <div class="flyerFrame" id="flyerFrame">
+          <img class="flyerImg" id="flyerImg" alt="Flyer del evento" />
+          <div class="flyerOverlay"></div>
+
+          <div class="flyerMeta">
+            <div class="info">
+              <div class="title" id="flyerTitle">Cargando...</div>
+              <div class="sub" id="flyerSub">—</div>
+            </div>
+            <div class="pill" id="flyerPill"><i class="fa-solid fa-calendar-day"></i> —</div>
+          </div>
+        </div>
+
+        <div class="flyerDots" id="flyerDots"></div>
+      </div>
+    </div>
+
+    <!-- VIEW: Lista -->
+    <div class="grid" id="listView"></div>
+  </section>
+
+  <footer>© 2026 INDX • Eventos del Departamento de Iglesia</footer>
+
+  <!-- MODAL -->
+  <div class="modal" id="modal">
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="sheetHead">
+        <b><i class="fa-solid fa-calendar-star"></i> <span id="modalTitle">Evento</span></b>
+        <button class="closeBtn" id="closeModal" title="Cerrar">✕</button>
+      </div>
+
+      <div class="sheetBody">
+        <div class="sheetMedia">
+          <img id="modalImg" alt="Imagen del evento" />
+        </div>
+
+        <div class="sheetTitle" id="modalName">—</div>
+        <div class="sheetDesc" id="modalDesc">—</div>
+
+        <div class="sheetGrid">
+          <div class="infoBox">
+            <div class="k">ESTADO</div>
+            <div class="v" id="modalState">—</div>
+          </div>
+          <div class="infoBox">
+            <div class="k">FECHA</div>
+            <div class="v" id="modalDate">—</div>
+          </div>
+          <div class="infoBox">
+            <div class="k">ZONA</div>
+            <div class="v" id="modalZone">—</div>
+          </div>
+          <div class="infoBox">
+            <div class="k">LUGAR</div>
+            <div class="v" id="modalPlace">—</div>
+          </div>
+        </div>
+
+        <div class="sheetActions">
+          <button class="action primary" id="actionWhats" type="button">
+            <i class="fa-brands fa-whatsapp"></i> WhatsApp
+          </button>
+          <button class="action" id="actionCall" type="button">
+            <i class="fa-solid fa-phone"></i> Llamar
+          </button>
+          <button class="action" id="actionMap" type="button">
+            <i class="fa-solid fa-location-dot"></i> Ver mapa
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    // ===== Firebase (tu config actual)
+    const firebaseConfig = {
+      apiKey: "AIzaSyDYNLhKi2h_JoPlDYK9_ZhKaHnKQ3DJhbk",
+      authDomain: "cweb-ac414.firebaseapp.com",
+      projectId: "cweb-ac414",
+      storageBucket: "cweb-ac414.firebasestorage.app",
+      messagingSenderId: "174144272082",
+      appId: "1:174144272082:web:68b9d5aefc1aef07ab9f0b"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // ===== THEME (misma key que venís usando en INDX)
+    const THEME_KEY = "indx_theme";
+    const themeToggle = document.getElementById("themeToggle");
+
+    function setTheme(theme){
+      document.body.setAttribute("data-theme", theme === "dark" ? "dark" : "light");
+      localStorage.setItem(THEME_KEY, theme === "dark" ? "dark" : "light");
+      themeToggle.textContent = (document.body.dataset.theme === "dark") ? "🌙" : "🌓";
+    }
+    function initTheme(){
+      const saved = localStorage.getItem(THEME_KEY);
+      if(saved === "dark" || saved === "light"){
+        setTheme(saved); return;
+      }
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      setTheme(prefersDark ? "dark" : "light");
+    }
+    themeToggle.addEventListener("click", ()=>{
+      const isDark = document.body.dataset.theme === "dark";
+      setTheme(isDark ? "light" : "dark");
+    });
+
+    // ===== DOM
+    const backBtn = document.getElementById("backBtn");
+    const gotoCatalogBtn = document.getElementById("gotoCatalogBtn");
+    const refreshBtn = document.getElementById("refreshBtn");
+    const clearBtn = document.getElementById("clearBtn");
+
+    const input = document.getElementById("searchInput");
+    const selectDistrito = document.getElementById("districtSelect");
+    const resultsInfo = document.getElementById("resultsInfo");
+
+    const stateChips = document.getElementById("stateChips");
+    const flyerView = document.getElementById("flyerView");
+    const listView = document.getElementById("listView");
+
+    const viewFlyers = document.getElementById("viewFlyers");
+    const viewList = document.getElementById("viewList");
+
+    // Flyers UI
+    const flyerImg = document.getElementById("flyerImg");
+    const flyerTitle = document.getElementById("flyerTitle");
+    const flyerSub = document.getElementById("flyerSub");
+    const flyerPill = document.getElementById("flyerPill");
+    const flyerDots = document.getElementById("flyerDots");
+    const prevFlyer = document.getElementById("prevFlyer");
+    const nextFlyer = document.getElementById("nextFlyer");
+    const openCurrent = document.getElementById("openCurrent");
+
+    // Modal
+    const modal = document.getElementById("modal");
+    const closeModal = document.getElementById("closeModal");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalImg = document.getElementById("modalImg");
+    const modalName = document.getElementById("modalName");
+    const modalDesc = document.getElementById("modalDesc");
+    const modalState = document.getElementById("modalState");
+    const modalDate = document.getElementById("modalDate");
+    const modalZone = document.getElementById("modalZone");
+    const modalPlace = document.getElementById("modalPlace");
+    const actionWhats = document.getElementById("actionWhats");
+    const actionCall = document.getElementById("actionCall");
+    const actionMap = document.getElementById("actionMap");
+
+    // ===== Utils
+    const slugify = (s) => (s || "")
+      .toString()
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "");
+
+    function parseDateMaybe(d){
+      if(!d) return null;
+      if(d.toDate) return d.toDate();
+      const dt = new Date(d);
+      return isNaN(dt.getTime()) ? null : dt;
+    }
+    function fmtDate(d){
+      if(!d) return "Sin fecha";
+      try{
+        return new Intl.DateTimeFormat("es-AR", { dateStyle:"medium" }).format(d);
+      }catch{
+        return d.toLocaleDateString();
+      }
+    }
+    function fmtRange(ini, fin){
+      const a = parseDateMaybe(ini);
+      const b = parseDateMaybe(fin);
+      if(a && b) return `${fmtDate(a)} → ${fmtDate(b)}`;
+      if(a && !b) return fmtDate(a);
+      return "Sin fecha";
+    }
+
+    function safeImg(url){
+      const u = (url || "").toString().trim();
+      return u ? u : "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=60";
+    }
+
+    // Estado del evento
+    function eventState(v){
+      const ini = parseDateMaybe(v.fechaInicio || v.inicio || v.startDate);
+      const fin = parseDateMaybe(v.fechaFin || v.fin || v.endDate);
+      const now = new Date();
+
+      if(ini && fin){
+        if(now < ini) return { key:"proximos", label:"Próximo", kind:"warn" };
+        if(now > fin) return { key:"pasados", label:"Finalizado", kind:"bad" };
+        return { key:"en_curso", label:"En curso", kind:"ok" };
+      }
+      if(ini && !fin){
+        if(now < ini) return { key:"proximos", label:"Próximo", kind:"warn" };
+        return { key:"en_curso", label:"Activo", kind:"ok" };
+      }
+      return { key:"todos", label:"Evento", kind:"warn" };
+    }
+
+    function normTipo(t){
+      const v = (t || "").toString().toLowerCase().trim();
+      if(v === "eventos") return "evento";
+      return v;
+    }
+
+    // ===== State
+    let allEvents = [];
+    let filtered = [];
+    let selectedState = "todos";
+    let currentView = "flyers"; // flyers | lista
+    let flyerIndex = 0;
+
+    // ===== Navigation
+    backBtn.addEventListener("click", ()=> history.length > 1 ? history.back() : (location.href="./index.html"));
+    gotoCatalogBtn.addEventListener("click", ()=> location.href = "./catalogo.html?tipo=evento");
+    refreshBtn.addEventListener("click", ()=> loadEvents(true));
+
+    // ===== Chips estado
+    stateChips.querySelectorAll(".chip").forEach(ch => {
+      const st = ch.dataset.state;
+      const vw = ch.dataset.view;
+      if(st){
+        ch.addEventListener("click", ()=>{
+          stateChips.querySelectorAll(".chip[data-state]").forEach(x=>x.classList.remove("active"));
+          ch.classList.add("active");
+          selectedState = st;
+          applyFilters();
+        });
+      }
+      if(vw){
+        ch.addEventListener("click", ()=>{
+          if(vw === "flyers"){
+            viewFlyers.classList.add("active");
+            viewList.classList.remove("active");
+            currentView = "flyers";
+          }else{
+            viewList.classList.add("active");
+            viewFlyers.classList.remove("active");
+            currentView = "lista";
+          }
+          renderViews();
+        });
+      }
+    });
+
+    // ===== UI events
+    input.addEventListener("input", ()=> applyFilters());
+    selectDistrito.addEventListener("change", ()=> applyFilters());
+
+    clearBtn.addEventListener("click", ()=>{
+      input.value = "";
+      selectDistrito.value = "todos";
+      selectedState = "todos";
+      stateChips.querySelectorAll(".chip[data-state]").forEach(x=>x.classList.remove("active"));
+      stateChips.querySelector('.chip[data-state="todos"]').classList.add("active");
+      applyFilters();
+    });
+
+    // ===== Flyers controls
+    prevFlyer.addEventListener("click", ()=>{
+      if(!filtered.length) return;
+      flyerIndex = (flyerIndex - 1 + filtered.length) % filtered.length;
+      renderFlyer();
+    });
+    nextFlyer.addEventListener("click", ()=>{
+      if(!filtered.length) return;
+      flyerIndex = (flyerIndex + 1) % filtered.length;
+      renderFlyer();
+    });
+    openCurrent.addEventListener("click", ()=>{
+      if(!filtered.length) return;
+      openEventModal(filtered[flyerIndex]);
+    });
+
+    // ===== Modal
+    function openEventModal(v){
+      const st = eventState(v);
+
+      modalTitle.textContent = (v.nombre || "Evento").toString();
+      modalName.textContent = (v.nombre || "Evento").toString();
+      modalDesc.textContent = (v.descripcion || "Sin descripción").toString();
+      modalImg.src = safeImg(v.imagen);
+
+      modalState.textContent = st.label;
+      modalDate.textContent = fmtRange(v.fechaInicio || v.inicio || v.startDate, v.fechaFin || v.fin || v.endDate);
+      modalZone.textContent = (v.distrito || "Sin zona").toString();
+      modalPlace.textContent = (v.ubicacion || v.direccion || "Sin ubicación").toString();
+
+      // Acciones
+      const phone = (v.telefono || "").toString().trim();
+      const wa = (v.whatsapp || phone || "").toString().replace(/\s+/g,'').trim();
+      const maps = (v.maps || "").toString().trim();
+
+      actionWhats.disabled = !wa;
+      actionCall.disabled = !phone;
+      actionMap.disabled = !(maps || v.ubicacion || v.direccion);
+
+      actionWhats.onclick = ()=>{
+        if(!wa) return;
+        const msg = encodeURIComponent(`Hola! Quiero info sobre el evento: ${v.nombre || ""}`);
+        const num = wa.replace(/[^\d]/g,''); // solo números
+        window.open(`https://wa.me/${num}?text=${msg}`, "_blank");
+      };
+
+      actionCall.onclick = ()=>{
+        if(!phone) return;
+        window.location.href = `tel:${phone.replace(/\s+/g,'')}`;
+      };
+
+      actionMap.onclick = ()=>{
+        if(maps){
+          window.open(maps, "_blank");
+          return;
+        }
+        const q = encodeURIComponent(`${v.ubicacion || v.direccion || v.distrito || "Iglesia San Juan"}`);
+        window.open(`https://www.google.com/maps/search/?api=1&query=${q}`, "_blank");
+      };
+
+      modal.classList.add("show");
+    }
+
+    function closeEventModal(){
+      modal.classList.remove("show");
+    }
+    closeModal.addEventListener("click", closeEventModal);
+    modal.addEventListener("click", (e)=>{ if(e.target === modal) closeEventModal(); });
+    document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeEventModal(); });
+
+    // ===== Render
+    function applyFilters(){
+      const q = (input.value || "").toLowerCase().trim();
+      const zona = (selectDistrito.value || "todos");
+
+      filtered = allEvents.filter(v => {
+        // zona
+        if(zona !== "todos"){
+          const dv = slugify(v.distrito);
+          if(dv !== slugify(zona)) return false;
+        }
+
+        // estado
+        if(selectedState !== "todos"){
+          const st = eventState(v);
+          if(st.key !== selectedState) return false;
+        }
+
+        // búsqueda
+        if(q){
+          const n = (v.nombre || "").toString().toLowerCase();
+          const d = (v.descripcion || "").toString().toLowerCase();
+          const z = (v.distrito || "").toString().toLowerCase();
+          const p = (v.ubicacion || v.direccion || "").toString().toLowerCase();
+          return n.includes(q) || d.includes(q) || z.includes(q) || p.includes(q);
+        }
+        return true;
+      });
+
+      // Orden pro: En curso > Próximos > Pasados, y luego por fechaInicio
+      const orderKey = { en_curso:0, proximos:1, pasados:2, todos:3 };
+      filtered.sort((a,b)=>{
+        const sa = eventState(a).key;
+        const sb = eventState(b).key;
+        if(orderKey[sa] !== orderKey[sb]) return orderKey[sa] - orderKey[sb];
+
+        const da = parseDateMaybe(a.fechaInicio || a.inicio || a.startDate) || new Date(8640000000000000);
+        const db = parseDateMaybe(b.fechaInicio || b.inicio || b.startDate) || new Date(8640000000000000);
+        return da - db;
+      });
+
+      resultsInfo.textContent = `${filtered.length} evento(s) • ${selectedState === "todos" ? "todos" : selectedState.replace("_"," ")} • ${zona === "todos" ? "toda la zona" : zona}`;
+      flyerIndex = 0;
+      renderViews();
+    }
+
+    function renderViews(){
+      // alternar vistas
+      if(currentView === "flyers"){
+        flyerView.classList.remove("hidden");
+        listView.classList.add("hidden");
+        renderFlyer();
+      }else{
+        flyerView.classList.add("hidden");
+        listView.classList.remove("hidden");
+        renderList();
+      }
+    }
+
+    function renderFlyer(){
+      if(!filtered.length){
+        flyerImg.src = safeImg("");
+        flyerTitle.textContent = "No hay eventos con estos filtros";
+        flyerSub.textContent = "Probá cambiar zona, estado o búsqueda.";
+        flyerPill.className = "pill warn";
+        flyerPill.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Sin resultados`;
+        flyerDots.innerHTML = "";
+        return;
+      }
+
+      const v = filtered[flyerIndex];
+      const st = eventState(v);
+
+      flyerImg.src = safeImg(v.imagen);
+      flyerTitle.textContent = (v.nombre || "Evento").toString();
+
+      const zona = (v.distrito || "Zona").toString();
+      const fechaTxt = fmtRange(v.fechaInicio || v.inicio || v.startDate, v.fechaFin || v.fin || v.endDate);
+      flyerSub.textContent = `${zona} • ${fechaTxt}`;
+
+      flyerPill.className = `pill ${st.kind}`;
+      const icon = st.kind === "ok" ? "fa-circle-check" : (st.kind === "bad" ? "fa-circle-xmark" : "fa-clock");
+      flyerPill.innerHTML = `<i class="fa-solid ${icon}"></i> ${st.label}`;
+
+      // dots
+      flyerDots.innerHTML = "";
+      const maxDots = Math.min(filtered.length, 12);
+      // Si hay más de 12, mostramos 12 y listo (evita quilombo visual)
+      for(let i=0;i<maxDots;i++){
+        const d = document.createElement("div");
+        d.className = "dot" + (i === flyerIndex ? " active" : "");
+        d.title = `Evento ${i+1}`;
+        d.addEventListener("click", ()=>{
+          flyerIndex = i;
+          renderFlyer();
+        });
+        flyerDots.appendChild(d);
+      }
+
+      // click en flyer abre modal
+      document.getElementById("flyerFrame").onclick = ()=> openEventModal(v);
+    }
+
+    function renderList(){
+      listView.innerHTML = "";
+
+      if(!filtered.length){
+        listView.innerHTML = `
+          <div style="grid-column:1/-1;text-align:center;color:var(--muted);padding:18px 0;font-weight:950;">
+            😕 No se encontraron eventos con esos filtros.
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach((v)=>{
+        const st = eventState(v);
+        const img = safeImg(v.imagen);
+        const zona = (v.distrito || "Zona").toString();
+        const fechaTxt = fmtRange(v.fechaInicio || v.inicio || v.startDate, v.fechaFin || v.fin || v.endDate);
+
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <div class="media">
+            <img src="${img}" alt="${(v.nombre || "Evento").toString()}" loading="lazy" decoding="async">
+            <div class="overlay" aria-hidden="true"></div>
+            <span class="badge ${st.kind}">
+              <i class="fa-solid ${st.kind === "ok" ? "fa-circle-check" : (st.kind === "bad" ? "fa-circle-xmark" : "fa-clock")}"></i>
+              ${st.label}
+            </span>
+            <span class="type"><i class="fa-solid fa-calendar-days"></i> Evento</span>
+          </div>
+
+          <div class="card-content">
+            <h3 title="${(v.nombre || "Evento").toString()}">${(v.nombre || "Evento").toString()}</h3>
+            <p title="${zona}">${zona} • ${fechaTxt}</p>
+            <div class="metaRow">
+              <span class="tag">📍 ${zona}</span>
+              <span class="tag">📅 ${fechaTxt}</span>
+            </div>
+          </div>
+        `;
+
+        card.addEventListener("click", ()=> openEventModal(v));
+
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              card.classList.add('loaded');
+              observer.unobserve(card);
+            }
+          });
+        }, { rootMargin: '140px' });
+        observer.observe(card);
+
+        listView.appendChild(card);
+      });
+    }
+
+    // Skeleton (flyer + list)
+    function paintLoading(){
+      resultsInfo.textContent = "Cargando eventos...";
+      flyerImg.src = safeImg("");
+      flyerTitle.textContent = "Cargando...";
+      flyerSub.textContent = "—";
+      flyerPill.className = "pill warn";
+      flyerPill.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Cargando`;
+      flyerDots.innerHTML = "";
+
+      listView.innerHTML = "";
+      for(let i=0;i<8;i++){
+        const sk = document.createElement("div");
+        sk.className = "card loaded";
+        sk.style.cursor = "default";
+        sk.innerHTML = `
+          <div class="media">
+            <div class="skeleton" style="height:170px;"></div>
+          </div>
+          <div class="card-content">
+            <div class="skeleton" style="height:16px; width:70%; border-radius:999px; margin: 0 auto 10px;"></div>
+            <div class="skeleton" style="height:12px; width:55%; border-radius:999px; margin: 0 auto 14px;"></div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:center;">
+              <div class="skeleton" style="height:28px; width:120px; border-radius:999px;"></div>
+              <div class="skeleton" style="height:28px; width:140px; border-radius:999px;"></div>
+            </div>
+          </div>
+        `;
+        listView.appendChild(sk);
+      }
+    }
+
+    // Load events from Firestore
+    async function loadEvents(force=false){
+      paintLoading();
+      try{
+        const snapshot = await getDocs(collection(db, "comercios"));
+        const docs = snapshot.docs.map(d => ({ id: d.id, ...(d.data() || {}) }));
+
+        // Filtrar SOLO eventos
+        allEvents = docs.filter(v => normTipo(v.tipo) === "evento");
+
+        // Si no cargaste tipo en algunos, podrías activar esto:
+        // allEvents = docs.filter(v => (normTipo(v.tipo) === "evento") || (slugify(v.categoria||v.rubro).includes("evento")));
+
+        applyFilters();
+      }catch(e){
+        console.error(e);
+        resultsInfo.textContent = "Error al cargar eventos.";
+        flyerTitle.textContent = "Error al cargar";
+        flyerSub.textContent = "Revisá conexión o configuración Firebase.";
+        flyerPill.className = "pill bad";
+        flyerPill.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> Error`;
+        listView.innerHTML = `<div style="grid-column:1/-1;text-align:center;color:#ff4d6d;padding:18px 0;font-weight:950;">Error al cargar datos.</div>`;
+      }
+    }
+
+    // ===== Init
+    initTheme();
+    loadEvents();
+
+    // auto refresh suave cada 2 min (por cambios de estado)
+    setInterval(()=> loadEvents(), 120000);
+  </script>
+</body>
+</html>
