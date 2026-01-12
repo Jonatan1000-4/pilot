@@ -1264,7 +1264,8 @@ function getEventEnd(v){
       const fin = getEventEnd(v);
 
       modalState.textContent = st.label;
-      modalDate.textContent = fmtRange(ini, fin);
+      modalDate.textContent = fmtRange(getEventStart(v), getEventEnd(v));
+
 
       const zonaLabel = districtName(v.distrito);
       modalZone.textContent = zonaLabel;
