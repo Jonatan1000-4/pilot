@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=5.0" />
+  <title>INDX | Términos y Condiciones</title>
+  <meta name="description" content="Términos y Condiciones de uso del sistema INDX - Catálogo Digital Local." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+  <style>
+    :root{
+      --primary:#2D5BFF;
+      --sky:#0EA5E9;
+      --bg:#F6F7FB;
+      --panel: rgba(255,255,255,.90);
+      --text:#0B1220;
+      --muted:#5B667A;
+      --line: rgba(12,18,32,.10);
+      --shadow: 0 18px 60px rgba(11,18,32,.10);
+      --r26:26px;
+      --max:980px;
+    }
+
+    [data-theme="dark"]{
+      --bg:#070A10;
+      --panel: rgba(15,23,42,.85);
+      --text:#F8FAFC;
+      --muted:#A3B2C7;
+      --line: rgba(255,255,255,.08);
+    }
+
+    *{ box-sizing:border-box; margin:0; padding:0; }
+    body{
+      font-family:'Plus Jakarta Sans',sans-serif;
+      background: var(--bg);
+      color:var(--text);
+      min-height:100vh;
+      line-height:1.6;
+    }
+
+    .container{ width:min(var(--max), calc(100% - 22px)); margin:0 auto; }
+
+    header{
+      position:sticky; top:0; z-index:50;
+      background: rgba(255,255,255,.65);
+      backdrop-filter: blur(12px);
+      border-bottom:1px solid var(--line);
+    }
+
+    [data-theme="dark"] header{ background: rgba(7,10,16,.65); }
+
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:12px 0;
+    }
+
+    .brand{ display:flex; align-items:center; gap:10px; }
+    .logo{
+      width:50px; height:50px; border-radius: 26px;
+      background: url(indx_logo.png) center/cover no-repeat;
+      position:relative;
+      overflow:hidden;
+    }
+
+    main{ padding:18px 0 26px; }
+
+    .hero{
+      background: linear-gradient(135deg, rgba(45,91,255,.12), rgba(14,165,233,.08));
+      border:1px solid var(--line);
+      border-radius: var(--r26);
+      padding:18px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero h1{
+      font-size:28px;
+      font-weight:900;
+      letter-spacing:-.8px;
+    }
+
+    .hero p{
+      margin-top:10px;
+      color:var(--muted);
+      font-weight:700;
+    }
+
+    .section{
+      margin-top:16px;
+      background: var(--panel);
+      border:1px solid var(--line);
+      border-radius: var(--r26);
+      padding:16px;
+      box-shadow: var(--shadow);
+    }
+
+    .section h2{
+      font-size:15px;
+      font-weight:900;
+      margin-bottom:10px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .section p, .section li{
+      color:var(--muted);
+      font-weight:700;
+      font-size:14px;
+    }
+
+    ul{ padding-left:18px; margin-top:8px; display:grid; gap:6px; }
+
+    footer{
+      margin-top:26px;
+      padding:18px 0;
+      border-top:1px solid var(--line);
+      text-align:center;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:700;
+    }
+
+    .btn{
+      margin-top:14px;
+      background: linear-gradient(135deg, var(--sky), var(--primary));
+      color:#fff;
+      padding:12px 16px;
+      border-radius:18px;
+      display:inline-block;
+      font-weight:900;
+      text-decoration:none;
+    }
+  </style>
+</head>
+
+<body data-theme="light">
+
+<header>
+  <div class="container">
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">INDX</div>
+        <div>
+          <b>Términos y Condiciones</b><br>
+          <small style="color:#777">Catálogo Digital Local</small>
+        </div>
+      </div>
+      <a href="./index.html" class="btn">Volver</a>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+
+  <section class="hero">
+    <h1>Términos y Condiciones de Uso</h1>
+    <p>
+      Bienvenido a <b>INDX – Catálogo Digital Local</b>.  
+      Al utilizar este sistema, navegar el sitio o registrar una ficha comercial,
+      aceptás los siguientes términos y condiciones.
+    </p>
+    <p><b>Última actualización:</b> 17 de enero de 2026</p>
+  </section>
+
+  <section class="section">
+    <h2><i class="fa-solid fa-circle-info"></i> 1. Descripción del servicio</h2>
+    <p>
+      INDX es una plataforma digital de guía local que permite visualizar fichas públicas
+      de comercios, servicios, profesionales, turismo, eventos y contactos útiles.
+    </p>
+    <p>
+      El sistema funciona como un directorio informativo y no interviene en las
+      operaciones comerciales entre usuarios y prestadores.
+    </p>
+  </section>
+
+  <section class="section">
+    <h2><i class="fa-solid fa-user"></i> 2. Usuarios y comercios (ULAs)</h2>
+    <ul>
+      <li>Los usuarios pueden navegar libremente el catálogo.</li>
+      <li>Los comercios/profesionales pueden solicitar su alta como ULA.</li>
+      <li>La información publicada es responsabilidad exclusiva del titular de la ficha.</li>
+      <li>INDX se reserva el derecho de rechazar o suspender fichas que incumplan estas condiciones.</li>
+    </ul>
+  </section>
+
+  <section class="section">
+    <h2><i class="fa-solid fa-file-signature"></i> 3. Registro y publicación</h2>
+    <p>
+      Al solicitar el alta en INDX, el comercio/profesional autoriza la publicación de sus datos
+      comerciales en el sistema.
+    </p>
+    <ul>
+      <li>Nombre comercial</li>
+      <li>Rubro y categoría</li>
+      <li>Teléfono y WhatsApp</li>
+      <li>Ubicación y mapa</li>
+      <li>Horarios</li>
+      <li>Imágenes y descripciones</li>
+    </ul>
+  </section>
+
+  <section class="section">
+    <h2><i class="fa-solid fa-money-bill"></i> 4. Planes y pagos</h2>
+    <ul>
+      <li>Plan Base INDX: Publicación en el catálogo.</li>
+      <li>Plan Google Maps: Optimización y posicionamiento.</li>
+      <li>Los pagos no son reembolsables una vez publicada la ficha.</li>
+      <li>Las renovaciones mensuales garantizan visibilidad continua.</li>
+    </ul>
+  </section>
+
+  <section class="section">
+    <h2><i class="fa-solid fa-triangle-exclamation"></i> 5. Responsabilidades</h2>
+    <ul>
+      <li>INDX no garantiza resultados comerciales.</li>
+      <li>INDX no es responsable por acuerdos entre usuarios y comercios.</li>
+      <li>INDX no valida precios, calidad ni disponibilidad.</li>
+      <li>El uso indebido del sistema puede generar suspensión.</li>
+    </ul>
+  </section>
+
+  <section class="section">
+    <h2><i class="fa-solid fa-calendar"></i> 6. Eventos y turismo</h2>
+    <ul>
+      <li>Los eventos son publicados con la información brindada por el organizador.</li>
+      <li>Las fechas, horarios y ubicaciones son responsabilidad del organizador.</li>
+      <li>INDX no organiza ni gestiona eventos.</li>
+    </ul>
+  </section>
+
+  <section class="section">
+    <h2><i class="fa-solid fa-shield-halved"></i> 7. Privacidad</h2>
+    <p>
+      El uso de datos se rige por nuestra Política de Privacidad.
+      Solo se publican datos comerciales autorizados por cada titular.
+    </p>
+  </section>
+
+  <section class="section">
+    <h2><i class="fa-solid fa-rotate"></i> 8. Modificaciones</h2>
+    <p>
+      INDX puede actualizar estos términos cuando sea necesario.
+      Las nuevas versiones entran en vigencia al ser publicadas.
+    </p>
+  </section>
+
+  <section class="section">
+    <h2><i class="fa-solid fa-envelope"></i> 9. Contacto</h2>
+    <ul>
+      <li>WhatsApp: +54 264 624 6834</li>
+      <li>Email: contacto@igwservicios.com</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer>
+  © 2026 INDX – Catálogo Digital Local · Todos los derechos reservados
+</footer>
+
+</body>
+</html>
