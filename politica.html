@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=5.0" />
+  <title>INDX | Política de Privacidad</title>
+  <meta name="description" content="Política de Privacidad de INDX - Catálogo Digital Local. Cómo recopilamos, usamos y protegemos tu información." />
+  <meta name="robots" content="index,follow" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+  <style>
+    :root{
+      --primary:#2D5BFF;
+      --primary-dark:#1A3EBF;
+      --sky:#0EA5E9;
+      --ok:#10B981;
+      --danger:#EF4444;
+
+      --bg:#F6F7FB;
+      --surface: rgba(255,255,255,.76);
+      --panel: rgba(255,255,255,.86);
+      --card: rgba(255,255,255,.92);
+
+      --text:#0B1220;
+      --muted:#5B667A;
+      --line: rgba(12,18,32,.10);
+
+      --shadow: 0 18px 60px rgba(11,18,32,.10);
+      --shadow2: 0 10px 26px rgba(11,18,32,.08);
+      --glow: 0 0 0 3px rgba(45,91,255,0.20);
+
+      --r14:14px;
+      --r18:18px;
+      --r22:22px;
+      --r26:26px;
+
+      --max:980px;
+      --transition: all .22s ease;
+    }
+
+    [data-theme="dark"]{
+      --bg:#070A10;
+      --surface: rgba(15,23,42,.65);
+      --panel: rgba(15,23,42,.80);
+      --card: rgba(15,23,42,.88);
+      --text:#F8FAFC;
+      --muted:#A3B2C7;
+      --line: rgba(255,255,255,.08);
+
+      --shadow: 0 18px 70px rgba(0,0,0,.45);
+      --shadow2: 0 10px 30px rgba(0,0,0,.35);
+    }
+
+    *{ box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color: transparent; }
+    body{
+      font-family:'Plus Jakarta Sans',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background: var(--bg);
+      color:var(--text);
+      min-height:100vh;
+      overflow-x:hidden;
+      line-height: 1.55;
+    }
+    a{ color:inherit; text-decoration:none; }
+    button,input,select,textarea{ font:inherit; }
+    :focus-visible{ outline:none; box-shadow: var(--glow); border-radius: 14px; }
+
+    /* Fondo premium */
+    .bgfx{
+      position:fixed; inset:0; z-index:-2; pointer-events:none;
+      background:
+        radial-gradient(900px 520px at 10% -10%, rgba(45,91,255,.18), transparent 60%),
+        radial-gradient(700px 460px at 110% 10%, rgba(14,165,233,.14), transparent 60%),
+        radial-gradient(650px 520px at 40% 120%, rgba(16,185,129,.10), transparent 55%);
+    }
+    .grain{
+      position:fixed; inset:0; z-index:-1; pointer-events:none;
+      opacity:.05;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
+      mix-blend-mode:multiply;
+    }
+    [data-theme="dark"] .grain{ mix-blend-mode:screen; opacity:.06; }
+
+    .container{ width:min(var(--max), calc(100% - 22px)); margin:0 auto; }
+
+    /* Header */
+    header{
+      position:sticky; top:0; z-index:50;
+      background: rgba(255,255,255,.60);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom:1px solid var(--line);
+      box-shadow: 0 8px 24px rgba(0,0,0,.06);
+    }
+    [data-theme="dark"] header{
+      background: rgba(7,10,16,.55);
+      box-shadow: 0 10px 28px rgba(0,0,0,.30);
+    }
+
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:10px; padding:12px 0;
+    }
+    .brand{ display:flex; align-items:center; gap:10px; min-width:0; }
+    .logo{
+      width:50px; height:50px; border-radius:26px;
+      background: url(indx logo.png) center/cover no-repeat;
+      box-shadow: 0 1px 34px rgba(45,91,255,.22);
+      border: 1px solid rgba(255,255,255,.25);
+      flex:0 0 auto;
+    }
+    .brand .t{ min-width:0; display:flex; flex-direction:column; }
+    .brand h1{
+      font-size:16px; font-weight:950; letter-spacing:-.4px;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      max-width: 62vw;
+    }
+    .subhead{
+      margin-top:2px; color: var(--muted); font-size:12px; font-weight:850;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      max-width: 62vw;
+    }
+    .controls{ display:flex; align-items:center; gap:10px; }
+    .icon-btn{
+      width:44px; height:44px; border-radius:16px;
+      border:1px solid var(--line);
+      background: var(--panel);
+      box-shadow: var(--shadow2);
+      cursor:pointer;
+      display:grid; place-items:center;
+      font-size:18px;
+      transition: var(--transition);
+    }
+    .icon-btn:hover{ transform: translateY(-1px); }
+
+    /* Hero */
+    main{ padding: 18px 0 26px; }
+    .hero{
+      border:1px solid var(--line);
+      background: linear-gradient(135deg, rgba(45,91,255,.12), rgba(14,165,233,.08), rgba(16,185,129,.06));
+      border-radius: var(--r26);
+      box-shadow: var(--shadow2);
+      padding: 16px;
+      margin-top: 10px;
+      overflow:hidden;
+    }
+    [data-theme="dark"] .hero{
+      background: linear-gradient(135deg, rgba(45,91,255,.16), rgba(14,165,233,.10), rgba(16,185,129,.08));
+    }
+    .kicker{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(45,91,255,.22);
+      background: rgba(45,91,255,.08);
+      color: var(--text);
+      font-weight: 950;
+      font-size: 12px;
+    }
+    .kicker i{ color: var(--primary); }
+    .hero h2{
+      margin-top: 10px;
+      font-size: 26px;
+      line-height: 1.08;
+      letter-spacing: -0.8px;
+      font-weight: 1000;
+    }
+    .hero p{
+      margin-top: 8px;
+      color: var(--muted);
+      font-weight: 850;
+      font-size: 14px;
+      max-width: 80ch;
+    }
+
+    /* Content */
+    .grid{
+      margin-top: 14px;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    .card{
+      border:1px solid var(--line);
+      background: var(--panel);
+      border-radius: var(--r26);
+      box-shadow: var(--shadow);
+      padding: 14px;
+    }
+    .card h3{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size: 14px;
+      font-weight: 1000;
+      letter-spacing: .2px;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .ico{
+      width:34px; height:34px;
+      border-radius: 14px;
+      display:grid; place-items:center;
+      background: rgba(45,91,255,.10);
+      border: 1px solid rgba(45,91,255,.18);
+      color: var(--primary);
+      flex:0 0 auto;
+    }
+    .card p, .card li{
+      color: var(--muted);
+      font-weight: 850;
+      font-size: 13.5px;
+      line-height: 1.6;
+    }
+    ul{ padding-left: 18px; margin-top: 8px; display:grid; gap:6px; }
+    li b{ color: var(--text); }
+
+    .note{
+      margin-top: 10px;
+      border:1px dashed rgba(45,91,255,.28);
+      background: rgba(45,91,255,.06);
+      padding: 12px;
+      border-radius: 18px;
+      color: var(--muted);
+      font-weight: 850;
+      font-size: 12.5px;
+      line-height: 1.55;
+    }
+
+    .ctaRow{
+      margin-top: 12px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+      justify-content:flex-start;
+    }
+    .btn{
+      border:1px solid rgba(45,91,255,.20);
+      background: linear-gradient(135deg, var(--sky), var(--primary));
+      color:#fff;
+      border-radius: 18px;
+      padding: 12px 14px;
+      box-shadow: 0 14px 28px rgba(14,165,233,.20);
+      font-weight: 950;
+      cursor:pointer;
+      transition: var(--transition);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      min-width: 220px;
+      text-align:center;
+    }
+    .btn:hover{ transform: translateY(-1px); }
+    .btn.secondary{
+      border:1px solid var(--line);
+      background: var(--surface);
+      color: var(--text);
+      box-shadow: var(--shadow2);
+    }
+
+    footer{
+      padding: 18px 0 22px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      text-align:center;
+      font-size: 12px;
+      font-weight:850;
+      margin-top: 18px;
+    }
+
+    @media (max-width: 720px){
+      .hero h2{ font-size: 24px; }
+      .btn{ width:100%; min-width: unset; }
+    }
+
+    /* Print */
+    @media print{
+      header, .bgfx, .grain, .ctaRow, footer{ display:none !important; }
+      body{ background:#fff; color:#000; }
+      .card, .hero{ box-shadow:none; background:#fff; }
+      .card{ border:1px solid #ddd; }
+      .hero{ border:1px solid #ddd; }
+    }
+  </style>
+</head>
+
+<body data-theme="light">
+  <div class="bgfx"></div>
+  <div class="grain"></div>
+
+  <header>
+    <div class="container">
+      <div class="topbar">
+        <a class="brand" href="./index.html" title="Volver al inicio">
+          <div class="logo" aria-hidden="true"></div>
+          <div class="t">
+            <h1>INDX | Privacidad</h1>
+            <div class="subhead">Política de Privacidad • Catálogo Digital Local</div>
+          </div>
+        </a>
+
+        <div class="controls">
+          <button class="icon-btn" id="backBtn" title="Volver">←</button>
+          <button class="icon-btn" id="themeToggle" title="Cambiar tema">🌓</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="kicker"><i class="fa-solid fa-shield-halved"></i> Transparencia • Seguridad • Control</div>
+      <h2>Política de Privacidad</h2>
+      <p>
+        Esta Política describe cómo <b>INDX – Catálogo Digital Local</b> recopila, utiliza y protege la información cuando
+        navegás el sistema o cuando un comercio/profesional se registra para aparecer en el catálogo.
+      </p>
+      <p style="margin-top:8px">
+        <b>Última actualización:</b> <span id="lastUpdate">2026-01-01</span>
+      </p>
+
+      <div class="ctaRow">
+        <a class="btn secondary" href="./terminos.html" title="Términos y condiciones">
+          <i class="fa-solid fa-file-contract"></i> Ver Términos y Condiciones
+        </a>
+        <button class="btn" id="printBtn" type="button" title="Imprimir / Guardar PDF">
+          <i class="fa-solid fa-print"></i> Imprimir / Guardar PDF
+        </button>
+      </div>
+    </section>
+
+    <section class="grid" aria-label="Contenido de política">
+      <div class="card">
+        <h3><span class="ico"><i class="fa-solid fa-circle-info"></i></span> 1) Quiénes somos</h3>
+        <p>
+          <b>INDX</b> es un sistema de <b>guía/catálogo local</b> que muestra fichas públicas de comercios, servicios,
+          profesionales, turismo, eventos y contactos útiles, para que la comunidad los encuentre de forma rápida.
+        </p>
+        <div class="note">
+          <b>Importante:</b> INDX no es un servicio de emergencias ni reemplaza organismos oficiales. Ante una urgencia real,
+          comunicate con los números oficiales de tu zona.
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span class="ico"><i class="fa-solid fa-database"></i></span> 2) Qué datos recopilamos</h3>
+        <p>Recopilamos datos en dos contextos:</p>
+        <ul>
+          <li><b>Navegación:</b> información técnica básica (por ejemplo, tipo de dispositivo/navegador) para funcionamiento y seguridad.</li>
+          <li><b>Registro de fichas (ULAs/comercios):</b> datos públicos que el propio negocio/profesional decide brindar.</li>
+        </ul>
+        <p style="margin-top:10px">
+          Ejemplos de datos que puede contener una ficha: <b>nombre comercial</b>, <b>categoría</b>, <b>descripción</b>,
+          <b>dirección o zona</b>, <b>teléfono/WhatsApp</b>, <b>horarios</b>, <b>mapa</b>, <b>redes</b>,
+          <b>imágenes</b>, <b>promociones</b>, <b>métodos de pago</b> y <b>tags</b>.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3><span class="ico"><i class="fa-solid fa-bullseye"></i></span> 3) Para qué usamos los datos</h3>
+        <ul>
+          <li><b>Publicar y mostrar fichas</b> en el catálogo y sus secciones (turismo/eventos/urgencias).</li>
+          <li><b>Facilitar contacto</b> entre usuarios y comercios/profesionales (WhatsApp, llamadas, redes, web, Maps).</li>
+          <li><b>Mejorar funcionamiento</b>, rendimiento, estabilidad y seguridad del sistema.</li>
+          <li><b>Soporte operativo</b>: responder solicitudes de corrección/actualización de datos de una ficha.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3><span class="ico"><i class="fa-solid fa-eye"></i></span> 4) Datos públicos vs. privados</h3>
+        <p>
+          Las fichas del catálogo están pensadas para ser <b>públicas</b>. Por eso, recomendamos a los comercios/profesionales
+          publicar solo información necesaria para que los clientes los contacten.
+        </p>
+        <ul>
+          <li><b>Público:</b> nombre, rubro, zona, WhatsApp comercial, horarios, imágenes, redes, ubicación.</li>
+          <li><b>No recomendado:</b> datos personales sensibles, direcciones privadas no comerciales, documentos, contraseñas, etc.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3><span class="ico"><i class="fa-solid fa-cookie-bite"></i></span> 5) Cookies y almacenamiento local</h3>
+        <p>
+          INDX puede usar <b>almacenamiento local del navegador</b> (por ejemplo, <code>localStorage</code>) para guardar
+          preferencias como el <b>modo claro/oscuro</b> y mejorar la experiencia.
+        </p>
+        <p style="margin-top:8px">
+          No usamos estas preferencias para identificarte personalmente. Podés borrar este almacenamiento desde la configuración de tu navegador.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3><span class="ico"><i class="fa-solid fa-share-nodes"></i></span> 6) Terceros y enlaces externos</h3>
+        <p>
+          INDX puede contener enlaces a servicios de terceros, por ejemplo:
+          <b>Google Maps</b>, <b>WhatsApp</b>, <b>Instagram</b>, <b>Facebook</b>, o <b>sitios web</b> de cada ficha.
+        </p>
+        <p style="margin-top:8px">
+          Estos servicios se rigen por sus propias políticas. INDX no controla su funcionamiento ni el uso que hagan de los datos.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3><span class="ico"><i class="fa-solid fa-lock"></i></span> 7) Seguridad</h3>
+        <ul>
+          <li>Aplicamos medidas razonables para proteger la información y evitar accesos no autorizados.</li>
+          <li>Sin embargo, ningún sistema es 100% infalible. Recomendamos publicar solo datos comerciales necesarios.</li>
+          <li>Si detectás un error o vulnerabilidad, te pedimos que lo reportes para corregirlo.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3><span class="ico"><i class="fa-solid fa-pen-to-square"></i></span> 8) Actualización y corrección de fichas</h3>
+        <p>
+          Si sos titular/representante de un comercio o ficha y necesitás <b>modificar, actualizar o eliminar</b> información,
+          podés solicitarlo por los canales de contacto de INDX.
+        </p>
+        <ul>
+          <li>Podemos pedirte una verificación mínima (por ejemplo, contacto desde el WhatsApp publicado) para evitar cambios indebidos.</li>
+          <li>Los tiempos de actualización dependen del volumen de solicitudes y validaciones.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3><span class="ico"><i class="fa-solid fa-people-arrows"></i></span> 9) Menores de edad</h3>
+        <p>
+          INDX no está diseñado para recopilar datos personales de menores. Si detectás que se publicó información inapropiada,
+          solicitá su eliminación.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3><span class="ico"><i class="fa-solid fa-rotate"></i></span> 10) Cambios a esta política</h3>
+        <p>
+          Podemos actualizar esta Política para reflejar mejoras del sistema o cambios operativos. Publicaremos la nueva versión
+          con su fecha de actualización.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3><span class="ico"><i class="fa-solid fa-envelope"></i></span> 11) Contacto</h3>
+        <p>
+          Para consultas sobre privacidad, correcciones o bajas de fichas, escribinos por los canales oficiales del proyecto.
+        </p>
+        <ul>
+          <li><b>WhatsApp:</b> <span id="contactWhats">[completá tu número]</span></li>
+          <li><b>Email:</b> <span id="contactEmail">[completá tu correo]</span></li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>© 2026 INDX • Política de Privacidad</footer>
+
+  <script>
+    // ===== Theme (misma key del sistema)
+    const THEME_KEY = "indx_theme";
+    const themeToggle = document.getElementById("themeToggle");
+
+    function setTheme(theme){
+      document.body.setAttribute("data-theme", theme === "dark" ? "dark" : "light");
+      localStorage.setItem(THEME_KEY, theme === "dark" ? "dark" : "light");
+      themeToggle.textContent = (document.body.dataset.theme === "dark") ? "🌙" : "🌓";
+    }
+    function initTheme(){
+      const saved = localStorage.getItem(THEME_KEY);
+      if(saved === "dark" || saved === "light"){
+        setTheme(saved); return;
+      }
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      setTheme(prefersDark ? "dark" : "light");
+    }
+    themeToggle.addEventListener("click", ()=>{
+      const isDark = document.body.dataset.theme === "dark";
+      setTheme(isDark ? "light" : "dark");
+    });
+
+    // Back
+    document.getElementById("backBtn").addEventListener("click", ()=>{
+      if(history.length > 1) history.back();
+      else location.href = "./index.html";
+    });
+
+    // Print / Save PDF
+    document.getElementById("printBtn").addEventListener("click", ()=> window.print());
+
+    // ===== Personalización rápida
+    // Poné tu fecha real acá:
+    document.getElementById("lastUpdate").textContent = "2026-01-17";
+
+    // Poné tus datos reales acá:
+    document.getElementById("contactWhats").textContent = "+54 264 624-6834";
+    document.getElementById("contactEmail").textContent = "contacto@igwservicios.com";
+
+    // Init
+    initTheme();
+  </script>
+</body>
+</html>
