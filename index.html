@@ -313,12 +313,75 @@
     .qbtn b{ display:block; font-size: 11px; font-weight: 950;color: #3cc0e8; }
     .qbtn span{ display:block; font-size: 10.5px; color: var(--muted); font-weight: 850; }
 
-    /* Allies */
-    .allies{ margin-top: 14px; text-align:center; }
-    .allies h4{ font-size: 11px; color: var(--muted); letter-spacing: 2px; font-weight: 950; margin-bottom: 10px; }
-    .logos{ display:flex; gap: 10px; justify-content:center; overflow-x:auto; padding: 6px 2px; }
-    .logoBox{ flex: 0 0 auto; width: 180px; height: 90px; border-radius: 16px; border: 1px solid var(--border); background: var(--surface); display: table; place-items: center; overflow: hidden; padding: 8px; }
-    .logoBox img{ width: 100%; height: 100%; object-fit:contain}
+      .aliados{
+  padding: 26px 14px;
+  color:#ed5b0c;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+}
+
+.aliados__title{
+  text-align:center;
+  letter-spacing:.22em;
+  font-weight:800;
+  font-size: 14px;
+  opacity:.9;
+  margin: 0 0 16px;
+}
+
+.marquee{
+  overflow:hidden;
+  border-radius: 12px;
+  padding: 1px 0;
+  position: relative;
+}
+
+.marquee__track{
+  display:flex;
+  gap: 18px;
+  width: max-content;
+  will-change: transform;
+  animation: scrollX 22s linear infinite;
+}
+
+.logoCard{
+  width: min(75vw, 55vw);
+  height: 150px;
+  background: rgba(248, 230, 33, 0);
+  border-radius: 18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding: 3px;
+  text-decoration: none;
+  transition: transform .25s ease, border-color .25s ease;
+}
+
+.logoCard:hover{
+  transform: translateY(-2px) scale(1.01);
+}
+
+.logoCard img{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Pausa cuando el usuario pasa el mouse */
+.marquee:hover .marquee__track{
+  animation-play-state: paused;
+}
+
+/* Animación: se ajusta por JS con variables */
+@keyframes scrollX{
+  from { transform: translateX(0); }
+  to   { transform: translateX(calc(-1 * var(--loopWidth, 80px))); }
+}
+
+/* Accesibilidad: si el usuario prefiere menos movimiento */
+@media (prefers-reduced-motion: reduce){
+  .marquee__track{ animation: none; }
+}
+
 
     /* Footer */
     footer{
@@ -419,18 +482,32 @@
       </div>
     </section>
 
-    <section class="allies">
-      <h4>ALIADOS LOCALES</h4>
-      <div class="logos" id="alliesGrid">
-        <div class="logoBox"><img src="LOGO SUMATE.png" alt="Sumate"></div>
-        <div class="logoBox"><img src="LOGO SUMATE.png" alt="Sumate"></div>
-        <div class="logoBox"><img src="LOGO BMP.png" alt="Consultora Bmp"></div>
-        <div class="logoBox"><img src="LOGO IGW.png" alt="Iglesia Web"></div>
-        <div class="logoBox"><img src="LOGO SUMATE.png" alt="Sumate"></div>
-        <div class="logoBox"><img src="LOGO SUMATE.png" alt="Sumate"></div>
-        
-      </div>
-    </section>
+    <section class="aliados">
+  <h2 class="aliados__title">ALIADOS LOCALES</h2>
+
+  <div class="marquee" aria-label="Carrusel de aliados">
+    <div class="marquee__track" id="aliadosTrack">
+      <!-- SET A -->
+      <a class="logoCard" href="www.consultorabmp.com" target="_blank" rel="noopener">
+        <img src="LOGO BMP.png" alt="BMP Consultora - Talento Humano">
+      </a>
+
+      <a class="logoCard" href="www.igwservicios.com" target="_blank" rel="noopener">
+        <img src="LOGO IGW.png" alt="IGW Iglesia Web">
+      </a>
+
+      <a class="logoCard" href="#" target="_blank" rel="noopener">
+        <img src="LOGO SUMATE.png" alt="Aliado 3">
+      </a>
+
+      <a class="logoCard" href="#" target="_blank" rel="noopener">
+        <img src="indx logo.png" alt="Aliado 4">
+      </a>
+
+      <!-- SET B (duplicado automático por JS) -->
+    </div>
+  </div>
+</section>
 
     <footer>
       <div class="brand" style="justify-content:center;">
@@ -514,6 +591,26 @@
     }
     document.getElementById("searchBtn").addEventListener("click", runSearch);
     document.getElementById("q").addEventListener("keydown", e => e.key === "Enter" && runSearch());
+    (function(){
+    const track = document.getElementById("aliadosTrack");
+    if(!track) return;
+
+    // Duplicar los items para loop infinito
+    const items = Array.from(track.children);
+    items.forEach(node => track.appendChild(node.cloneNode(true)));
+
+    // Calcular ancho del "set A" para que el loop sea perfecto
+    // (set A = cantidad original)
+    requestAnimationFrame(() => {
+      let loopWidth = 0;
+      for (let i = 0; i < items.length; i++) {
+        loopWidth += items[i].getBoundingClientRect().width;
+        // sumar el gap (18px) excepto último
+        if (i < items.length - 1) loopWidth += 18;
+      }
+      track.style.setProperty("--loopWidth", `${loopWidth}px`);
+    });
+  })();
   </script>
 </body>
 </html>
