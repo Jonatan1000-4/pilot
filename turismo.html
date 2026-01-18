@@ -1,0 +1,1449 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>INDX | Turismo</title>
+  <meta name="description" content="Puntos turísticos del Departamento de Iglesia. Guía visual, mapas y galería." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+  <style>
+    :root{
+      --primary:#2D5BFF;
+      --primary-dark:#1A3EBF;
+      --sky:#0EA5E9;
+      --ok:#10B981;
+      --danger:#EF4444;
+      --gold:#F59E0B;
+
+      --bg:#F6F7FB;
+      --surface: rgba(255,255,255,.76);
+      --panel: rgba(255,255,255,.86);
+      --card: rgba(255,255,255,.92);
+
+      --text:#0B1220;
+      --muted:#5B667A;
+      --line: rgba(12,18,32,.10);
+
+      --shadow: 0 18px 60px rgba(11,18,32,.10);
+      --shadow2: 0 10px 26px rgba(11,18,32,.08);
+      --glow: 0 0 0 3px rgba(45,91,255,0.20);
+
+      --r14:14px;
+      --r18:18px;
+      --r22:22px;
+      --r26:26px;
+
+      --max:1200px;
+
+      --chip: rgba(255,255,255,0.62);
+      --chip-border: rgba(12,18,32,.10);
+
+      --transition: all .22s ease;
+    }
+
+    [data-theme="dark"]{
+      --bg:#070A10;
+      --surface: rgba(15,23,42,.65);
+      --panel: rgba(15,23,42,.80);
+      --card: rgba(15,23,42,.88);
+      --text:#F8FAFC;
+      --muted:#A3B2C7;
+      --line: rgba(255,255,255,.08);
+
+      --shadow: 0 18px 70px rgba(0,0,0,.45);
+      --shadow2: 0 10px 30px rgba(0,0,0,.35);
+      --chip: rgba(15,23,42,0.55);
+      --chip-border: rgba(255,255,255,.10);
+    }
+
+    *{ box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color: transparent; }
+    body{
+      font-family:'Plus Jakarta Sans',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background: var(--bg);
+      color:var(--text);
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      overflow-x:hidden;
+    }
+    a{ color:inherit; text-decoration:none; }
+    button,input,select{ font:inherit; }
+    :focus-visible{ outline:none; box-shadow: var(--glow); border-radius: 14px; }
+
+    /* Fondo premium */
+    .bgfx{
+      position:fixed; inset:0; z-index:-2; pointer-events:none;
+      background:
+        radial-gradient(900px 520px at 10% -10%, rgba(45,91,255,.18), transparent 60%),
+        radial-gradient(700px 460px at 110% 10%, rgba(14,165,233,.14), transparent 60%),
+        radial-gradient(650px 520px at 40% 120%, rgba(245,158,11,.10), transparent 55%);
+    }
+    .grain{
+      position:fixed; inset:0; z-index:-1; pointer-events:none;
+      opacity:.05;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
+      mix-blend-mode:multiply;
+    }
+    [data-theme="dark"] .grain{ mix-blend-mode:screen; opacity:.06; }
+
+    .container{ width:min(var(--max), calc(100% - 22px)); margin:0 auto; }
+
+    /* HEADER */
+    header{
+      position:sticky; top:0; z-index:50;
+      background: rgba(255,255,255,.60);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom:1px solid var(--line);
+      box-shadow: 0 8px 24px rgba(0,0,0,.06);
+    }
+    [data-theme="dark"] header{
+      background: rgba(7,10,16,.55);
+      box-shadow: 0 10px 28px rgba(0,0,0,.30);
+    }
+
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:10px; padding:12px 0 8px;
+    }
+    .brand{ display:flex; align-items:center; gap:10px; min-width:0; }
+    .logo{
+      width:50px; height:50px; border-radius: 26px;
+      background: url(indx_logo.png) center/cover no-repeat;
+      box-shadow: 0 1px 34px rgba(45,91,255,.22);
+      border: 1px solid rgba(255,255,255,.25);
+      flex:0 0 auto;
+    }
+    .brand .t{ min-width:0; display:flex; flex-direction:column; }
+    .brand h1{
+      font-size:16px; font-weight:950; letter-spacing:-.4px;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      max-width: 60vw;
+    }
+    .subhead{
+      margin-top:2px; color: var(--muted); font-size:12px; font-weight:850;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      max-width: 60vw;
+    }
+
+    .controls{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
+    .icon-btn{
+      width:44px; height:44px; border-radius:16px;
+      border:1px solid var(--line);
+      background: var(--panel);
+      box-shadow: var(--shadow2);
+      cursor:pointer;
+      display:grid; place-items:center;
+      font-size:18px;
+      transition: var(--transition);
+    }
+    .icon-btn:hover{ transform: translateY(-1px); }
+
+    /* HERO */
+    .hero{ padding: 8px 0 10px; }
+    .heroCard{
+      border:1px solid var(--line);
+      background: linear-gradient(135deg, rgba(245,158,11,.14), rgba(45,91,255,.10), rgba(14,165,233,.08));
+      border-radius: var(--r26);
+      box-shadow: var(--shadow2);
+      overflow:hidden;
+      position:relative;
+    }
+    [data-theme="dark"] .heroCard{
+      background: linear-gradient(135deg, rgba(245,158,11,.14), rgba(45,91,255,.14), rgba(14,165,233,.10));
+    }
+    .heroInner{
+      padding: 14px 14px 14px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .heroTitle{
+      display:flex; gap:10px; align-items:flex-start;
+    }
+    .heroIcon{
+      width:42px; height:42px;
+      border-radius: 16px;
+      display:grid; place-items:center;
+      background: rgba(245,158,11,.14);
+      border: 1px solid rgba(245,158,11,.25);
+      color: var(--gold);
+      box-shadow: 0 10px 24px rgba(245,158,11,.12);
+      flex:0 0 auto;
+    }
+    .heroTitle h2{
+      font-size: 15px;
+      font-weight: 950;
+      letter-spacing: -0.2px;
+      margin-top: 2px;
+    }
+    .heroTitle p{
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+      line-height: 1.35;
+      max-width: 520px;
+    }
+
+    /* FILTERS */
+    .filters{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+      padding: 8px 0 12px;
+    }
+    .search-bar{
+      grid-column: 1 / -1;
+      border:1px solid var(--chip-border);
+      background: var(--chip);
+      box-shadow: var(--shadow2);
+      border-radius: var(--r26);
+      display:flex; align-items:center; padding: 12px 14px; gap:10px;
+      transition:.2s;
+    }
+    .search-bar:focus-within{ border-color: rgba(245,158,11,0.55); box-shadow: 0 0 0 3px rgba(245,158,11,.18); }
+    .search-bar i{ color: var(--muted); }
+    .search-bar input{
+      width:100%; border:none; outline:none; background:transparent;
+      color: var(--text); font-size: 14px; font-weight:850;
+    }
+    .search-bar input::placeholder{ color: var(--muted); font-weight:800; }
+
+    .select{
+      border:1px solid var(--line);
+      background: var(--panel);
+      color: var(--text);
+      border-radius: 18px;
+      padding: 10px 12px;
+      box-shadow: var(--shadow2);
+      transition: var(--transition);
+      font-weight:950;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      position:relative;
+    }
+    .select::after{
+      content:"▾";
+      position:absolute;
+      right:12px; top:50%;
+      transform: translateY(-50%);
+      pointer-events:none;
+      color: var(--muted);
+      font-weight: 950;
+    }
+    select{
+      appearance:none; -webkit-appearance:none; -moz-appearance:none;
+      border:none; outline:none; background:transparent;
+      width:100%;
+      color: var(--text);
+      font-weight:950;
+      cursor:pointer;
+      padding-right: 18px;
+    }
+    select option { background: #ffffff; color: #0F172A; }
+    [data-theme="dark"] select option { background: #0F172A; color: #F8FAFC; }
+
+    .btn{
+      border:1px solid rgba(245,158,11,.25);
+      background: linear-gradient(135deg, rgba(245,158,11,.92), rgba(45,91,255,.92));
+      color: #fff;
+      border-radius: 18px;
+      padding: 10px 12px;
+      box-shadow: 0 14px 28px rgba(245,158,11,.16);
+      transition: var(--transition);
+      font-weight:950;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+    }
+    .btn:hover{ transform: translateY(-1px); }
+    .btn.ghost{
+      background: var(--panel);
+      color: var(--text);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow2);
+    }
+
+    .results-info{
+      font-size: 12px;
+      color: var(--muted);
+      text-align:center;
+      padding: 6px 0 12px;
+      font-weight: 850;
+    }
+
+    /* GRID */
+    .views{
+      width:min(var(--max), calc(100% - 22px));
+      margin: 0 auto;
+      padding: 12px 0 26px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 14px;
+    }
+    .card{
+      grid-column: span 4;
+      border-radius: 22px;
+      overflow:hidden;
+      border: 1px solid var(--line);
+      background: var(--card);
+      box-shadow: var(--shadow);
+      position:relative;
+      cursor:pointer;
+
+      opacity:0;
+      transform: translateY(14px);
+      transition: .28s ease;
+      min-width:0;
+      isolation:isolate;
+    }
+    .card.loaded{ opacity:1; transform: translateY(0); }
+    .card:hover{ transform: translateY(-3px); box-shadow: 0 22px 60px rgba(0,0,0,.16); }
+    [data-theme="dark"] .card:hover{ box-shadow: 0 22px 60px rgba(0,0,0,.55); }
+
+    .media{ position:relative; border-bottom:1px solid var(--line); background: rgba(255,255,255,.05); }
+    .card img{
+      width:100%;
+      height: 190px;
+      object-fit:cover;
+      display:block;
+      filter: saturate(1.08) contrast(1.05);
+      transform: scale(1.02);
+      transition: .35s ease;
+    }
+    .card:hover img{ transform: scale(1.06); }
+
+    .overlay{
+      position:absolute; inset:0;
+      background: linear-gradient(to top, rgba(0,0,0,.58), rgba(0,0,0,.12), transparent);
+      pointer-events:none; z-index:1;
+    }
+    .badge{
+      position:absolute; top:10px; left:10px; z-index:3;
+      display:inline-flex; align-items:center; gap:7px;
+      padding: 6px 9px; border-radius: 999px;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.34);
+      backdrop-filter: blur(10px);
+      color: rgba(255,255,255,.94);
+      font-size: 11px; font-weight: 950;
+      white-space:nowrap;
+      max-width: calc(100% - 20px);
+      overflow:hidden; text-overflow:ellipsis;
+    }
+
+    .card-content{ padding: 12px 12px 14px; }
+    .card-content h3{
+      font-size: 15px; font-weight: 950; text-align:center;
+      letter-spacing:.2px; text-transform: uppercase;
+      line-height:1.2; margin-bottom: 6px;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .card-content p{
+      font-size: 12px; color: var(--muted); font-weight: 850;
+      margin-bottom: 10px; text-align:center;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .metaRow{
+      display:flex; gap:8px; flex-wrap:wrap; justify-content:center;
+    }
+    .tag{
+      background: rgba(245,158,11,.10);
+      border: 1px solid rgba(245,158,11,.22);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 12px;
+      font-weight: 950;
+      user-select:none;
+      max-width:100%;
+    }
+    [data-theme="dark"] .tag{
+      background: rgba(255,255,255,.06);
+      border-color: rgba(255,255,255,.10);
+      color: var(--text);
+    }
+
+    /* MODAL */
+    .modal{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.42);
+      display:none;
+      align-items:flex-end;
+      justify-content:center;
+      padding: 16px;
+      z-index:80;
+    }
+    .modal.show{ display:flex; }
+
+    .sheet{
+      width:min(820px, 100%);
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      transform: translateY(10px);
+      opacity:0;
+      transition: .22s ease;
+    }
+    .modal.show .sheet{ transform: translateY(0); opacity:1; }
+
+    .sheetHead{
+      display:flex; align-items:center; justify-content:space-between;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      gap:10px;
+    }
+    .sheetHead b{
+      font-size: 13px; font-weight: 950;
+      display:flex; align-items:center; gap:10px;
+      min-width:0;
+    }
+    .sheetHead b span{
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      max-width: 58vw;
+    }
+    .closeBtn{
+      width:44px; height:44px; border-radius:16px;
+      border:1px solid var(--line);
+      background: var(--surface);
+      box-shadow: var(--shadow2);
+      cursor:pointer;
+      display:grid; place-items:center;
+      font-size:18px;
+      transition: var(--transition);
+      flex:0 0 auto;
+    }
+
+    .sheetBody{
+      padding: 14px;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    /* Slider */
+    .slider{
+      border-radius: 20px;
+      overflow:hidden;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.06);
+      position:relative;
+      box-shadow: var(--shadow2);
+    }
+    .slideImg{
+      width:100%;
+      height: 300px;
+      object-fit: cover;
+      display:block;
+      user-select:none;
+      -webkit-user-drag:none;
+    }
+    @media (max-width: 640px){
+      .slideImg{ height: 240px; }
+    }
+    .sliderOverlay{
+      position:absolute; inset:0;
+      background: linear-gradient(to top, rgba(0,0,0,.62), rgba(0,0,0,.10), transparent);
+      pointer-events:none;
+    }
+    .sliderTop{
+      position:absolute; left:10px; right:10px; top:10px;
+      display:flex; align-items:center; justify-content:space-between;
+      gap:10px;
+      z-index:3;
+    }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.20);
+      background: rgba(0,0,0,.34);
+      backdrop-filter: blur(10px);
+      font-weight: 950;
+      font-size: 12px;
+      color:#fff;
+      white-space:nowrap;
+      max-width: 78%;
+      overflow:hidden; text-overflow:ellipsis;
+    }
+    .sliderBtns{
+      display:flex; gap:8px;
+    }
+    .sbtn{
+      width:42px; height:42px;
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.20);
+      background: rgba(0,0,0,.30);
+      color:#fff;
+      cursor:pointer;
+      display:grid; place-items:center;
+      transition: var(--transition);
+    }
+    .sbtn:hover{ transform: translateY(-1px); }
+    .sbtn:active{ transform: translateY(0px); }
+
+    .dots{
+      position:absolute;
+      left:0; right:0; bottom:10px;
+      display:flex; justify-content:center; gap:8px;
+      z-index:3;
+      padding: 0 10px;
+      flex-wrap:wrap;
+    }
+    .dot{
+      width:8px; height:8px;
+      border-radius:999px;
+      background: rgba(255,255,255,.35);
+      border:1px solid rgba(255,255,255,.00);
+      cursor:pointer;
+      transition: var(--transition);
+    }
+    .dot.active{
+      width:22px;
+      background: rgba(245,158,11,.95);
+      border-color: rgba(245,158,11,.35);
+    }
+
+    .sheetTitle{
+      font-weight: 950;
+      letter-spacing:.2px;
+      text-transform: uppercase;
+      font-size: 15px;
+      line-height: 1.25;
+      text-align:center;
+    }
+    .sheetDesc{
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 850;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+
+    .sheetGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    @media (max-width: 640px){
+      .sheetGrid{ grid-template-columns: 1fr; }
+    }
+    .infoBox{
+      border:1px solid var(--line);
+      background: var(--surface);
+      border-radius: 18px;
+      padding: 10px 12px;
+      box-shadow: var(--shadow2);
+      min-width:0;
+    }
+    .infoBox .k{
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 950;
+      letter-spacing:.14em;
+      text-transform: uppercase;
+    }
+    .infoBox .v{
+      margin-top: 6px;
+      font-size: 13px;
+      font-weight: 950;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .sheetActions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .action{
+      border:1px solid var(--line);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 18px;
+      padding: 11px 12px;
+      box-shadow: var(--shadow2);
+      cursor:pointer;
+      font-weight: 950;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      transition: var(--transition);
+      flex: 1 1 180px;
+      min-width: 160px;
+    }
+    .action.primary{
+      border-color: rgba(245,158,11,.30);
+      background: linear-gradient(135deg, rgba(245,158,11,.92), rgba(45,91,255,.92));
+      color: #fff;
+      box-shadow: 0 14px 28px rgba(245,158,11,.18);
+    }
+    .action:hover{ transform: translateY(-1px); }
+
+    /* Skeleton */
+    .skeleton{ position:relative; overflow:hidden; background: rgba(255,255,255,.10); border-radius: 16px; }
+    [data-theme="dark"] .skeleton{ background: rgba(255,255,255,.06); }
+    .skeleton::after{
+      content:"";
+      position:absolute; inset:-40% -60%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.12), transparent);
+      transform: translateX(-40%);
+      animation: sk 1.2s ease-in-out infinite;
+    }
+    @keyframes sk{ 0%{ transform: translateX(-60%); } 100%{ transform: translateX(60%); } }
+
+    /* Responsive grid */
+    @media (max-width: 980px){
+      .card{ grid-column: span 6; }
+    }
+    @media (max-width: 640px){
+      .card{ grid-column: span 6; } /* 2 por fila en móvil */
+      .card img{ height: 160px; }
+      .grid{ gap: 12px; }
+    }
+    @media (max-width: 380px){
+      .card{ grid-column: span 12; } /* ultra chico: 1 */
+      .card img{ height: 180px; }
+    }
+
+    footer{
+      margin-top:auto;
+      padding: 18px 0 22px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      text-align:center;
+      font-size: 12px;
+      font-weight:850;
+    }
+  </style>
+</head>
+
+<body data-theme="light">
+  <div class="bgfx"></div>
+  <div class="grain"></div>
+
+  <header>
+    <div class="container">
+      <div class="topbar">
+        <a class="brand" href="./index.html" title="Volver al inicio">
+          <div class="logo" aria-hidden="true"></div>
+          <div class="t">
+            <h1>INDX | Turismo</h1>
+            <div class="subhead">Puntos turísticos del Departamento de Iglesia</div>
+          </div>
+        </a>
+
+        <div class="controls">
+          <button class="icon-btn" id="backBtn" title="Volver">←</button>
+          <button class="icon-btn" id="themeToggle" title="Cambiar tema">🌓</button>
+        </div>
+      </div>
+
+      <div class="hero">
+        <div class="heroCard">
+          <div class="heroInner">
+            <div class="heroTitle">
+              <div class="heroIcon"><i class="fa-solid fa-mountain-sun"></i></div>
+              <div>
+                <h2>Explorá lugares increíbles</h2>
+                <p>
+                  Buscá por nombre o filtrá por distrito. Tocá un lugar para ver <b>galería</b>, <b>mapa</b> y detalles.
+                </p>
+              </div>
+            </div>
+
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <button class="btn ghost" id="gotoCatalogBtn" type="button" title="Ver turismo en el catálogo">
+                <i class="fa-solid fa-layer-group"></i> Ver en Catálogo
+              </button>
+              <button class="btn" id="refreshBtn" type="button" title="Actualizar">
+                <i class="fa-solid fa-rotate"></i> Actualizar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section class="filters">
+        <div class="search-bar">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="searchInput" placeholder="Buscar por nombre, tags, descripción...">
+        </div>
+
+        <div class="select" title="Distrito">
+          <span>📍</span>
+          <select id="districtSelect">
+            <option value="todos">Todos los distritos</option>
+            <option value="4">Bella Vista</option>
+            <option value="2">Rodeo</option>
+            <option value="5">Villa Iglesia</option>
+            <option value="1">Las Flores</option>
+            <option value="3">Tudcum</option>
+          </select>
+        </div>
+
+        <button class="btn ghost" id="clearBtn" type="button" title="Limpiar filtros">
+          <i class="fa-solid fa-eraser"></i> Limpiar
+        </button>
+      </section>
+
+      <div class="results-info" id="resultsInfo"></div>
+    </div>
+  </header>
+
+  <section class="views" id="views">
+    <div class="grid" id="gridView"></div>
+  </section>
+
+  <footer>© 2026 INDX • Turismo • Iglesia (San Juan)</footer>
+
+  <!-- MODAL -->
+  <div class="modal" id="modal">
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="sheetHead">
+        <b><i class="fa-solid fa-mountain-sun"></i> <span id="modalTitle">Lugar</span></b>
+        <button class="closeBtn" id="closeModal" title="Cerrar">✕</button>
+      </div>
+
+      <div class="sheetBody">
+        <!-- Slider -->
+        <div class="slider" id="slider">
+          <img id="slideImg" class="slideImg" alt="Imagen del lugar" />
+          <div class="sliderOverlay"></div>
+
+          <div class="sliderTop">
+            <div class="pill" id="sliderPill"><i class="fa-solid fa-camera"></i> 1/1</div>
+            <div class="sliderBtns">
+              <button class="sbtn" id="prevSlide" type="button" title="Anterior"><i class="fa-solid fa-chevron-left"></i></button>
+              <button class="sbtn" id="nextSlide" type="button" title="Siguiente"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+          </div>
+
+          <div class="dots" id="dots"></div>
+        </div>
+
+        <div class="sheetTitle" id="modalName">—</div>
+        <div class="sheetDesc" id="modalDesc">—</div>
+
+        <div class="sheetGrid">
+          <div class="infoBox">
+            <div class="k">DISTRITO</div>
+            <div class="v" id="modalZone">—</div>
+          </div>
+          <div class="infoBox">
+            <div class="k">UBICACIÓN</div>
+            <div class="v" id="modalPlace">—</div>
+          </div>
+          <div class="infoBox">
+            <div class="k">TAGS</div>
+            <div class="v" id="modalTags">—</div>
+          </div>
+          <div class="infoBox">
+            <div class="k">SITIO / INFO</div>
+            <div class="v" id="modalWeb">—</div>
+          </div>
+        </div>
+
+        <div class="sheetActions">
+          <button class="action primary" id="actionMap" type="button">
+            <i class="fa-solid fa-location-dot"></i> Ver mapa
+          </button>
+          <button class="action" id="actionWeb" type="button">
+            <i class="fa-solid fa-globe"></i> Ver info
+          </button>
+          <button class="action" id="actionWhats" type="button">
+            <i class="fa-brands fa-whatsapp"></i> Consultar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- =========================
+TURISMO.HTML (PARTE 2/2) - ACTUALIZADA
+Reemplazá tu Parte 2 completa por esta
+========================= -->
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    // ===== Firebase (tu config actual)
+    const firebaseConfig = {
+      apiKey: "AIzaSyDYNLhKi2h_JoPlDYK9_ZhKaHnKQ3DJhbk",
+      authDomain: "cweb-ac414.firebaseapp.com",
+      projectId: "cweb-ac414",
+      storageBucket: "cweb-ac414.firebasestorage.app",
+      messagingSenderId: "174144272082",
+      appId: "1:174144272082:web:68b9d5aefc1aef07ab9f0b"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // ===== THEME
+    const THEME_KEY = "indx_theme";
+    const themeToggle = document.getElementById("themeToggle");
+
+    function setTheme(theme){
+      document.body.setAttribute("data-theme", theme === "dark" ? "dark" : "light");
+      localStorage.setItem(THEME_KEY, theme === "dark" ? "dark" : "light");
+      themeToggle.textContent = (document.body.dataset.theme === "dark") ? "🌙" : "🌓";
+    }
+    function initTheme(){
+      const saved = localStorage.getItem(THEME_KEY);
+      if(saved === "dark" || saved === "light"){ setTheme(saved); return; }
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      setTheme(prefersDark ? "dark" : "light");
+    }
+    themeToggle.addEventListener("click", ()=>{
+      const isDark = document.body.dataset.theme === "dark";
+      setTheme(isDark ? "light" : "dark");
+    });
+
+    // ===== DOM
+    const backBtn = document.getElementById("backBtn");
+    const gotoCatalogBtn = document.getElementById("gotoCatalogBtn");
+    const refreshBtn = document.getElementById("refreshBtn");
+    const clearBtn = document.getElementById("clearBtn");
+
+    const input = document.getElementById("searchInput");
+    const selectDistrito = document.getElementById("districtSelect");
+    const resultsInfo = document.getElementById("resultsInfo");
+
+    const gridView = document.getElementById("gridView");
+
+    // Modal
+    const modal = document.getElementById("modal");
+    const closeModal = document.getElementById("closeModal");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalName = document.getElementById("modalName");
+    const modalDesc = document.getElementById("modalDesc");
+    const modalZone = document.getElementById("modalZone");
+    const modalPlace = document.getElementById("modalPlace");
+    const modalTags = document.getElementById("modalTags");
+    const modalWeb = document.getElementById("modalWeb");
+
+    const actionMap = document.getElementById("actionMap");
+    const actionWeb = document.getElementById("actionWeb");
+    const actionWhats = document.getElementById("actionWhats");
+
+    // Slider (modal)
+    const slideImg = document.getElementById("slideImg");
+    const sliderPill = document.getElementById("sliderPill");
+    const prevSlide = document.getElementById("prevSlide");
+    const nextSlide = document.getElementById("nextSlide");
+    const dots = document.getElementById("dots");
+
+    // ===== Fullscreen viewer (se crea por JS)
+    let fsOverlay = null;
+    let fsImg = null;
+    let fsPill = null;
+    let fsDots = null;
+    let fsPrev = null;
+    let fsNext = null;
+    let fsClose = null;
+
+    function ensureFullscreenUI(){
+      if(fsOverlay) return;
+
+      const style = document.createElement("style");
+      style.textContent = `
+        .fsOverlay{
+          position:fixed; inset:0; z-index:9999;
+          background: rgba(0,0,0,.92);
+          display:none;
+          align-items:center;
+          justify-content:center;
+          padding: 14px;
+        }
+        .fsOverlay.show{ display:flex; }
+        .fsWrap{
+          width:min(1200px, 100%);
+          height:min(86vh, 900px);
+          position:relative;
+          border-radius: 22px;
+          overflow:hidden;
+          border:1px solid rgba(255,255,255,.12);
+          background: rgba(255,255,255,.04);
+          box-shadow: 0 30px 90px rgba(0,0,0,.50);
+        }
+        .fsImg{
+          width:100%; height:100%;
+          object-fit: contain;
+          display:block;
+          user-select:none;
+          -webkit-user-drag:none;
+          background: rgba(0,0,0,.15);
+        }
+        .fsTop{
+          position:absolute; left:10px; right:10px; top:10px;
+          display:flex; align-items:center; justify-content:space-between;
+          gap:10px;
+        }
+        .fsPill{
+          display:inline-flex; align-items:center; gap:8px;
+          padding: 8px 10px;
+          border-radius: 999px;
+          border:1px solid rgba(255,255,255,.18);
+          background: rgba(0,0,0,.35);
+          backdrop-filter: blur(10px);
+          color:#fff;
+          font-weight:950;
+          font-size: 12px;
+          max-width: 75%;
+          overflow:hidden;
+          text-overflow:ellipsis;
+          white-space:nowrap;
+        }
+        .fsBtns{ display:flex; gap:8px; }
+        .fsBtn{
+          width:44px; height:44px;
+          border-radius: 16px;
+          border:1px solid rgba(255,255,255,.18);
+          background: rgba(0,0,0,.30);
+          color:#fff;
+          display:grid; place-items:center;
+          cursor:pointer;
+          transition: .18s ease;
+        }
+        .fsBtn:hover{ transform: translateY(-1px); }
+        .fsDots{
+          position:absolute;
+          left:0; right:0; bottom:12px;
+          display:flex; justify-content:center; gap:8px;
+          padding: 0 12px;
+          flex-wrap:wrap;
+        }
+        .fsDot{
+          width:8px; height:8px; border-radius:999px;
+          background: rgba(255,255,255,.35);
+          cursor:pointer;
+          transition:.18s ease;
+        }
+        .fsDot.active{ width:22px; background: rgba(245,158,11,.95); }
+      `;
+      document.head.appendChild(style);
+
+      fsOverlay = document.createElement("div");
+      fsOverlay.className = "fsOverlay";
+      fsOverlay.innerHTML = `
+        <div class="fsWrap" role="dialog" aria-modal="true">
+          <img class="fsImg" alt="Imagen en pantalla completa">
+          <div class="fsTop">
+            <div class="fsPill"><i class="fa-solid fa-camera"></i> 1/1</div>
+            <div class="fsBtns">
+              <button class="fsBtn" type="button" title="Anterior"><i class="fa-solid fa-chevron-left"></i></button>
+              <button class="fsBtn" type="button" title="Siguiente"><i class="fa-solid fa-chevron-right"></i></button>
+              <button class="fsBtn" type="button" title="Cerrar"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+          </div>
+          <div class="fsDots"></div>
+        </div>
+      `;
+      document.body.appendChild(fsOverlay);
+
+      fsImg = fsOverlay.querySelector(".fsImg");
+      fsPill = fsOverlay.querySelector(".fsPill");
+      fsDots = fsOverlay.querySelector(".fsDots");
+      const btns = fsOverlay.querySelectorAll(".fsBtn");
+      fsPrev = btns[0];
+      fsNext = btns[1];
+      fsClose = btns[2];
+
+      fsOverlay.addEventListener("click", (e)=>{
+        if(e.target === fsOverlay) closeFullscreen();
+      });
+      fsClose.addEventListener("click", closeFullscreen);
+
+      document.addEventListener("keydown", (e)=>{
+        if(!fsOverlay.classList.contains("show")) return;
+        if(e.key === "Escape") closeFullscreen();
+        if(e.key === "ArrowLeft") setFullscreenSlide(fsIndex - 1);
+        if(e.key === "ArrowRight") setFullscreenSlide(fsIndex + 1);
+      });
+    }
+
+    // ===== Utils
+    const slugify = (s) => (s || "")
+      .toString()
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "");
+
+    function safeImg(url){
+      const u = (url || "").toString().trim();
+      return u ? u : "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1400&q=60";
+    }
+
+    function districtLabel(d){
+      const v = (d ?? "").toString().trim();
+      const map = { "1":"Las Flores", "2":"Rodeo", "3":"Tudcum", "4":"Bella Vista", "5":"Villa Iglesia" };
+      return map[v] || (v ? `Distrito ${v}` : "—");
+    }
+
+    // ===== Getters robustos (absorbe distintos nombres)
+    function getWeb(v){
+      return (
+        v?.redes?.web ||
+        v?.web ||
+        v?.sitio_web ||
+        v?.sitioWeb ||
+        v?.url ||
+        v?.evento?.web ||
+        ""
+      ).toString().trim();
+    }
+
+    function getMap(v){
+      return (
+        v?.mapLink ||
+        v?.maps ||
+        v?.map ||
+        v?.ubicacion?.mapLink ||
+        v?.ubicacion?.maps ||
+        ""
+      ).toString().trim();
+    }
+
+    function getPlace(v){
+      return (
+        v?.direccion ||
+        v?.ubicacion ||
+        v?.ubicación ||
+        v?.lugar ||
+        v?.distrito?.value ||
+        ""
+      ).toString().trim();
+    }
+
+    function getDescShort(v){
+      return (
+        v?.descripcion ||
+        v?.descripción ||
+        v?.desc ||
+        v?.resumen ||
+        ""
+      ).toString().trim();
+    }
+
+    // ✅ NUEVO: descripción larga / historia
+    function getDescLong(v){
+      const long = (
+        v?.historia ||
+        v?.descripcion_larga ||
+        v?.descripcionLarga ||
+        v?.desc ||
+        v?.descripción ||
+        v?.info ||
+        v?.detalle ||
+        ""
+      ).toString().trim();
+
+      // si no hay larga, usamos la corta
+      return long || getDescShort(v);
+    }
+
+    function getCover(v){
+      if(v?.imagen) return v.imagen;
+      const g = Array.isArray(v?.galeria) ? v.galeria : [];
+      if(g.length) return g[0];
+      return "";
+    }
+
+    function getGallery(v){
+      const g = Array.isArray(v?.galeria) ? v.galeria : [];
+      const clean = g.map(x => (x||"").toString().trim()).filter(Boolean);
+      const unique = [...new Set(clean)];
+      if(unique.length) return unique;
+      if(v?.imagen) return [v.imagen];
+      return [];
+    }
+
+    function getWhats(v){
+      const wa = (v?.whatsapp || v?.telefono || v?.asistencia?.valor || "").toString().trim();
+      return wa.replace(/[^\d+]/g,"");
+    }
+
+    function getTags(v){
+      const t = Array.isArray(v?.tags) ? v.tags : [];
+      return t.map(x => (x||"").toString().trim()).filter(Boolean);
+    }
+
+    // ===== State
+    let all = [];
+    let filtered = [];
+
+    // Slider state (modal)
+    let currentGallery = [];
+    let slideIndex = 0;
+
+    function setSlide(i){
+      if(!currentGallery.length){
+        slideImg.src = safeImg("");
+        sliderPill.innerHTML = `<i class="fa-solid fa-camera"></i> 0/0`;
+        dots.innerHTML = "";
+        return;
+      }
+      slideIndex = (i + currentGallery.length) % currentGallery.length;
+      slideImg.src = safeImg(currentGallery[slideIndex]);
+      sliderPill.innerHTML = `<i class="fa-solid fa-camera"></i> ${slideIndex+1}/${currentGallery.length}`;
+
+      dots.innerHTML = "";
+      const maxDots = Math.min(currentGallery.length, 10);
+      for(let k=0;k<maxDots;k++){
+        const d = document.createElement("div");
+        d.className = "dot" + (k === slideIndex ? " active" : "");
+        d.title = `Foto ${k+1}`;
+        d.addEventListener("click", ()=> setSlide(k));
+        dots.appendChild(d);
+      }
+    }
+
+    // ===== Fullscreen viewer logic
+    let fsGallery = [];
+    let fsIndex = 0;
+
+    function openFullscreen(startIndex=0){
+      ensureFullscreenUI();
+      if(!fsGallery.length) return;
+      fsOverlay.classList.add("show");
+      setFullscreenSlide(startIndex);
+
+      // lock scroll
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeFullscreen(){
+      if(!fsOverlay) return;
+      fsOverlay.classList.remove("show");
+      document.body.style.overflow = "";
+    }
+
+    function setFullscreenSlide(i){
+      if(!fsGallery.length) return;
+      fsIndex = (i + fsGallery.length) % fsGallery.length;
+      fsImg.src = safeImg(fsGallery[fsIndex]);
+      fsPill.innerHTML = `<i class="fa-solid fa-camera"></i> ${fsIndex+1}/${fsGallery.length}`;
+
+      fsDots.innerHTML = "";
+      const maxDots = Math.min(fsGallery.length, 10);
+      for(let k=0;k<maxDots;k++){
+        const d = document.createElement("div");
+        d.className = "fsDot" + (k === fsIndex ? " active" : "");
+        d.title = `Foto ${k+1}`;
+        d.addEventListener("click", ()=> setFullscreenSlide(k));
+        fsDots.appendChild(d);
+      }
+    }
+
+    // prev/next/close handlers (se asignan cada vez que abrimos)
+    function bindFullscreenButtons(){
+      if(!fsOverlay) return;
+      fsPrev.onclick = ()=> setFullscreenSlide(fsIndex - 1);
+      fsNext.onclick = ()=> setFullscreenSlide(fsIndex + 1);
+
+      // swipe
+      let startX = 0;
+      let dragging = false;
+
+      fsImg.addEventListener("touchstart", (e)=>{ dragging=true; startX=e.touches[0].clientX; }, {passive:true});
+      fsImg.addEventListener("touchend", (e)=>{
+        if(!dragging) return;
+        dragging=false;
+        const endX = (e.changedTouches[0]?.clientX ?? startX);
+        const dx = endX - startX;
+        if(Math.abs(dx) > 40){
+          if(dx < 0) setFullscreenSlide(fsIndex + 1);
+          else setFullscreenSlide(fsIndex - 1);
+        }
+      }, {passive:true});
+    }
+
+    // ===== Swipe del slider modal
+    function attachSwipeModal(){
+      const el = document.getElementById("slider");
+      let startX = 0, dragging = false;
+
+      el.addEventListener("touchstart", (e)=>{ dragging=true; startX = e.touches[0].clientX; }, {passive:true});
+      el.addEventListener("touchend", (e)=>{
+        if(!dragging) return;
+        dragging=false;
+        const endX = (e.changedTouches[0]?.clientX ?? startX);
+        const dx = endX - startX;
+        if(Math.abs(dx) > 40){
+          if(dx < 0) setSlide(slideIndex+1);
+          else setSlide(slideIndex-1);
+        }
+      }, {passive:true});
+    }
+
+    // ===== Navigation
+    backBtn.addEventListener("click", ()=> history.length > 1 ? history.back() : (location.href="./index.html"));
+    gotoCatalogBtn.addEventListener("click", ()=> location.href = "./catalogo.html?tipo=turismo");
+    refreshBtn.addEventListener("click", ()=> loadTurismo(true));
+
+    // ===== Filters
+    input.addEventListener("input", ()=> applyFilters());
+    selectDistrito.addEventListener("change", ()=> applyFilters());
+
+    clearBtn.addEventListener("click", ()=>{
+      input.value = "";
+      selectDistrito.value = "todos";
+      applyFilters();
+    });
+
+    // ===== Modal
+    function openTurismoModal(v){
+      modalTitle.textContent = (v.nombre || "Lugar").toString();
+      modalName.textContent = (v.nombre || "Lugar").toString();
+
+      // ✅ Corto + Largo (área de historia)
+      const short = getDescShort(v);
+      const long = getDescLong(v);
+
+      // Si long es distinto de short, mostramos ambos en formato pro
+      if(long && short && long !== short){
+        modalDesc.innerHTML =
+          `<b>Descripción:</b>\n${escapeHtml(short)}\n\n<b>Historia / Detalle:</b>\n${escapeHtml(long)}`;
+      }else{
+        modalDesc.textContent = long || "Sin descripción";
+      }
+
+      modalZone.textContent = districtLabel(v.distrito);
+      modalPlace.textContent = getPlace(v) || "—";
+
+      const tags = getTags(v);
+      modalTags.textContent = tags.length ? tags.join(", ") : "—";
+
+      const web = getWeb(v);
+      modalWeb.textContent = web ? web : "—";
+
+      // Gallery
+      currentGallery = getGallery(v);
+      setSlide(0);
+
+      // ✅ click en imagen del slider => fullscreen
+      fsGallery = currentGallery.slice();
+      slideImg.style.cursor = fsGallery.length ? "zoom-in" : "default";
+      slideImg.onclick = ()=>{
+        if(!fsGallery.length) return;
+        openFullscreen(slideIndex);
+      };
+
+      // Actions
+      const maps = getMap(v);
+      const wa = getWhats(v);
+
+      actionMap.disabled = !(maps || modalPlace.textContent);
+      actionWeb.disabled = !web;
+      actionWhats.disabled = !wa;
+
+      actionMap.onclick = ()=>{
+        if(maps){ window.open(maps, "_blank"); return; }
+        const q = encodeURIComponent(`${modalPlace.textContent} ${districtLabel(v.distrito)} Iglesia San Juan`);
+        window.open(`https://www.google.com/maps/search/?api=1&query=${q}`, "_blank");
+      };
+
+      actionWeb.onclick = ()=>{
+        if(!web) return;
+        window.open(web, "_blank");
+      };
+
+      actionWhats.onclick = ()=>{
+        if(!wa) return;
+        const num = wa.replace(/[^\d]/g,"");
+        const msg = encodeURIComponent(`Hola! Quiero info sobre: ${v.nombre || ""}.`);
+        window.open(`https://wa.me/${num}?text=${msg}`, "_blank");
+      };
+
+      modal.classList.add("show");
+    }
+
+    function closeTurismoModal(){ modal.classList.remove("show"); }
+    closeModal.addEventListener("click", closeTurismoModal);
+    modal.addEventListener("click", (e)=>{ if(e.target === modal) closeTurismoModal(); });
+    document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeTurismoModal(); });
+
+    // Slider buttons
+    prevSlide.addEventListener("click", ()=> setSlide(slideIndex-1));
+    nextSlide.addEventListener("click", ()=> setSlide(slideIndex+1));
+
+    // ===== Render
+    function applyFilters(){
+      const q = (input.value || "").toLowerCase().trim();
+      const zona = (selectDistrito.value || "todos").toString().trim();
+
+      filtered = all.filter(v=>{
+        if(zona !== "todos"){
+          const dv = (v.distrito ?? "").toString().trim();
+          if(dv !== zona) return false;
+        }
+
+        if(q){
+          const n = (v.nombre || "").toString().toLowerCase();
+          const d1 = (getDescShort(v) || "").toLowerCase();
+          const d2 = (getDescLong(v) || "").toLowerCase();
+          const z = districtLabel(v.distrito).toLowerCase();
+          const p = (getPlace(v) || "").toLowerCase();
+          const t = getTags(v).join(" ").toLowerCase();
+          return n.includes(q) || d1.includes(q) || d2.includes(q) || z.includes(q) || p.includes(q) || t.includes(q);
+        }
+        return true;
+      });
+
+      filtered.sort((a,b)=>{
+        const oa = Number.isFinite(+a.orden) ? +a.orden : 9999;
+        const ob = Number.isFinite(+b.orden) ? +b.orden : 9999;
+        if(oa !== ob) return oa - ob;
+        return (a.nombre||"").toString().localeCompare((b.nombre||"").toString(), "es");
+      });
+
+      resultsInfo.textContent = `${filtered.length} lugar(es) • ${zona === "todos" ? "todos los distritos" : districtLabel(zona)}`;
+      renderGrid();
+    }
+
+    function renderGrid(){
+      gridView.innerHTML = "";
+
+      if(!filtered.length){
+        gridView.innerHTML = `
+          <div style="grid-column:1/-1;text-align:center;color:var(--muted);padding:18px 0;font-weight:950;">
+            😕 No se encontraron lugares con esos filtros.
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach((v)=>{
+        const img = safeImg(getCover(v));
+        const zona = districtLabel(v.distrito);
+        const tags = getTags(v);
+        const place = getPlace(v) || zona;
+        const desc = getDescShort(v) || "";
+
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <div class="media">
+            <img src="${img}" alt="${escapeAttr((v.nombre || "Lugar").toString())}" loading="lazy" decoding="async">
+            <div class="overlay" aria-hidden="true"></div>
+            <span class="badge"><i class="fa-solid fa-location-dot"></i> ${escapeHtml(zona)}</span>
+          </div>
+
+          <div class="card-content">
+            <h3 title="${escapeAttr((v.nombre || "Lugar").toString())}">${escapeHtml((v.nombre || "Lugar").toString())}</h3>
+            <p title="${escapeAttr(place)}">${escapeHtml(place)}</p>
+            <div class="metaRow">
+              <span class="tag">📍 ${escapeHtml(zona)}</span>
+              ${tags.slice(0,2).map(t=>`<span class="tag">🏷️ ${escapeHtml(t)}</span>`).join("")}
+              ${desc ? `<span class="tag" title="${escapeAttr(desc)}">📝 Info</span>` : ""}
+            </div>
+          </div>
+        `;
+
+        card.addEventListener("click", ()=> openTurismoModal(v));
+
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              card.classList.add('loaded');
+              observer.unobserve(card);
+            }
+          });
+        }, { rootMargin: '140px' });
+        observer.observe(card);
+
+        gridView.appendChild(card);
+      });
+    }
+
+    // Loading skeleton
+    function paintLoading(){
+      resultsInfo.textContent = "Cargando puntos turísticos...";
+      gridView.innerHTML = "";
+      for(let i=0;i<9;i++){
+        const sk = document.createElement("div");
+        sk.className = "card loaded";
+        sk.style.cursor = "default";
+        sk.innerHTML = `
+          <div class="media">
+            <div class="skeleton" style="height:190px;"></div>
+          </div>
+          <div class="card-content">
+            <div class="skeleton" style="height:16px; width:70%; border-radius:999px; margin: 0 auto 10px;"></div>
+            <div class="skeleton" style="height:12px; width:55%; border-radius:999px; margin: 0 auto 14px;"></div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:center;">
+              <div class="skeleton" style="height:28px; width:120px; border-radius:999px;"></div>
+              <div class="skeleton" style="height:28px; width:140px; border-radius:999px;"></div>
+            </div>
+          </div>
+        `;
+        gridView.appendChild(sk);
+      }
+    }
+
+    // Load Turismo from Firestore
+    async function loadTurismo(force=false){
+      paintLoading();
+      try{
+        const snapshot = await getDocs(collection(db, "comercios"));
+        const docs = snapshot.docs.map(d => ({ id: d.id, ...(d.data() || {}) }));
+
+        // SOLO TURISMO
+        all = docs.filter(v => (v?.tipo || "").toString().toLowerCase().trim() === "turismo");
+
+        applyFilters();
+      }catch(e){
+        console.error(e);
+        resultsInfo.textContent = "Error al cargar turismo.";
+        gridView.innerHTML = `<div style="grid-column:1/-1;text-align:center;color:#ff4d6d;padding:18px 0;font-weight:950;">Error al cargar datos.</div>`;
+      }
+    }
+
+    // ===== Sanitizers
+    function escapeHtml(str){
+      return (str ?? "").toString()
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+    function escapeAttr(str){
+      return escapeHtml(str).replaceAll("\n"," ").replaceAll("\r"," ");
+    }
+
+    // ===== Init
+    initTheme();
+    attachSwipeModal();
+    ensureFullscreenUI();
+    bindFullscreenButtons();
+    loadTurismo();
+
+    // Auto refresh suave (2 min)
+    setInterval(()=> loadTurismo(), 120000);
+  </script>
+</body>
+</html>
